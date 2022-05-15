@@ -1,11 +1,13 @@
 import NavLinks from '../Navigation/NavLinks';
 import Title from './Title';
 
+import './Header.css';
+
 const MainHeader = (props) => {
   return (
     <header>
       <Title />
-      <nav>
+      <nav className="menu-bar">
         <NavLinks />
       </nav>
     </header>

@@ -1,7 +1,7 @@
 
 
 const Title = () => {
-  return <h1>Not Real Pizza</h1>;
+  return <h1 className="title">Not a Restaurant</h1>;
 };
 
 export default Title;
