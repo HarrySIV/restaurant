@@ -1,0 +1,10 @@
+.deals-card {
+   box-shadow: 1px 5px 10px black;
+   border-radius: 5rem;
+   display: flex;
+   flex-flow: row, wrap;
+   height: fit-content;
+   justify-content: space-evenly;
+   position: relative;
+   width: 80%;
+}
