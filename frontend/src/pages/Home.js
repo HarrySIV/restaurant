@@ -1,4 +1,5 @@
 import Deals from '../components/Deals';
+import Join from '../components/Join';
 
 import './Home.css';
 
@@ -10,6 +11,8 @@ const Home = () => {
         <Deals />
         {/* careers "Work for us" */}
       </div>
+      <hr />
+      <Join />
     </>
   );
 };
