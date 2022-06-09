@@ -7,9 +7,8 @@ const Home = () => {
   return (
     <>
       <h1>Home</h1>
-      <div className="deals-card">
+      <div className="deals-container">
         <Deals />
-        {/* careers "Work for us" */}
       </div>
       <hr />
       <Join />

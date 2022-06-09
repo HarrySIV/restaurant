@@ -1,9 +1,12 @@
-
-
 import Card from '../shared/UIElements/Card.js';
 
 const Deal = () => {
   const deals = [
+    {
+      name: 'Not a coupon',
+      price: '$4.99',
+      img: '/assets/images/onepizza.jpg',
+    },
     {
       name: 'Twice the Pizza, Twice the Price!',
       price: '$10.00',
@@ -16,20 +19,20 @@ const Deal = () => {
     },
     {
       name: 'Just some soda',
-      price: '$4.99',
+      price: '$5.00',
       img: '/assets/images/pepsi.jpg',
     },
   ];
   return (
-    <Card>
+    <>
       {deals.map((deal) => (
-        <>
-          <img src={deal.img} alt={deal.name} />
+        <div className='deal'>
+          <img src={deal.img} alt={deal.name} className="deals-img" />
           <h3>{deal.name}</h3>
           <h2>{deal.price}</h2>
-        </>
+        </div>
       ))}
-    </Card>
+    </>
   );
 };
 

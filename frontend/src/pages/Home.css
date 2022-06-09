@@ -1,12 +1,18 @@
-.deals-card {
+.deals-container {
   box-shadow: 1px 5px 10px black;
   border-radius: 5rem;
   display: flex;
-  flex-flow: row, wrap;
-  height: fit-content;
+  flex-flow: row wrap;
   justify-content: space-evenly;
+  margin: 3%;
+  padding: 3%;
   position: relative;
   width: 80%;
+}
+
+.deals-img {
+  height: 200px;
+  width: 200px;
 }
 
 .link {
