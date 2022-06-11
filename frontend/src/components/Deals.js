@@ -1,5 +1,3 @@
-import Card from '../shared/UIElements/Card.js';
-
 const Deal = () => {
   const deals = [
     {
@@ -22,11 +20,17 @@ const Deal = () => {
       price: '$5.00',
       img: '/assets/images/pepsi.jpg',
     },
+    {
+      name: 'Spaghetti',
+      price: '$3.99',
+      img: '/assets/images/pasta.jpg',
+    },
   ];
   return (
     <>
+      <h2 className="deals-text">Deals</h2>
       {deals.map((deal) => (
-        <div className='deal'>
+        <div className="deal">
           <img src={deal.img} alt={deal.name} className="deals-img" />
           <h3>{deal.name}</h3>
           <h2>{deal.price}</h2>

@@ -1,3 +1,6 @@
+.active {
+  color: black;
+}
 .deals-container {
   box-shadow: 1px 5px 10px black;
   border-radius: 5rem;
@@ -13,6 +16,12 @@
 .deals-img {
   height: 200px;
   width: 200px;
+}
+
+.deals-text {
+  position: absolute;
+  top: 2%;
+  left: 2%;
 }
 
 .link {
