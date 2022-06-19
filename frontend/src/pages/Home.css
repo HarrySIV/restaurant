@@ -24,10 +24,18 @@
   left: 2%;
 }
 
+.active {
+  display: block;
+}
+
 .link {
   color: red;
 }
 
 .link:hover {
   color: green;
+}
+
+.none {
+  display: none;
 }
