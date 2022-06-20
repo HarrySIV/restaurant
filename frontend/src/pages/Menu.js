@@ -1,5 +1,7 @@
 import MenuItem from '../components/MenuItem';
 
+import './CSS/Menu.css';
+
 const Menu = () => {
   return (
     <>

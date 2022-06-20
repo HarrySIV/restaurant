@@ -9,7 +9,7 @@ const NavLinks = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink to="/menu" exact>
+        <NavLink to="/menu">
           MENU
         </NavLink>
       </li>
@@ -17,7 +17,7 @@ const NavLinks = () => {
         <NavLink to="/about">ABOUT</NavLink>
       </li>
       <li>
-        <NavLink to="/locations" exact>
+        <NavLink to="/locations">
           LOCATIONS
         </NavLink>
       </li>

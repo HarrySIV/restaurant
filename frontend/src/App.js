@@ -20,12 +20,12 @@ function App() {
   const routes = (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/menu" element={<Menu />} exact />
+      <Route path="/menu" element={<Menu />} />
       <Route path="/about" element={<About />} />
-      <Route path="/locations" element={<Locations />} exact />
-      <Route path="/careers" element={<Careers />} exact />
+      <Route path="/locations" element={<Locations />} />
+      <Route path="/careers" element={<Careers />} />
       <Route path="/error-page" element={<ErrorPage />} />
-      <Route path="/redirect" element={<Navigate to="/error-page" />} exact />
+      <Route path="/redirect" element={<Navigate to="/error-page" />} />
     </Routes>
   );
   return (

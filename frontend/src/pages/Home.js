@@ -1,7 +1,7 @@
 import Deals from '../components/Deals';
 import Join from '../components/Join';
 
-import './Home.css';
+import './CSS/Home.css';
 
 const Home = () => {
   return (

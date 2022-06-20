@@ -1,6 +1,11 @@
 .active {
   color: black;
 }
+
+.active-item {
+  display: block;
+}
+
 .deals-container {
   box-shadow: 1px 5px 10px black;
   border-radius: 5rem;
@@ -24,10 +29,6 @@
   left: 2%;
 }
 
-.active {
-  display: block;
-}
-
 .link {
   color: red;
 }
@@ -36,6 +37,4 @@
   color: green;
 }
 
-.none {
-  display: none;
-}
+
