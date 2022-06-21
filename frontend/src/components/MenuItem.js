@@ -20,7 +20,7 @@ const MenuItem = () => {
   const [ID, setID] = useState(null);
 
   const itemHandler = (item) => {
-    if (ID === null) {
+    if (ID === null || ID !== item.key) {
       setID(item.key);
     } else {
       setID(null);
