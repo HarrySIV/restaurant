@@ -5,52 +5,47 @@ const items = [
     name: 'Pizza',
     description: 'Cheese, bread, red sauce',
     price: '4.99',
-    key: 1,
+    key: 0,
   },
   {
     name: 'Spaghetti',
     description: 'cooked noodles, red sauce, parmesan',
     price: '3.99',
-    key: 2,
+    key: 1,
   },
-  { name: 'Soda', description: 'pepsi products', price: '4.99', key: 3 },
+  { name: 'Soda', description: 'pepsi products', price: '4.99', key: 2 },
 ];
 
-const styles = {
-  display: 'active-item',
-};
-
 const MenuItem = () => {
-  const [] = useState(false);
+  const [ID, setID] = useState(null);
 
-  const itemHandler = () => {
-    styles.display === 'active-item'
-      ? (styles.display = 'none')
-      : (styles.display = 'active-item');
+  const itemHandler = (item) => {
+    if (ID === null) {
+      setID(item.key);
+    } else {
+      setID(null);
+    }
   };
 
   return (
-    <li className="items">
+    <ul className="items">
       {items.map((item) => {
         return (
-          <ul>
-            <button className="menu-item" onClick={itemHandler} key={item.name}>
-              {`${item.name}          ${item.price}`}
+          <li key={item.key}>
+            <button className="menu-item" onClick={() => itemHandler(item)}>
+              {`${item.name} $${item.price}`}
             </button>
             <h4
               className={`menu-description ${
-                styles.display === 'active-item'
-                  ? (styles.display = 'none')
-                  : (styles.display = 'active-item')
+                ID === item.key ? 'active-item' : 'none'
               }`}
-              key={item.key}
             >
               {item.description}
             </h4>
-          </ul>
+          </li>
         );
       })}
-    </li>
+    </ul>
   );
 };
 

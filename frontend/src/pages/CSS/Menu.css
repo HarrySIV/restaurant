@@ -1,6 +1,12 @@
+.active-item {
+  display: block;
+}
+
 .items {
-   width: 100%;
-   height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  height: 100%;
 }
 
 .menu-item {

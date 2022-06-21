@@ -2,10 +2,6 @@
   color: black;
 }
 
-.active-item {
-  display: block;
-}
-
 .deals-container {
   box-shadow: 1px 5px 10px black;
   border-radius: 5rem;
