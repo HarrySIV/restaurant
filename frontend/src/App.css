@@ -1,0 +1,19 @@
+.active {
+  color: black;
+}
+
+.link {
+  color: red;
+}
+
+.link:hover {
+  color: green;
+}
+
+.wrapper {
+   min-height: 90vh;
+}
+
+hr {
+   margin: 0;
+}

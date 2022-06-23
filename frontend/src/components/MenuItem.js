@@ -14,6 +14,12 @@ const items = [
     key: 1,
   },
   { name: 'Soda', description: 'pepsi products', price: '4.99', key: 2 },
+  {
+    name: 'Breadsticks',
+    description: 'Fresh bread topped with melted butter',
+    price: '5.99',
+    key: 3,
+  },
 ];
 
 const MenuItem = () => {

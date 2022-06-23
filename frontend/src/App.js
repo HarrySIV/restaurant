@@ -1,11 +1,6 @@
 import './App.css';
 
-import {
-  BrowserRouter,
-  Route,
-  Navigate,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 
 import Home from './pages/Home.js';
 import Menu from './pages/Menu.js';
@@ -30,8 +25,10 @@ function App() {
   );
   return (
     <BrowserRouter>
-      <MainHeader />
-      <main>{routes}</main>
+      <div className="wrapper">
+        <MainHeader />
+        <main>{routes}</main>
+      </div>
       <SiteMap />
     </BrowserRouter>
   );

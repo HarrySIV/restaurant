@@ -1,5 +1,17 @@
 .author {
    background-color: black;
    color: white;
+   margin: 0;
    text-align: center;
 }
+
+.site-map {
+   background-color: lightgray;
+   display: flex;
+   flex-flow: row nowrap;
+ }
+ 
+ .column {
+    display: flex;
+    flex-flow: column nowrap;
+ }
