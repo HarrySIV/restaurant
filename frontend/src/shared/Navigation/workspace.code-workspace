@@ -1,7 +1,10 @@
 {
 	"folders": [
 		{
-			"path": "..\\..\\..\\..\\.."
+			"path": "..\\..\\..\\..\\..\\resume"
+		},
+		{
+			"path": "..\\..\\..\\..\\..\\creator_website\\frontend"
 		}
 	],
 	"settings": {}
