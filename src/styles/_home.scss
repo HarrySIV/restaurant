@@ -1,0 +1,23 @@
+.deals-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  margin: 3%;
+  padding: 3%;
+  position: relative;
+  width: 80%;
+  max-height: 700px;
+  max-width: 1000px;
+}
+
+.deals-img {
+  margin: 20px;
+  height: 200px;
+  width: 200px;
+}
+
+.deals-text {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+}
