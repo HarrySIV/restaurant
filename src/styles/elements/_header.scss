@@ -1,3 +1,28 @@
+.checkout {
+  position: relative;
+}
+
+.circle {
+  position: absolute;
+  z-index: 1;
+  bottom: 6px;
+  left: 7px;
+}
+
+.number {
+  position: absolute;
+  z-index: 3;
+  bottom: -18px;
+  left: 12px;
+  color: white;
+}
+
+.register {
+  position: absolute;
+  z-index: 2;
+  bottom: -8px;
+}
+
 .header {
   width: 100%;
   box-shadow: 1px 1px 7px;
@@ -6,6 +31,12 @@
 .menu-bar {
   background-color: red;
   text-align: center;
+}
+
+.nav-links {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
 }
 
 .title {
@@ -21,10 +52,9 @@ a {
   color: white;
   font-weight: bolder;
   text-decoration-line: none;
-}
-
-a:hover {
-  color: black;
+  &:hover {
+    color: black;
+  }
 }
 
 li {

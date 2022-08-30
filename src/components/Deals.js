@@ -45,6 +45,7 @@ const Deal = () => {
           <img src={deal.img} alt={deal.name} className="deals-img" />
           <div className="deals-backdrop">
             <div className="details">
+              <h3 className="add-to-order">ADD TO ORDER</h3>
               <h4 className="deals-text">{deal.name}</h4>
               <h2 className="deals-text">{deal.price}</h2>
             </div>
