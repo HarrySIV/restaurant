@@ -1,6 +1,6 @@
 import MenuItem from '../components/MenuItem';
 
-import '../styles/_menu.scss';
+import '../styles/pages/_menu.scss';
 
 const Menu = () => {
   return (
