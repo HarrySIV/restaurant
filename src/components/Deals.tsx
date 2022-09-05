@@ -1,4 +1,6 @@
-const Deal = () => {
+import React from 'react';
+
+const Deal: React.FC = () => {
   const deals = [
     {
       name: 'Not a coupon',

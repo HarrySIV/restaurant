@@ -1,15 +1,16 @@
-import './styles/_app.scss';
+import React from 'react';
+//import './styles/_app.scss';
 
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 
-import Home from './pages/Home.js';
-import Menu from './pages/Menu.js';
-import About from './pages/About.js';
-import Locations from './pages/Locations.js';
-import Careers from './pages/Careers.js';
-import ErrorPage from './pages/ErrorPage.js';
-import SiteMap from './shared/SiteMap.js';
-import MainHeader from './shared/Header/MainHeader.js';
+import Home from './pages/Home';
+import Menu from './pages/Menu';
+import About from './pages/About';
+import Locations from './pages/Locations';
+import Careers from './pages/Careers';
+import ErrorPage from './pages/ErrorPage';
+import SiteMap from './shared/SiteMap';
+import MainHeader from './shared/Header/MainHeader';
 
 function App() {
   const routes = (

@@ -1,3 +1,4 @@
+import React from 'react';
 import NavLinks from '../Navigation/NavLinks';
 import Title from './Title';
 

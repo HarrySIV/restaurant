@@ -1,3 +1,4 @@
+import React from 'react';
 import Deals from '../components/Deals';
 import Join from '../components/Join';
 
