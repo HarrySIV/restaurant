@@ -1,57 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-
-const items = [
-  {
-    name: 'Pizza',
-    description: 'Cheese, bread, red sauce',
-    price: '4.99',
-    key: 0,
-  },
-  {
-    name: 'Spaghetti',
-    description: 'cooked noodles, red sauce, parmesan',
-    price: '3.99',
-    key: 1,
-  },
-  { name: 'Soda', description: 'pepsi products', price: '4.99', key: 2 },
-  {
-    name: 'Breadsticks',
-    description: 'Fresh bread topped with melted butter',
-    price: '5.99',
-    key: 3,
-  },
-];
+import { useMenu } from '../shared/hooks/menu-hook';
+import { Item } from '../shared/hooks/menu-hook';
 
 const MenuItem = () => {
-  const [ID, setID] = useState(null);
+  const [ID, setID] = useState<number | null>(null);
+  const [menu, setMenu] = useState<Item[]>([]);
+  const { getMenu, retrievedData } = useMenu();
 
-  const itemHandler = (item) => {
-    if (ID === null || ID !== item.key) {
-      setID(item.key);
+  // //gets menu items using menu-hook
+  useEffect(() => {
+    getMenu();
+  }, []);
+
+  // //if menu is retrieved, setMenu to retrieved data
+  useEffect(() => {
+    if (retrievedData.length) setMenu(retrievedData);
+  }, [retrievedData]);
+
+  //onClick of menu item, displays menu item description
+  const itemHandler = (item: Item) => {
+    if (ID === null || ID !== item._id) {
+      setID(item._id);
     } else {
       setID(null);
     }
   };
 
+  //maps menu items when loaded, otherwise return a loading spinner
   return (
     <ul className="items">
-      {items.map((item) => {
-        return (
-          <li key={item.key} className="list-item">
-            <button className="menu-item" onClick={() => itemHandler(item)}>
-              {`${item.name} $${item.price}`}
-            </button>
-            <h4
-              className={`menu-description ${
-                ID === item.key ? 'active-item' : 'none'
-              }`}
-            >
-              {item.description}
-            </h4>
-          </li>
-        );
-      })}
+      {menu.length ? (
+        menu.map((item: Item) => {
+          return (
+            <li key={item._id} className="list-item">
+              <button className="menu-item" onClick={() => itemHandler(item)}>
+                {`${item.name} $${item.price}`}
+              </button>
+              <h4
+                className={`menu-description ${
+                  ID === item._id ? 'active-item' : 'none'
+                }`}
+              >
+                {item.description}
+              </h4>
+            </li>
+          );
+        })
+      ) : (
+        <h1>Loading...</h1>
+      )}
     </ul>
   );
 };

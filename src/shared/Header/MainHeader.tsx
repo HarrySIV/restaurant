@@ -4,7 +4,7 @@ import Title from './Title';
 
 import '../../styles/elements/_header.scss';
 
-const MainHeader = (props) => {
+const MainHeader = () => {
   return (
     <header className="header">
       <Title />

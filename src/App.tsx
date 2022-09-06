@@ -1,5 +1,5 @@
 import React from 'react';
-//import './styles/_app.scss';
+import './styles/_app.scss';
 
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import Menu from './pages/Menu';
 import About from './pages/About';
 import Locations from './pages/Locations';
 import Careers from './pages/Careers';
+import Order from './pages/Order';
 import ErrorPage from './pages/ErrorPage';
 import SiteMap from './shared/SiteMap';
 import MainHeader from './shared/Header/MainHeader';
@@ -20,6 +21,7 @@ function App() {
       <Route path="/about" element={<About />} />
       <Route path="/locations" element={<Locations />} />
       <Route path="/careers" element={<Careers />} />
+      <Route path="/order" element={<Order />} />
       <Route path="/error-page" element={<ErrorPage />} />
       <Route path="/redirect" element={<Navigate to="/error-page" />} />
     </Routes>

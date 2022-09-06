@@ -20,7 +20,7 @@ const NavLinks = () => {
         <NavLink to="/locations">LOCATIONS</NavLink>
       </li>
       <li>
-        <NavLink to="/checkout">
+        <NavLink to="/order">
           <div className="checkout">
             <FontAwesomeIcon icon={faCircle} className="circle" color="green"  />
             <h6 className="number">0</h6>
