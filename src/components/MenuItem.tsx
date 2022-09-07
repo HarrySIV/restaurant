@@ -10,13 +10,9 @@ const MenuItem = () => {
 
   // //gets menu items using menu-hook
   useEffect(() => {
-    getMenu();
-  }, []);
-
-  // //if menu is retrieved, setMenu to retrieved data
-  useEffect(() => {
-    if (retrievedData.length) setMenu(retrievedData);
-  }, [retrievedData]);
+    if (!retrievedData.length) getMenu();
+    else setMenu(retrievedData);
+  }, [retrievedData, getMenu]);
 
   //onClick of menu item, displays menu item description
   const itemHandler = (item: Item) => {

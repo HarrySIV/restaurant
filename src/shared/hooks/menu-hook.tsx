@@ -10,14 +10,14 @@ export interface Item {
 }
 
 export const useMenu = () => {
-  const backendURL: string = 'https://localhost:3001/api/menu';
+  const backendURL: string = 'http://localhost:3001/api/menu';
   const [retrievedData, setRetrievedData] = useState<Item[]>([]);
 
   const getMenu = async () => {
     await axios
       .get(backendURL)
       .then((fetchedData) => {
-        setRetrievedData(fetchedData.data.menu);
+        setRetrievedData(fetchedData.data.items);
       })
       .catch(() => {
         setRetrievedData([]);
