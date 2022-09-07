@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 import '../../styles/elements/_modal.scss';
 
-const Modal: React.FC<{ header: string }> = (props) => {
+const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
   const content = (
-    <div className="backdrop">
-      <div className="modal">
-        <header>
-          <h2 className="title">{props.header}</h2>
-        </header>
-      </div>
+    <div className="modal">
+      <header>
+        <h2 className="title">Hello</h2>
+        <FontAwesomeIcon icon={faClose} />
+      </header>
+      <main>{props.children}</main>
     </div>
   );
   return ReactDOM.createPortal(
