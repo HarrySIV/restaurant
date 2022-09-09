@@ -27,8 +27,8 @@ export const VALIDATOR_MAX = (val: number) => ({
 export const VALIDATOR_EMAIL = () => ({ type: VALIDATOR_TYPE_EMAIL });
 
 export const validate = (
-  value: string,
-  validators: [{ type: string; val: number }]
+  value: string, //user entred value
+  validators: [{ type: string; val: number }] //array of validators
 ) => {
   let isValid = true;
   for (const validator of validators) {

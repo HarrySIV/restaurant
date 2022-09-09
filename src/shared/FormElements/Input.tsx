@@ -1,15 +1,17 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { validate } from '../util/validators.js';
 
 interface IState {
   value: string;
   isValid: boolean; //validate(action.val: string?, action.validators: [{ type: string, val: number}])
+  isTouched: boolean;
 }
 
 type Actions = {
-  type: 'CHANGE';
+  type: string;
   val: string;
-  validators: [boolean]; //not sure this is correct
+  validators: [{ type: string; val: number }]; //not sure this is correct
+  isTouched: boolean;
 };
 
 type props = {
@@ -20,7 +22,8 @@ type props = {
   label: string;
   rows: number;
   errorText: string;
-  validators: [boolean];
+  validators: [{ type: string; val: number }];
+  onInput: (id: string, value: string, isValid: boolean) => void;
 };
 
 const inputReducer = (state: IState, action: Actions) => {
@@ -29,7 +32,12 @@ const inputReducer = (state: IState, action: Actions) => {
       return {
         ...state,
         value: action.val,
-        isValid: true,
+        isValid: validate(action.val, action.validators),
+      };
+    case 'TOUCH':
+      return {
+        ...state,
+        isTouched: true,
       };
     default:
       return state;
@@ -40,7 +48,16 @@ export const Input = (props: props) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: '',
     isValid: false,
+    isTouched: false,
   });
+
+  const { id, onInput } = props;
+  const { value, isValid } = inputState;
+
+  useEffect(() => {
+    onInput(id, value, isValid);
+  }, [id, value, isValid, onInput]);
+
   const changeHandler = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -50,6 +67,16 @@ export const Input = (props: props) => {
       type: 'CHANGE',
       val: event.target.value.toString(),
       validators: props.validators,
+      isTouched: false,
+    });
+  };
+
+  const touchHandler = () => {
+    dispatch({
+      val: inputState.value,
+      validators: props.validators,
+      isTouched: inputState.isTouched, //added these three values to make it work
+      type: 'TOUCH',
     });
   };
 
@@ -60,6 +87,7 @@ export const Input = (props: props) => {
         type={props.type}
         placeholder={props.placeholder}
         onChange={changeHandler}
+        onBlur={touchHandler}
         value={inputState.value}
       />
     ) : (
@@ -67,6 +95,7 @@ export const Input = (props: props) => {
         id={props.id}
         rows={props.rows}
         onChange={changeHandler}
+        onBlur={touchHandler}
         value={inputState.value}
       />
     );
@@ -74,12 +103,12 @@ export const Input = (props: props) => {
   return (
     <div
       className={`form-control ${
-        !inputState.isValid && `form-control--invalid`
+        !inputState.isValid && inputState.isTouched && `form-control--invalid`
       }`}
     >
       <label htmlFor={props.id}>{props.label}</label>
       {inputElement}
-      {!inputState.isValid && <p>{props.errorText}</p>}
+      {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
     </div>
   );
 };
