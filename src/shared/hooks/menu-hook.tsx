@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export interface Item {
@@ -9,20 +9,23 @@ export interface Item {
   cooking_time: string;
 }
 
+const fetchMenu = async () => {
+  const backendURL: string = 'https://localhost:3001/api/menu';
+
+  try {
+    const { data } = await axios.get(backendURL);
+    return data.menu;
+  } catch (error) {
+    return [];
+  }
+};
+
 export const useMenu = () => {
-  const backendURL: string = 'http://localhost:3001/api/menu';
-  const [retrievedData, setRetrievedData] = useState<Item[]>([]);
+  const [menu, setMenu] = useState<Item[]>([]);
 
-  const getMenu = async () => {
-    await axios
-      .get(backendURL)
-      .then((fetchedData) => {
-        setRetrievedData(fetchedData.data.items);
-      })
-      .catch(() => {
-        setRetrievedData([]);
-      });
-  };
+  useEffect(() => {
+    fetchMenu().then((result: Item[]) => setMenu(result));
+  }, []);
 
-  return { getMenu, retrievedData };
+  return menu;
 };

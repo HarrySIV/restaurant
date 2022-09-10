@@ -7,14 +7,14 @@ interface IState {
   isTouched: boolean;
 }
 
-type Actions = {
+interface Actions {
   type: string;
   val: string;
   validators: [{ type: string; val: number }]; //not sure this is correct
   isTouched: boolean;
-};
+}
 
-type props = {
+interface props {
   element: string;
   type: string;
   placeholder: string;
@@ -23,8 +23,12 @@ type props = {
   rows: number;
   errorText: string;
   validators: [{ type: string; val: number }];
-  onInput: (id: string, value: string, isValid: boolean) => void;
-};
+  onInput: (
+    id: string,
+    value: string,
+    isValid: boolean
+  ) => { type: string; value: string; inputId: string; isValid: boolean };
+}
 
 const inputReducer = (state: IState, action: Actions) => {
   switch (action.type) {

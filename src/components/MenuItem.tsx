@@ -1,18 +1,9 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import { useMenu } from '../shared/hooks/menu-hook';
-import { Item } from '../shared/hooks/menu-hook';
+import React, { useState } from 'react';
+import { useMenu, Item } from '../shared/hooks/menu-hook';
 
 const MenuItem = () => {
   const [ID, setID] = useState<number | null>(null);
-  const [menu, setMenu] = useState<Item[]>([]);
-  const { getMenu, retrievedData } = useMenu();
-
-  // //gets menu items using menu-hook
-  useEffect(() => {
-    if (!retrievedData.length) getMenu();
-    else setMenu(retrievedData);
-  }, [retrievedData, getMenu]);
+  const { menu } = useMenu();
 
   //onClick of menu item, displays menu item description
   const itemHandler = (item: Item) => {
