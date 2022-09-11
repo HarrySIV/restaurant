@@ -4,7 +4,7 @@ import Title from './Title';
 
 import '../../styles/elements/_header.scss';
 
-const MainHeader = () => {
+export const MainHeader = () => {
   return (
     <header className="header">
       <Title />
@@ -14,5 +14,3 @@ const MainHeader = () => {
     </header>
   );
 };
-
-export default MainHeader;

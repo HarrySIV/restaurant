@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import '../styles/elements/_footer.scss';
 
-const SiteMap = () => {
+export const SiteMap = () => {
   return (
     <footer>
       <hr />
@@ -32,5 +32,3 @@ const SiteMap = () => {
     </footer>
   );
 };
-
-export default SiteMap;

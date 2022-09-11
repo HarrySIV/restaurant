@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDeal, IDeal } from '../shared/hooks/deal-hook';
 
-const Deal: React.FC = () => {
+export const Deals: React.FC = () => {
   const { retrievedData, getDeals } = useDeal();
   const [deals, setDeals] = useState<IDeal[]>([]);
 
@@ -33,5 +33,3 @@ const Deal: React.FC = () => {
     </>
   );
 };
-
-export default Deal;

@@ -10,7 +10,7 @@ interface Order {
   total: number;
 }
 
-const useOrder = () => {
+export const useOrder = () => {
   const backendURL: string = 'https://localhost:3001/api/orders';
   const [retrievedData, setRetrievedData] = useState<Order[]>();
   const [message, setMessage] = useState<{ message: string }>();
@@ -27,5 +27,3 @@ const useOrder = () => {
 
   return { retrievedData, getOrders, message };
 };
-
-export default useOrder;

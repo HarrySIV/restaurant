@@ -1,10 +1,10 @@
 import React from 'react';
-import Deals from '../components/Deals';
-import Join from '../components/Join';
+import { Deals } from '../components/Deals';
+import { Join } from '../components/Join';
 
 import '../styles/pages/_home.scss';
 
-const Home = () => {
+export const Home = () => {
   return (
     <>
       <div className="deals-container">
@@ -15,5 +15,3 @@ const Home = () => {
     </>
   );
 };
-
-export default Home;

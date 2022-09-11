@@ -1,8 +1,8 @@
-import MenuItem from '../components/MenuItem';
+import { MenuItem } from '../components/MenuItem';
 
 import '../styles/pages/_menu.scss';
 
-const Menu = () => {
+export const Menu = () => {
   return (
     <>
       <h1>Menu</h1>
@@ -10,5 +10,3 @@ const Menu = () => {
     </>
   );
 };
-
-export default Menu;

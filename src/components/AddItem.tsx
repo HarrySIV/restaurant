@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from '../shared/FormElements/Input';
 
-import LoadingSpinner from '../shared/UIElements/LoadingSpinner';
+import { LoadingSpinner } from '../shared/UIElements/LoadingSpinner';
 
 const AddItem = () => {
   const [isLoading, setIsLoading] = useState(false);

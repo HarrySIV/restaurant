@@ -12,7 +12,7 @@ interface FormState {
 }
 
 interface FormAction {
-  inputs: Inputs;
+  inputs: Inputs[];
   type: string;
   value: string;
   inputId: string;
@@ -49,7 +49,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
 };
 
 export const useForm = (
-  initialInputs: Inputs,
+  initialInputs: Inputs[],
   initialFormValidity: boolean
 ) => {
   const [formState, dispatch] = useReducer(formReducer, {

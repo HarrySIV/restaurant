@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMenu, Item } from '../shared/hooks/menu-hook';
 
-const MenuItem = () => {
+export const MenuItem = () => {
   const [ID, setID] = useState<number | null>(null);
   const { menu } = useMenu();
 
@@ -40,5 +40,3 @@ const MenuItem = () => {
     </ul>
   );
 };
-
-export default MenuItem;

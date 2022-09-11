@@ -5,7 +5,7 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 import '../../styles/elements/_modal.scss';
 
-const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
+export const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
   const content = (
     <div className="modal">
       <header>
@@ -20,5 +20,3 @@ const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
     document.getElementById('modal-hook') as HTMLElement
   );
 };
-
-export default Modal;

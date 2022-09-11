@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-const Join = () => {
+export const Join = () => {
   return (
     <h2>
       Join our team{' '}
@@ -11,5 +11,3 @@ const Join = () => {
     </h2>
   );
 };
-
-export default Join;

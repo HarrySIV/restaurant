@@ -1,6 +1,6 @@
 import React from 'react';
 
-const About = () => {
+export const About = () => {
   return (
     <>
       <h2>Where we come from</h2>
@@ -15,5 +15,3 @@ const About = () => {
     </>
   );
 };
-
-export default About;

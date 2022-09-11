@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCashRegister, faCircle } from '@fortawesome/free-solid-svg-icons';
 
-const NavLinks = () => {
+export const NavLinks = () => {
   return (
     <ul className="nav-links">
       <li>
@@ -22,7 +22,7 @@ const NavLinks = () => {
       <li>
         <NavLink to="/order">
           <div className="checkout">
-            <FontAwesomeIcon icon={faCircle} className="circle" color="green"  />
+            <FontAwesomeIcon icon={faCircle} className="circle" color="green" />
             <h6 className="number">0</h6>
             <FontAwesomeIcon icon={faCashRegister} className="register" />
           </div>
@@ -31,5 +31,3 @@ const NavLinks = () => {
     </ul>
   );
 };
-
-export default NavLinks;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Locations = () => {
+export const Locations = () => {
   return (
     <>
       <h1>Our Location</h1>
@@ -9,5 +9,3 @@ const Locations = () => {
     </>
   );
 };
-
-export default Locations;

@@ -3,17 +3,17 @@ import './styles/_app.scss';
 
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 
-import Home from './pages/Home';
-import Menu from './pages/Menu';
-import About from './pages/About';
-import Locations from './pages/Locations';
-import Careers from './pages/Careers';
-import Order from './pages/Order';
-import ErrorPage from './pages/ErrorPage';
-import SiteMap from './shared/SiteMap';
-import MainHeader from './shared/Header/MainHeader';
+import { Home } from './pages/Home';
+import { Menu } from './pages/Menu';
+import { About } from './pages/About';
+import { Locations } from './pages/Locations';
+import { Careers } from './pages/Careers';
+import { Order } from './pages/Order';
+import { ErrorPage } from './pages/ErrorPage';
+import { SiteMap } from './shared/SiteMap';
+import { MainHeader } from './shared/Header/MainHeader';
 
-function App() {
+export function App() {
   const routes = (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -36,5 +36,3 @@ function App() {
     </BrowserRouter>
   );
 }
-
-export default App;
