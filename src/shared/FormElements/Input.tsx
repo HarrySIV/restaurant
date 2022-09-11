@@ -1,18 +1,15 @@
 import React, { useReducer, useEffect } from 'react';
 import { validate } from '../util/validators.js';
 
-interface IState {
+interface InputState {
   value: string;
   isValid: boolean; //validate(action.val: string?, action.validators: [{ type: string, val: number}])
   isTouched: boolean;
 }
 
-interface Actions {
-  type: string;
-  val: string;
-  validators: [{ type: string; val: number }]; //not sure this is correct
-  isTouched: boolean;
-}
+type InputActions =
+  | { type: 'CHANGE'; val: string; validators: [{ type: string; val: number }] }
+  | { type: 'TOUCH' };
 
 interface props {
   element: string;
@@ -30,7 +27,7 @@ interface props {
   ) => { type: string; value: string; inputId: string; isValid: boolean };
 }
 
-const inputReducer = (state: IState, action: Actions) => {
+const inputReducer = (state: InputState, action: InputActions) => {
   switch (action.type) {
     case 'CHANGE':
       return {
@@ -71,15 +68,11 @@ export const Input = (props: props) => {
       type: 'CHANGE',
       val: event.target.value.toString(),
       validators: props.validators,
-      isTouched: false,
     });
   };
 
   const touchHandler = () => {
     dispatch({
-      val: inputState.value,
-      validators: props.validators,
-      isTouched: inputState.isTouched, //added these three values to make it work
       type: 'TOUCH',
     });
   };
