@@ -3,7 +3,7 @@ import { useMenu, Item } from '../shared/hooks/menu-hook';
 
 export const MenuItem = () => {
   const [ID, setID] = useState<number | null>(null);
-  const { menu } = useMenu();
+  const menu = useMenu();
 
   //onClick of menu item, displays menu item description
   const itemHandler = (item: Item) => {

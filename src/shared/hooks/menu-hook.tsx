@@ -11,7 +11,6 @@ export interface Item {
 
 const fetchMenu = async () => {
   const backendURL: string = 'https://localhost:3001/api/menu';
-
   try {
     const { data } = await axios.get(backendURL);
     return data.menu;
