@@ -3,7 +3,7 @@ import { useCallback, useReducer } from 'react';
 interface Inputs {
   id: string;
   value: string;
-  inputIsValid: boolean;
+  isValid: boolean;
 }
 
 interface FormState {
@@ -11,14 +11,9 @@ interface FormState {
   isValid: boolean;
 }
 
-interface FormAction {
-  inputs: Inputs[];
-  type: string;
-  value: string;
-  inputId: string;
-  isValid: boolean;
-  formIsValid: boolean;
-}
+type FormAction =
+  | { type: 'INPUT_CHANGE'; value: string; inputId: string; isValid: boolean }
+  | { type: 'SET_DATA'; formIsValid: boolean; inputs: Inputs[] };
 
 const formReducer = (state: FormState, action: FormAction): FormState => {
   switch (action.type) {
@@ -28,7 +23,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
         if (!state.inputs[inputId]) continue;
         if (inputId === action.inputId)
           formIsValid = formIsValid && action.isValid;
-        else formIsValid = formIsValid && state.inputs[inputId].inputIsValid;
+        else formIsValid = formIsValid && state.inputs[inputId].isValid;
       }
       return {
         ...state,
@@ -68,7 +63,7 @@ export const useForm = (
     []
   );
   const setFormData = useCallback(
-    (inputData: Inputs, formValidity: boolean) => {
+    (inputData: Inputs[], formValidity: boolean) => {
       dispatch({
         type: 'SET_DATA',
         inputs: inputData,
