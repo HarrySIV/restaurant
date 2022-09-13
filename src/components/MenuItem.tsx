@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMenu, Item } from '../shared/hooks/menu-hook';
+import { useMenu, Item } from '../shared/hooks/database/menu-hook';
 
 export const MenuItem = () => {
   const [ID, setID] = useState<number | null>(null);

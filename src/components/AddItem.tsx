@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
 import { Input } from '../shared/FormElements/Input';
 
-import { LoadingSpinner } from '../shared/UIElements/LoadingSpinner';
-
-const AddItem = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
+export const AddItem = () => {
   const orderSubmitHandler = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
@@ -14,7 +9,7 @@ const AddItem = () => {
   return (
     <>
       <form className="order-form" onSubmit={orderSubmitHandler}>
-        {isLoading && <LoadingSpinner /* asOverlay*/ />}
+        <Input />
       </form>
     </>
   );

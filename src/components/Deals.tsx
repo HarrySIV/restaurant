@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDeal, IDeal } from '../shared/hooks/deal-hook';
+import { useDeal, IDeal } from '../shared/hooks/database/deal-hook';
 
 export const Deals: React.FC = () => {
   const { retrievedData, getDeals } = useDeal();

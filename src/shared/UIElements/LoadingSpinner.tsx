@@ -1,3 +1,12 @@
+import ReactDOM from 'react-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 export const LoadingSpinner = () => {
-  return <h1>Loadings</h1>;
+  const content = <FontAwesomeIcon icon={faSpinner} />;
+
+  return ReactDOM.createPortal(
+    content,
+    document.getElementById('overlays') as HTMLElement
+  );
 };

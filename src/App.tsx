@@ -13,7 +13,11 @@ import { ErrorPage } from './pages/ErrorPage';
 import { SiteMap } from './shared/SiteMap';
 import { MainHeader } from './shared/Header/MainHeader';
 
+import { useHttpClient } from './shared/hooks/http-hook';
+import { LoadingSpinner } from './shared/UIElements/LoadingSpinner';
+
 export function App() {
+  const { isLoading } = useHttpClient();
   const routes = (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -30,7 +34,10 @@ export function App() {
     <BrowserRouter>
       <div className="wrapper">
         <MainHeader />
-        <main>{routes}</main>
+        <main>
+          {isLoading && <LoadingSpinner />}
+          {routes}
+        </main>
       </div>
       <SiteMap />
     </BrowserRouter>
