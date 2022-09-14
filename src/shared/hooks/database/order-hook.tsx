@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { OrderItem } from './menu-hook';
 import { useHttpClient } from '../http-hook';
+import { OrderState } from '../orderContext/orderContext';
 
 interface Order {
   customer_name: string;
@@ -23,11 +24,11 @@ export const useOrder = () => {
       setMessage(responseData.message);
     } catch (error) {}
   };
-  const addItemToOrder = async (formData) => {
+  const addOrder = async () => {
     try {
-      await sendRequest(`${backendURL}/orders`, 'POST', formData);
+      await sendRequest(`${backendURL}/orders`, 'POST', OrderState);
     } catch (error) {}
   };
-  
-  return { retrievedData, getOrders, addItemToOrder, message };
+
+  return { retrievedData, getOrders, addOrder, message };
 };
