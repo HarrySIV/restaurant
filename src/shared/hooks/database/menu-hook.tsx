@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export interface Item {
+export interface OrderItem {
   name: string;
   description: string;
   price: number;
@@ -20,10 +20,10 @@ const fetchMenu = async () => {
 };
 
 export const useMenu = () => {
-  const [menu, setMenu] = useState<Item[]>([]);
+  const [menu, setMenu] = useState<OrderItem[]>([]);
 
   useEffect(() => {
-    fetchMenu().then((result: Item[]) => setMenu(result));
+    fetchMenu().then((result: OrderItem[]) => setMenu(result));
   }, []);
 
   return menu;

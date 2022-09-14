@@ -3,7 +3,7 @@ import { validate } from '../util/validators.js';
 
 interface InputState {
   value: string;
-  isValid: boolean; //validate(action.val: string?, action.validators: [{ type: string, val: number}])
+  isValid: boolean;
   isTouched: boolean;
 }
 
@@ -11,7 +11,7 @@ type InputActions =
   | { type: 'CHANGE'; val: string; validators: [{ type: string; val: number }] }
   | { type: 'TOUCH' };
 
-interface props {
+interface InputProps {
   element: string;
   type: string;
   placeholder: string;
@@ -24,7 +24,12 @@ interface props {
     id: string,
     value: string,
     isValid: boolean
-  ) => { type: string; value: string; inputId: string; isValid: boolean };
+  ) => {
+    type: string;
+    value: string;
+    inputId: string;
+    isValid: boolean;
+  };
 }
 
 const inputReducer = (state: InputState, action: InputActions) => {
@@ -45,7 +50,7 @@ const inputReducer = (state: InputState, action: InputActions) => {
   }
 };
 
-export const Input = (props: props) => {
+export const Input = (props: InputProps) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: '',
     isValid: false,
@@ -63,7 +68,6 @@ export const Input = (props: props) => {
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLSelectElement>
   ) => {
     dispatch({
       type: 'CHANGE',
@@ -100,21 +104,15 @@ export const Input = (props: props) => {
           value={inputState.value}
         />
       );
-    if (props.element === 'select')
+    if (props.element === 'checkbox')
       return (
-        <select
+        <input
           id={props.id}
+          type={props.type}
           onChange={changeHandler}
           onBlur={touchHandler}
           value={inputState.value}
-        >
-          <option value="pepperoni">Pepperoni</option>
-          <option value="sausage">Sausage</option>
-          <option value="mushrooms">Mushrooms</option>
-          <option value="onion">Onion</option>
-          <option value="black olives">Black Olives</option>
-          <option value="green pepper">Green Pepper</option>
-        </select>
+        />
       );
   };
 
@@ -124,9 +122,13 @@ export const Input = (props: props) => {
         !inputState.isValid && inputState.isTouched && `form-control--invalid`
       }`}
     >
-      <label htmlFor={props.id}>{props.label}</label>
-      {inputElement}
-      {!inputState.isValid && inputState.isTouched && <p>{props.errorText}</p>}
+      <>
+        <label htmlFor={props.id}>{props.label}</label>
+        {inputElement}
+        {!inputState.isValid && inputState.isTouched && (
+          <p>{props.errorText}</p>
+        )}
+      </>
     </div>
   );
 };

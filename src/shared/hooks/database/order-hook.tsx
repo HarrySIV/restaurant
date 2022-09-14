@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Item } from './menu-hook';
+import { OrderItem } from './menu-hook';
 
 interface Order {
   customer_name: string;
   phone_number: string;
   _id: string;
-  items: Item[];
+  items: OrderItem[];
   total: number;
 }
 
@@ -24,6 +24,14 @@ export const useOrder = () => {
       })
       .catch((error: Error) => console.log(error));
   };
+
+  const addItemToOrder = async () => {
+    try {
+      await sendRequest( `${backendURL}/orders`, 'POST', JSON.stringify({
+        customer_name
+      }))
+    }
+  }
 
   return { retrievedData, getOrders, message };
 };

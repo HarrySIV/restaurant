@@ -1,6 +1,7 @@
 import { Input } from '../shared/FormElements/Input';
 import { useForm } from '../shared/hooks/form-hook';
 import { useHttpClient } from '../shared/hooks/http-hook';
+import { Modal } from '../shared/UIElements/Modal';
 import { VALIDATOR_REQUIRE } from '../shared/util/validators';
 
 export const AddItem = () => {
@@ -12,7 +13,7 @@ export const AddItem = () => {
     event.preventDefault();
   };
   return (
-    <>
+    <Modal>
       <form className="order-form" onSubmit={orderSubmitHandler}>
         <Input
           id="size"
@@ -29,6 +30,6 @@ export const AddItem = () => {
           onInput={inputHandler}
         />
       </form>
-    </>
+    </Modal>
   );
 };
