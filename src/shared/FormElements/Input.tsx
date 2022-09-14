@@ -63,6 +63,7 @@ export const Input = (props: props) => {
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>
   ) => {
     dispatch({
       type: 'CHANGE',
@@ -77,25 +78,45 @@ export const Input = (props: props) => {
     });
   };
 
-  const inputElement =
-    props.element === 'input' ? (
-      <input
-        id={props.id}
-        type={props.type}
-        placeholder={props.placeholder}
-        onChange={changeHandler}
-        onBlur={touchHandler}
-        value={inputState.value}
-      />
-    ) : (
-      <textarea
-        id={props.id}
-        rows={props.rows}
-        onChange={changeHandler}
-        onBlur={touchHandler}
-        value={inputState.value}
-      />
-    );
+  const inputElement = () => {
+    if (props.element === 'input')
+      return (
+        <input
+          id={props.id}
+          type={props.type}
+          placeholder={props.placeholder}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+          value={inputState.value}
+        />
+      );
+    if (props.element === 'textarea')
+      return (
+        <textarea
+          id={props.id}
+          rows={props.rows}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+          value={inputState.value}
+        />
+      );
+    if (props.element === 'select')
+      return (
+        <select
+          id={props.id}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+          value={inputState.value}
+        >
+          <option value="pepperoni">Pepperoni</option>
+          <option value="sausage">Sausage</option>
+          <option value="mushrooms">Mushrooms</option>
+          <option value="onion">Onion</option>
+          <option value="black olives">Black Olives</option>
+          <option value="green pepper">Green Pepper</option>
+        </select>
+      );
+  };
 
   return (
     <div
