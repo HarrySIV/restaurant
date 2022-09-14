@@ -1,8 +1,6 @@
 import React from 'react';
 import './styles/_app.scss';
 
-import { useContext } from 'react';
-
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 
 import { Home } from './pages/Home';
@@ -19,7 +17,6 @@ import { useHttpClient } from './shared/hooks/http-hook';
 import { LoadingSpinner } from './shared/UIElements/LoadingSpinner';
 
 export function App() {
-  const Order = useContext(order);
   const { isLoading } = useHttpClient();
   const routes = (
     <Routes>
