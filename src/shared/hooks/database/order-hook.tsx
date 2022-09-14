@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { OrderItem } from './menu-hook';
+import { useHttpClient } from '../http-hook';
 
 interface Order {
   customer_name: string;
@@ -11,27 +11,23 @@ interface Order {
 }
 
 export const useOrder = () => {
+  const { sendRequest } = useHttpClient();
   const backendURL: string = 'https://localhost:3001/api/orders';
   const [retrievedData, setRetrievedData] = useState<Order[]>();
   const [message, setMessage] = useState<{ message: string }>();
 
   const getOrders = async () => {
-    await axios
-      .get(backendURL)
-      .then((fetchedData) => {
-        setRetrievedData(fetchedData.data.orders);
-        setMessage(fetchedData.data.message);
-      })
-      .catch((error: Error) => console.log(error));
-  };
-
-  const addItemToOrder = async () => {
     try {
-      await sendRequest( `${backendURL}/orders`, 'POST', JSON.stringify({
-        customer_name
-      }))
-    }
-  }
-
-  return { retrievedData, getOrders, message };
+      const responseData = await sendRequest(backendURL);
+      setRetrievedData(responseData.orders);
+      setMessage(responseData.message);
+    } catch (error) {}
+  };
+  const addItemToOrder = async (formData) => {
+    try {
+      await sendRequest(`${backendURL}/orders`, 'POST', formData);
+    } catch (error) {}
+  };
+  
+  return { retrievedData, getOrders, addItemToOrder, message };
 };
