@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import { OrderItem } from '../database/menu-hook';
+import { MenuItem } from '../database/menu-hook';
 import { orderReducer, orderInitializer } from './orderReducer';
 
 interface OrderContext {
-  order: OrderItem[];
+  order: MenuItem[];
   dispatch: (action: any) => void;
 }
 

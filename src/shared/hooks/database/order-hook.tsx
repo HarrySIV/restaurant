@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { OrderItem } from './menu-hook';
+import { MenuItem } from './menu-hook';
 import { useHttpClient } from '../http-hook';
 import { OrderState } from '../orderContext/orderContext';
 
@@ -7,7 +7,7 @@ interface Order {
   customer_name: string;
   phone_number: string;
   _id: string;
-  items: OrderItem[];
+  items: MenuItem[];
   total: number;
 }
 

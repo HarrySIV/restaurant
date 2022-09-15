@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useMenu, OrderItem } from '../shared/hooks/database/menu-hook';
+import { useMenu, MenuItem } from '../shared/hooks/database/menu-hook';
 
 export const MenuItem = () => {
   const [ID, setID] = useState<number | null>(null);
   const menu = useMenu();
 
   //onClick of menu item, displays menu item description
-  const itemHandler = (item: OrderItem) => {
+  const itemHandler = (item: MenuItem) => {
     if (ID === null || ID !== item._id) {
       setID(item._id);
     } else {
@@ -18,7 +18,7 @@ export const MenuItem = () => {
   return (
     <ul className="items">
       {menu.length ? (
-        menu.map((item: OrderItem) => {
+        menu.map((item: MenuItem) => {
           return (
             <li key={item._id} className="list-item">
               <button className="menu-item" onClick={() => itemHandler(item)}>
