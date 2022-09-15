@@ -6,7 +6,9 @@ import { VALIDATOR_REQUIRE } from '../shared/util/validators';
 
 export const AddItem = () => {
   const { isLoading, sendRequest, error, clearError } = useHttpClient();
-  const [formState, inputHandler] = useForm({});
+  const [formState, inputHandler] = useForm<menuItem>({
+    
+  });
   const orderSubmitHandler = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
