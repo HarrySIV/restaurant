@@ -3,16 +3,40 @@ import { useForm } from '../shared/hooks/form-hook';
 import { useHttpClient } from '../shared/hooks/http-hook';
 import { Modal } from '../shared/UIElements/Modal';
 import { VALIDATOR_REQUIRE } from '../shared/util/validators';
+import { MenuItem } from './MenuItem';
 
 export const AddItem = () => {
   const { isLoading, sendRequest, error, clearError } = useHttpClient();
-  const [formState, inputHandler] = useForm<menuItem>({
-    
+  const [formState, inputHandler] = useForm<MenuItem>({
+    name: {
+      value: '',
+      isValid: false,
+    },
+    description: {
+      value: '',
+      isValid: false,
+    },
+    price: {
+      value: '',
+      isValid: false,
+    },
+    cooking_time: {
+      value: '',
+      isValid: false,
+    },
   });
-  const orderSubmitHandler = async (
+  const itemSubmitHandler = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('name', formState.inputs.name.value);
+      formData.append('description', formState.inputs.description.value);
+      formData.append('price', formState.inputs.price.value);
+      formData.append('cooking_time', formState.inputs.cooking_time.value);
+    
+    }
   };
   return (
     <Modal>

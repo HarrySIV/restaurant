@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useHttpClient } from '../http-hook';
+import { config } from '../../../config/config';
 
 export interface IDeal {
   name: string;
@@ -11,13 +12,12 @@ export interface IDeal {
 
 export const useDeal = () => {
   const { sendRequest } = useHttpClient();
-  const backendURL: string = 'http://localhost:3001/api/deals';
   const [retrievedData, setRetrievedData] = useState<IDeal[]>([]);
   const [message, setMessage] = useState<{ message: string }>();
 
   const getDeals = async () => {
     try {
-      const responseData = await sendRequest(backendURL);
+      const responseData = await sendRequest(config.api);
       setRetrievedData(responseData.deals);
       setMessage(responseData.message);
     } catch (error) {}

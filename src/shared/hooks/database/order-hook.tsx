@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MenuItem } from './menu-hook';
 import { useHttpClient } from '../http-hook';
 import { OrderState } from '../orderContext/orderContext';
+import { config } from '../../../config/config';
 
 interface Order {
   customer_name: string;
@@ -13,22 +14,26 @@ interface Order {
 
 export const useOrder = () => {
   const { sendRequest } = useHttpClient();
-  const backendURL: string = 'https://localhost:3001/api/orders';
-  const [retrievedData, setRetrievedData] = useState<Order[]>();
+  const [orders, setOrders] = useState<Order[]>();
   const [message, setMessage] = useState<{ message: string }>();
 
   const getOrders = async () => {
     try {
-      const responseData = await sendRequest(backendURL);
-      setRetrievedData(responseData.orders);
+      const responseData = await sendRequest(`${config.api}/orders`);
+      setOrders(responseData.orders);
       setMessage(responseData.message);
     } catch (error) {}
   };
   const addOrder = async () => {
     try {
-      await sendRequest(`${backendURL}/orders`, 'POST', OrderState);
+      const responseData = await sendRequest(
+        `${config.api}/orders`,
+        'POST',
+        OrderState
+      );
+      setMessage(responseData.message);
     } catch (error) {}
   };
 
-  return { retrievedData, getOrders, addOrder, message };
+  return { orders, getOrders, addOrder, message };
 };
