@@ -40,7 +40,7 @@ export const AddItem = () => {
   };
   return (
     <Modal>
-      <form className="order-form" onSubmit={orderSubmitHandler}>
+      <form className="order-form" onSubmit={itemSubmitHandler}>
         <Input
           id="size"
           element="select"
