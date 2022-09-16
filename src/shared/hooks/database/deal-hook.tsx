@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHttpClient } from '../http-hook';
 import { config } from '../../../config/config';
 
@@ -12,16 +12,19 @@ export interface IDeal {
 
 export const useDeal = () => {
   const { sendRequest } = useHttpClient();
-  const [retrievedData, setRetrievedData] = useState<IDeal[]>([]);
+  const [deals, setDeals] = useState<IDeal[]>([]);
   const [message, setMessage] = useState<{ message: string }>();
 
-  const getDeals = async () => {
-    try {
-      const responseData = await sendRequest(config.api);
-      setRetrievedData(responseData.deals);
-      setMessage(responseData.message);
-    } catch (error) {}
+  useEffect(() => {
+    const getDeals = async () => {
+      try {
+        const responseData = await sendRequest(config.api);
+        setDeals(responseData.deals);
+        setMessage(responseData.message);
+      } catch (error) {}
+    };
+    getDeals();
+  }, [sendRequest]);
 
-    return { retrievedData, getDeals, message };
-  };
+  return { deals, message };
 };

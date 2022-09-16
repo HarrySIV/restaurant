@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { MenuItem } from './menu-hook';
+import { IMenuItem } from './menu-hook';
 import { useHttpClient } from '../http-hook';
 import { OrderState } from '../orderContext/orderContext';
 import { config } from '../../../config/config';
 
-interface Order {
+interface IOrder {
   customer_name: string;
   phone_number: string;
   _id: string;
-  items: MenuItem[];
+  items: IMenuItem[];
   total: number;
 }
 
 export const useOrder = () => {
   const { sendRequest } = useHttpClient();
-  const [orders, setOrders] = useState<Order[]>();
+  const [orders, setOrders] = useState<IOrder[]>();
   const [message, setMessage] = useState<{ message: string }>();
 
   const getOrders = async () => {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHttpClient } from '../http-hook';
 import { config } from '../../../config/config';
 
-export interface MenuItem {
+export interface IMenuItem {
   name: string;
   description: string;
   price: number;
@@ -12,7 +12,7 @@ export interface MenuItem {
 
 export const useMenu = () => {
   const { sendRequest } = useHttpClient();
-  const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [menu, setMenu] = useState<IMenuItem[]>([]);
   const [message, setMessage] = useState<string>('');
 
   useEffect(() => {

@@ -1,15 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useDeal, IDeal } from '../shared/hooks/database/deal-hook';
+import React from 'react';
+import { useDeal } from '../shared/hooks/database/deal-hook';
 
 export const Deals: React.FC = () => {
-  const { retrievedData, getDeals } = useDeal();
-  const [deals, setDeals] = useState<IDeal[]>([]);
-
-  // //gets menu items using menu-hook
-  useEffect(() => {
-    if (!retrievedData.length) getDeals();
-    else setDeals(retrievedData);
-  }, [retrievedData, getDeals]);
+  const { deals } = useDeal();
 
   return (
     <>
