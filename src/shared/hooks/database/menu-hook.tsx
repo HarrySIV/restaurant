@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useHttpClient } from '../http-hook';
+import { config } from '../../../config/config';
 
 export interface MenuItem {
   name: string;
@@ -8,22 +10,22 @@ export interface MenuItem {
   cooking_time: string;
 }
 
-const fetchMenu = async () => {
-  const backendURL: string = 'https://localhost:3001/api/menu';
-  try {
-    const { data } = await axios.get(backendURL);
-    return data.menu;
-  } catch (error) {
-    return [];
-  }
-};
-
 export const useMenu = () => {
+  const { sendRequest } = useHttpClient();
   const [menu, setMenu] = useState<MenuItem[]>([]);
+  const [message, setMessage] = useState<string>('');
+
+  const getMenu = async () => {
+    try {
+      const responseData = await sendRequest(`${config.api}/menu`);
+      setMenu(responseData.menu);
+      setMessage(responseData.message);
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    fetchMenu().then((result: MenuItem[]) => setMenu(result));
+    getMenu().then((result: MenuItem[]) => getMenu);
   }, []);
 
-  return menu;
+  return { menu, message, getMenu };
 };
