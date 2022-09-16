@@ -15,17 +15,16 @@ export const useMenu = () => {
   const [menu, setMenu] = useState<MenuItem[]>([]);
   const [message, setMessage] = useState<string>('');
 
-  const getMenu = async () => {
-    try {
-      const responseData = await sendRequest(`${config.api}/menu`);
-      setMenu(responseData.menu);
-      setMessage(responseData.message);
-    } catch (error) {}
-  };
-
   useEffect(() => {
-    getMenu().then((result: MenuItem[]) => getMenu);
-  }, []);
+    const getMenu = async () => {
+      try {
+        const responseData = await sendRequest(`${config.api}/menu`);
+        setMenu(responseData.menu);
+        setMessage(responseData.message);
+      } catch (error) {}
+    };
+    getMenu();
+  }, [sendRequest]);
 
-  return { menu, message, getMenu };
+  return { menu, message };
 };
