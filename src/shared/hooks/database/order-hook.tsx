@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IMenuItem } from './menu-hook';
 import { useHttpClient } from '../http-hook';
-import { OrderState } from '../orderContext/OrderContext';
+import { useOrderContext } from '../orderContext/OrderContext';
 import { config } from '../../../config/config';
 
 interface IOrder {
@@ -13,6 +13,7 @@ interface IOrder {
 }
 
 export const useOrder = () => {
+  const context = useOrderContext();
   const { sendRequest } = useHttpClient();
   const [orders, setOrders] = useState<IOrder[]>();
   const [message, setMessage] = useState<{ message: string }>();
@@ -29,7 +30,7 @@ export const useOrder = () => {
       const responseData = await sendRequest(
         `${config.api}/orders`,
         'POST',
-        OrderState
+        context
       );
       setMessage(responseData.message);
     } catch (error) {}

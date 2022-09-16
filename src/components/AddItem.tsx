@@ -3,11 +3,11 @@ import { useForm } from '../shared/hooks/form-hook';
 import { useHttpClient } from '../shared/hooks/http-hook';
 import { Modal } from '../shared/UIElements/Modal';
 import { VALIDATOR_REQUIRE } from '../shared/util/validators';
-import { MenuItem } from './MenuItem';
+import { IMenuItem } from '../shared/hooks/database/menu-hook'; 
 
 export const AddItem = () => {
   const { isLoading, sendRequest, error, clearError } = useHttpClient();
-  const [formState, inputHandler] = useForm<MenuItem>({
+  const [formState, inputHandler] = useForm({
     name: {
       value: '',
       isValid: false,

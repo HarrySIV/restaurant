@@ -2,15 +2,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 import { IMenuItem } from '../database/menu-hook';
 import { orderReducer, orderInitializer } from './orderReducer';
 
-interface OrderContext {
-  items: IMenuItem[];
-  dispatch: (action: any) => void;
-}
-
-const OrderContext = createContext<OrderContext>({
-  items: [],
-  dispatch: () => [],
-});
+const OrderContext = createContext<IMenuItem[]>([]);
 
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, [], orderInitializer);
@@ -58,7 +50,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useOrder = () => {
+export const useOrderContext = () => {
   const context = useContext(OrderContext);
 
   if (context === undefined)
