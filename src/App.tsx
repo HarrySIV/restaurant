@@ -15,6 +15,7 @@ import { MainHeader } from './shared/Header/MainHeader';
 
 import { useHttpClient } from './shared/hooks/http-hook';
 import { LoadingSpinner } from './shared/UIElements/LoadingSpinner';
+import { OrderProvider } from './shared/hooks/orderContext/OrderContext';
 
 export function App() {
   const { isLoading } = useHttpClient();
@@ -33,11 +34,13 @@ export function App() {
   return (
     <BrowserRouter>
       <div className="wrapper">
-        <MainHeader />
-        <main>
-          {isLoading && <LoadingSpinner />}
-          {routes}
-        </main>
+        <OrderProvider>
+          <MainHeader />
+          <main>
+            {isLoading && <LoadingSpinner />}
+            {routes}
+          </main>
+        </OrderProvider>
       </div>
       <SiteMap />
     </BrowserRouter>

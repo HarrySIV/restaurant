@@ -1,16 +1,16 @@
-import { MenuItem } from '../database/menu-hook';
+import { IMenuItem } from '../database/menu-hook';
 
 export const orderReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_ITEM':
       return [...state, action.menuItem];
     case 'DELETE_ITEM':
-      return state.forEach((menuItem: MenuItem) => {
+      return state.forEach((menuItem: IMenuItem) => {
         if (action.menuItem.id === menuItem.id) return;
         return menuItem;
       });
     case 'UPDATE_ITEM':
-      return state.forEach((menuItem: MenuItem) => {
+      return state.forEach((menuItem: IMenuItem) => {
         if (action.menuItem.id === menuItem.id) return { ...action.menuItem };
         return menuItem;
       });
