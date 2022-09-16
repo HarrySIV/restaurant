@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
-import '../../styles/elements/_modal.scss';
+import './_modal.scss';
 
 export const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
   const content = (
