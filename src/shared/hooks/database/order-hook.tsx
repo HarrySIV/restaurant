@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IMenuItem } from './menu-hook';
 import { useHttpClient } from '../http-hook';
-import { OrderState } from '../orderContext/orderContext';
+import { OrderState } from '../orderContext/OrderContext';
 import { config } from '../../../config/config';
 
 interface IOrder {
