@@ -14,7 +14,7 @@ export const MenuItem = () => {
     }
   };
 
-  //maps menu items when loaded, otherwise return a loading spinner
+  //displays menu items when menu and menu.length exist... breaks otherwise.
   return (
     <ul className="items">
       {menu && menu.length ? (
