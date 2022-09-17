@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useHttpClient } from '../http-hook';
-import { config } from '../../../config/config';
+import { environment } from '../../../config/settings';
 
 export interface IMenuItem {
   name: string;
@@ -18,8 +18,8 @@ export const useMenu = () => {
   useEffect(() => {
     const getMenu = async () => {
       try {
-        const responseData = await sendRequest(`${config.api}/menu`);
-        setMenu(responseData.menu);
+        const responseData = await sendRequest(`${environment.api}/menu`);
+        setMenu(responseData.items);
         setMessage(responseData.message);
       } catch (error) {}
     };

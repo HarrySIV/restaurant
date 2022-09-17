@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useHttpClient } from '../http-hook';
-import { config } from '../../../config/config';
+import { environment } from '../../../config/settings';
 
 export interface IDeal {
   name: string;
@@ -18,7 +18,7 @@ export const useDeal = () => {
   useEffect(() => {
     const getDeals = async () => {
       try {
-        const responseData = await sendRequest(config.api);
+        const responseData = await sendRequest(`${environment.api}/deals`);
         setDeals(responseData.deals);
         setMessage(responseData.message);
       } catch (error) {}

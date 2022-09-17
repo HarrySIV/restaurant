@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IMenuItem } from './menu-hook';
 import { useHttpClient } from '../http-hook';
 import { useOrderContext } from '../orderContext/OrderContext';
-import { config } from '../../../config/config';
+import { environment } from '../../../config/settings';
 
 interface IOrder {
   customer_name: string;
@@ -18,17 +18,21 @@ export const useOrder = () => {
   const [orders, setOrders] = useState<IOrder[]>();
   const [message, setMessage] = useState<{ message: string }>();
 
-  const getOrders = async () => {
-    try {
-      const responseData = await sendRequest(`${config.api}/orders`);
-      setOrders(responseData.orders);
-      setMessage(responseData.message);
-    } catch (error) {}
-  };
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const responseData = await sendRequest(`${environment.api}/orders`);
+        setOrders(responseData.orders);
+        setMessage(responseData.message);
+      } catch (error) {}
+    };
+    getOrders();
+  }, [sendRequest]);
+
   const addOrder = async () => {
     try {
       const responseData = await sendRequest(
-        `${config.api}/orders`,
+        `${environment.api}/orders`,
         'POST',
         context
       );
@@ -36,5 +40,5 @@ export const useOrder = () => {
     } catch (error) {}
   };
 
-  return { orders, getOrders, addOrder, message };
+  return { orders, addOrder, message };
 };

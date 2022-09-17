@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import '../styles/elements/_footer.scss';
+import './_footer.scss';
 
 export const SiteMap = () => {
   return (

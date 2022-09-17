@@ -17,7 +17,7 @@ export const MenuItem = () => {
   //maps menu items when loaded, otherwise return a loading spinner
   return (
     <ul className="items">
-      {menu.length ? (
+      {menu && menu.length ? (
         menu.map((item: IMenuItem) => {
           return (
             <li key={item._id} className="list-item">
