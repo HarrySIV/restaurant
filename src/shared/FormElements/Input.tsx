@@ -22,11 +22,11 @@ interface InputProps {
   validators: [{ type: string; val: number }];
   onInput: (
     id: string,
-    value: string,
+    value: string | number,
     isValid: boolean
   ) => {
     type: string;
-    value: string;
+    value: string | number;
     inputId: string;
     isValid: boolean;
   };
@@ -68,6 +68,7 @@ export const Input = (props: InputProps) => {
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
+      | React.ChangeEvent<HTMLSelectElement>
   ) => {
     dispatch({
       type: 'CHANGE',
@@ -105,6 +106,32 @@ export const Input = (props: InputProps) => {
         />
       );
     if (props.element === 'checkbox')
+      return (
+        {toppings.map((topping) => {
+          <input
+          id={props.id}
+          type={props.type}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+        />
+        } )}
+
+      );
+    if (props.element === 'select')
+      return (
+        <select
+          id={props.id}
+          type={props.type}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+          value={inputState.value}
+        >
+          {sizes.map((size) => (
+            <option value={size}>{size}</option>
+          ))}
+        </select>
+      );
+    if (props.element === 'number')
       return (
         <input
           id={props.id}

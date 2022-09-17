@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from 'react';
 
 interface Inputs {
-  id: string;
+  _id: string;
   value: string;
   isValid: boolean;
 }
