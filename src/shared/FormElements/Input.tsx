@@ -1,17 +1,27 @@
 import React, { useReducer, useEffect } from 'react';
 import { validate } from '../util/validators.js';
 
-interface InputState {
-  value: string;
+interface UserInputState {
+  value: string | number;
   isValid: boolean;
   isTouched: boolean;
 }
 
 type InputActions =
-  | { type: 'CHANGE'; val: string; validators: [{ type: string; val: number }] }
+  | {
+      type: 'CHANGE';
+      val: string;
+      validators: [{ type: string; val: number }];
+    }
   | { type: 'TOUCH' };
 
-interface InputProps {
+interface Sizes {
+  _id: number;
+  value: string;
+  isValid: boolean;
+}
+
+interface InputElementProps {
   element: string;
   type: string;
   placeholder: string;
@@ -19,7 +29,12 @@ interface InputProps {
   label: string;
   rows: number;
   errorText: string;
+  sizes: Sizes[];
   validators: [{ type: string; val: number }];
+  initialValue: {
+    initialValue: string;
+    initialValid: boolean;
+  };
   onInput: (
     id: string,
     value: string | number,
@@ -32,29 +47,29 @@ interface InputProps {
   };
 }
 
-const inputReducer = (state: InputState, action: InputActions) => {
+const inputReducer = (userInputs: UserInputState, action: InputActions) => {
   switch (action.type) {
     case 'CHANGE':
       return {
-        ...state,
+        ...userInputs,
         value: action.val,
         isValid: validate(action.val, action.validators),
       };
     case 'TOUCH':
       return {
-        ...state,
+        ...userInputs,
         isTouched: true,
       };
     default:
-      return state;
+      return userInputs;
   }
 };
 
-export const Input = (props: InputProps) => {
+export const Input = (props: InputElementProps) => {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: '',
+    value: props.initialValue || '',
     isValid: false,
-    isTouched: false,
+    isTouched: props.initialValid || false,
   });
 
   const { id, onInput } = props;
@@ -95,47 +110,37 @@ export const Input = (props: InputProps) => {
           value={inputState.value}
         />
       );
-    if (props.element === 'textarea')
-      return (
-        <textarea
-          id={props.id}
-          rows={props.rows}
-          onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputState.value}
-        />
-      );
-    if (props.element === 'checkbox')
-      return (
-        {toppings.map((topping) => {
-          <input
-          id={props.id}
-          type={props.type}
-          onChange={changeHandler}
-          onBlur={touchHandler}
-        />
-        } )}
-
-      );
-    if (props.element === 'select')
-      return (
-        <select
-          id={props.id}
-          type={props.type}
-          onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputState.value}
-        >
-          {sizes.map((size) => (
-            <option value={size}>{size}</option>
-          ))}
-        </select>
-      );
     if (props.element === 'number')
       return (
         <input
           id={props.id}
           type={props.type}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+          value={inputState.value}
+        />
+      );
+    if (props.element === 'select')
+      return (
+        <select
+          id={props.id}
+          onChange={changeHandler}
+          onBlur={touchHandler}
+          value={inputState.value}
+        >
+          {props.sizes &&
+            props.sizes.map((size) => (
+              <option value={size.value}>{size.value}</option>
+            ))}
+        </select>
+      );
+    if (props.element === 'checkbox')
+      return <input id={props.id} onChange={changeHandler} />;
+    if (props.element === 'textarea')
+      return (
+        <textarea
+          id={props.id}
+          rows={props.rows}
           onChange={changeHandler}
           onBlur={touchHandler}
           value={inputState.value}
