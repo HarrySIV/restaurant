@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect } from 'react';
-import { validate } from '../util/validators.js';
+import { validate } from '../../util/validators.js';
 
 interface UserInputState {
   value: string | number;
@@ -13,25 +13,20 @@ type InputActions =
       val: string;
       validators: [{ type: string; val: number }];
     }
-  | { type: 'TOUCH' };
-
-interface Sizes {
-  _id: number;
-  value: string;
-  isValid: boolean;
-}
+  | { type: 'TOUCH'; isTouched: boolean };
 
 interface InputElementProps {
   element: string;
   type: string;
-  placeholder: string;
+  placeholder?: string;
   id: string;
   label: string;
-  rows: number;
-  errorText: string;
-  sizes: Sizes[];
+  rows?: number;
+  errorText?: string;
+  hidden: boolean;
+  sizes?: { _id: string; value: string; isValid: boolean }[];
   validators: [{ type: string; val: number }];
-  initialValue: {
+  initialValue?: {
     initialValue: string;
     initialValid: boolean;
   };
@@ -108,6 +103,7 @@ export const Input = (props: InputElementProps) => {
           onChange={changeHandler}
           onBlur={touchHandler}
           value={inputState.value}
+          data-attribute={props.hidden ? props.hidden : ''}
         />
       );
     if (props.element === 'number')
@@ -118,6 +114,17 @@ export const Input = (props: InputElementProps) => {
           onChange={changeHandler}
           onBlur={touchHandler}
           value={inputState.value}
+          data-attribute={props.hidden ? props.hidden : ''}
+        />
+      );
+    if (props.element === 'checkbox')
+      return (
+        <input
+          id={props.id}
+          type={props.type}
+          onChange={changeHandler}
+          value={inputState.value}
+          data-attribute={props.hidden ? props.hidden : ''}
         />
       );
     if (props.element === 'select')
@@ -127,15 +134,16 @@ export const Input = (props: InputElementProps) => {
           onChange={changeHandler}
           onBlur={touchHandler}
           value={inputState.value}
+          data-attribute={props.hidden ? props.hidden : ''}
         >
           {props.sizes &&
             props.sizes.map((size) => (
-              <option value={size.value}>{size.value}</option>
+              <option value={size.value} id={size._id}>
+                {size.value}
+              </option>
             ))}
         </select>
       );
-    if (props.element === 'checkbox')
-      return <input id={props.id} onChange={changeHandler} />;
     if (props.element === 'textarea')
       return (
         <textarea
@@ -144,6 +152,7 @@ export const Input = (props: InputElementProps) => {
           onChange={changeHandler}
           onBlur={touchHandler}
           value={inputState.value}
+          data-attribute={props.hidden ? props.hidden : ''}
         />
       );
   };

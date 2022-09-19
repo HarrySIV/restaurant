@@ -11,9 +11,9 @@ import { Careers } from './pages/Careers';
 import { Order } from './pages/Order';
 import { ErrorPage } from './pages/ErrorPage';
 import { SiteMap } from './shared/SiteMap';
-import { MainHeader } from './shared/Header/MainHeader';
+import { MainHeader } from './shared/sections/Header/MainHeader';
 import { useHttpClient } from './shared/hooks/http-hook';
-import { LoadingSpinner } from './shared/UIElements/LoadingSpinner';
+import { LoadingSpinner } from './shared/elements/UIElements/LoadingSpinner';
 import { OrderProvider } from './shared/hooks/orderContext/OrderContext';
 
 export function App() {
