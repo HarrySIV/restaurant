@@ -8,47 +8,49 @@ const VALIDATOR_TYPE_FILE = 'FILE';
 
 export const VALIDATOR_REQUIRE = () => ({ type: VALIDATOR_TYPE_REQUIRE });
 export const VALIDATOR_FILE = () => ({ type: VALIDATOR_TYPE_FILE });
-export const VALIDATOR_MINLENGTH = (val: number) => ({
+export const VALIDATOR_MINLENGTH = (configVal: number) => ({
   type: VALIDATOR_TYPE_MINLENGTH,
-  val: val,
+  configVal: configVal,
 });
-export const VALIDATOR_MAXLENGTH = (val: number) => ({
+export const VALIDATOR_MAXLENGTH = (configVal: number) => ({
   type: VALIDATOR_TYPE_MAXLENGTH,
-  val: val,
+  configVal: configVal,
 });
-export const VALIDATOR_MIN = (val: number) => ({
+export const VALIDATOR_MIN = (configVal: number) => ({
   type: VALIDATOR_TYPE_MIN,
-  val: val,
+  configVal: configVal,
 });
-export const VALIDATOR_MAX = (val: number) => ({
+export const VALIDATOR_MAX = (configVal: number) => ({
   type: VALIDATOR_TYPE_MAX,
-  val: val,
+  configVal: configVal,
 });
 export const VALIDATOR_EMAIL = () => ({ type: VALIDATOR_TYPE_EMAIL });
 
 export const validate = (
-  value: string, //user entred value
-  validators: [{ type: string; val: number }] //array of validators
+  userEnteredValue: string, //user entred value
+  validators: { type: string; configVal?: number }[] //array of validators
 ) => {
   let isValid = true;
   for (const validator of validators) {
     if (validator.type === VALIDATOR_TYPE_REQUIRE) {
-      isValid = isValid && value.trim().length > 0;
+      isValid = isValid && userEnteredValue.trim().length > 0;
     }
-    if (validator.type === VALIDATOR_TYPE_MINLENGTH) {
-      isValid = isValid && value.trim().length >= validator.val;
+    if (validator.type === VALIDATOR_TYPE_MINLENGTH && validator.configVal) {
+      isValid =
+        isValid && userEnteredValue.trim().length >= validator.configVal;
     }
-    if (validator.type === VALIDATOR_TYPE_MAXLENGTH) {
-      isValid = isValid && value.trim().length <= validator.val;
+    if (validator.type === VALIDATOR_TYPE_MAXLENGTH && validator.configVal) {
+      isValid =
+        isValid && userEnteredValue.trim().length <= validator.configVal;
     }
-    if (validator.type === VALIDATOR_TYPE_MIN) {
-      isValid = isValid && +value >= validator.val;
+    if (validator.type === VALIDATOR_TYPE_MIN && validator.configVal) {
+      isValid = isValid && +userEnteredValue >= validator.configVal;
     }
-    if (validator.type === VALIDATOR_TYPE_MAX) {
-      isValid = isValid && +value <= validator.val;
+    if (validator.type === VALIDATOR_TYPE_MAX && validator.configVal) {
+      isValid = isValid && +userEnteredValue <= validator.configVal;
     }
     if (validator.type === VALIDATOR_TYPE_EMAIL) {
-      isValid = isValid && /^\S+@\S+\.\S+$/.test(value);
+      isValid = isValid && /^\S+@\S+\.\S+$/.test(userEnteredValue);
     }
   }
   return isValid;

@@ -10,14 +10,14 @@ interface UserInputState {
 type InputActions =
   | {
       type: 'CHANGE';
-      val: string;
+      userActionValue: string;
       validators: [{ type: string; val: number }];
     }
   | { type: 'TOUCH'; isTouched: boolean };
 
 interface InputElementProps {
   element: string;
-  type: string;
+  type?: string;
   placeholder?: string;
   id: string;
   label: string;
@@ -25,7 +25,7 @@ interface InputElementProps {
   errorText?: string;
   hidden: boolean;
   sizes?: { _id: string; value: string; isValid: boolean }[];
-  validators: [{ type: string; val: number }];
+  validators: { type: string; configVal?: number }[]; //could be wrong
   initialValue?: {
     initialValue: string;
     initialValid: boolean;
@@ -42,13 +42,13 @@ interface InputElementProps {
   };
 }
 
-const inputReducer = (userInputs: UserInputState, action: InputActions) => {
-  switch (action.type) {
+const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
+  switch (userAction.type) {
     case 'CHANGE':
       return {
         ...userInputs,
-        value: action.val,
-        isValid: validate(action.val, action.validators),
+        value: userAction.userActionValue,
+        isValid: validate(userAction.userActionValue, userAction.validators),
       };
     case 'TOUCH':
       return {
@@ -61,14 +61,14 @@ const inputReducer = (userInputs: UserInputState, action: InputActions) => {
 };
 
 export const Input = (props: InputElementProps) => {
-  const [inputState, dispatch] = useReducer(inputReducer, {
+  const [inputReducerState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue || '',
     isValid: false,
     isTouched: props.initialValid || false,
   });
 
   const { id, onInput } = props;
-  const { value, isValid } = inputState;
+  const { value, isValid } = inputReducerState;
 
   useEffect(() => {
     onInput(id, value, isValid);
@@ -82,7 +82,7 @@ export const Input = (props: InputElementProps) => {
   ) => {
     dispatch({
       type: 'CHANGE',
-      val: event.target.value.toString(),
+      userActionValue: event.target.value,
       validators: props.validators,
     });
   };
@@ -102,7 +102,7 @@ export const Input = (props: InputElementProps) => {
           placeholder={props.placeholder}
           onChange={changeHandler}
           onBlur={touchHandler}
-          value={inputState.value}
+          value={inputReducerState.value}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );
@@ -113,7 +113,7 @@ export const Input = (props: InputElementProps) => {
           type={props.type}
           onChange={changeHandler}
           onBlur={touchHandler}
-          value={inputState.value}
+          value={inputReducerState.value}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );
@@ -123,7 +123,7 @@ export const Input = (props: InputElementProps) => {
           id={props.id}
           type={props.type}
           onChange={changeHandler}
-          value={inputState.value}
+          value={inputReducerState.value}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );
@@ -132,8 +132,7 @@ export const Input = (props: InputElementProps) => {
         <select
           id={props.id}
           onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputState.value}
+          value={inputReducerState.value}
           data-attribute={props.hidden ? props.hidden : ''}
         >
           {props.sizes &&
@@ -148,10 +147,10 @@ export const Input = (props: InputElementProps) => {
       return (
         <textarea
           id={props.id}
-          rows={props.rows}
+          rows={props.rows || 3}
           onChange={changeHandler}
           onBlur={touchHandler}
-          value={inputState.value}
+          value={inputReducerState.value}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );
@@ -160,13 +159,15 @@ export const Input = (props: InputElementProps) => {
   return (
     <div
       className={`form-control ${
-        !inputState.isValid && inputState.isTouched && `form-control--invalid`
+        !inputReducerState.isValid &&
+        inputReducerState.isTouched &&
+        `form-control--invalid`
       }`}
     >
       <>
         <label htmlFor={props.id}>{props.label}</label>
         {inputElement}
-        {!inputState.isValid && inputState.isTouched && (
+        {!inputReducerState.isValid && inputReducerState.isTouched && (
           <p>{props.errorText}</p>
         )}
       </>

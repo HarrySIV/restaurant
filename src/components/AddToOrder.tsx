@@ -1,7 +1,5 @@
 import { ItemInputs } from '../shared/elements/ItemInputs';
-import { useForm } from '../shared/hooks/form-hook';
 import { Modal } from '../shared/elements/UIElements/Modal';
-import { Input } from '../shared/elements/FormElements/Input';
 
 const items = [
   {
@@ -21,13 +19,6 @@ const items = [
 ];
 
 export const AddItem = () => {
-  const [formState, inputHandler] = useForm({
-    _id,
-    toppings,
-    sizes,
-    quantity,
-  });
-
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -54,16 +45,10 @@ export const AddItem = () => {
           {items.map((item) => (
             <>
               <legend>{item.name}</legend>
-              <ItemInputs
-                id={item._id}
-                name={item.name}
-                price={item.price}
-                inputHandler={inputHandler}
-              />
+              <ItemInputs id={item._id} name={item.name} price={item.price} />
             </>
           ))}
         </fieldset>
-        
       </form>
     </Modal>
   );
