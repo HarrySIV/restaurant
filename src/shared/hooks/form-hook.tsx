@@ -13,7 +13,7 @@ interface FormState {
     size: Inputs;
     toppings: Inputs;
     quantity: Inputs;
-    id: Inputs;
+    _id: Inputs;
   };
   isFormValid: boolean;
 }

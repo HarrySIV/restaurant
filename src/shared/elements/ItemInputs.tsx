@@ -16,24 +16,27 @@ const sizes = [
 ];
 
 export const ItemInputs = () => {
-  const [formState, inputHandler] = useForm({
-    size: {
-      value: '',
-      isValid: true,
+  const [formState, inputHandler] = useForm(
+    {
+      size: {
+        value: '',
+        isValid: true,
+      },
+      toppings: {
+        value: [],
+        isValid: true,
+      },
+      quantity: {
+        value: 1,
+        isValid: true,
+      },
+      _id: {
+        value: 0,
+        isValid: true,
+      },
     },
-    toppings: {
-      value: [],
-      isValid: true,
-    },
-    quantity: {
-      value: 1,
-      isValid: true,
-    },
-    id: {
-      value: 0,
-      isValid: true,
-    },
-  });
+    true
+  );
   const hasToppings = true; //delete this later
   const hasSizes = true; //delete this later
   /*
@@ -71,12 +74,11 @@ export const ItemInputs = () => {
       {hasToppings &&
         toppings.map((topping) => (
           <Input
-            id="toppings"
-            element="select"
+            id={topping._id}
+            element="checkbox"
             label={topping.value}
             onInput={inputHandler}
             hidden={false}
-            validators={[VALIDATOR_REQUIRE()]}
           />
         ))}
       <Input

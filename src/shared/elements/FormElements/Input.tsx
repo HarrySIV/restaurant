@@ -7,29 +7,24 @@ interface UserInputState {
   isTouched: boolean;
 }
 
+interface ISizes {
+  id: string;
+  value: string;
+  isValid: boolean;
+}
+
 type InputActions =
   | {
       type: 'CHANGE';
       userActionValue: string;
-      validators: [{ type: string; val: number }];
+      validators?: { type: string; configVal?: number }[]; // could be wrong
     }
   | { type: 'TOUCH'; isTouched: boolean };
 
-interface InputElementProps {
-  element: string;
-  type?: string;
-  placeholder?: string;
+interface GenericInputElementProps {
   id: string;
-  label: string;
-  rows?: number;
-  errorText?: string;
   hidden: boolean;
-  sizes?: { _id: string; value: string; isValid: boolean }[];
-  validators: { type: string; configVal?: number }[]; //could be wrong
-  initialValue?: {
-    initialValue: string;
-    initialValid: boolean;
-  };
+  label: string;
   onInput: (
     id: string,
     value: string | number,
@@ -40,7 +35,36 @@ interface InputElementProps {
     inputId: string;
     isValid: boolean;
   };
+  validators?: { type: string; configVal?: number }[];
+  initialValue?: {
+    initialValue: string;
+    initialValid: boolean;
+  };
 }
+type TextElementProps = GenericInputElementProps & {
+  element: 'input';
+  type: string;
+  placeholder: string;
+  errorText: string;
+};
+type TextAreaElementProps = GenericInputElementProps & {
+  element: 'textarea';
+  rows: number;
+  placeholder: string;
+  errorText: string;
+};
+type NumberElementProps = GenericInputElementProps & {
+  element: 'number';
+  type: 'number';
+};
+type CheckboxElementProps = GenericInputElementProps & {
+  element: 'checkbox';
+  type: 'checkbox';
+};
+type SelectElementProps = GenericInputElementProps & {
+  element: 'select';
+  sizes: ISizes[];
+};
 
 const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
   switch (userAction.type) {
@@ -48,7 +72,9 @@ const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
       return {
         ...userInputs,
         value: userAction.userActionValue,
-        isValid: validate(userAction.userActionValue, userAction.validators),
+        isValid: userAction.validators
+          ? validate(userAction.userActionValue, userAction.validators)
+          : true, // added this to make it work but probably shouldn't
       };
     case 'TOUCH':
       return {
@@ -60,7 +86,14 @@ const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
   }
 };
 
-export const Input = (props: InputElementProps) => {
+export const Input = (
+  props:
+    | TextElementProps
+    | TextAreaElementProps
+    | NumberElementProps
+    | CheckboxElementProps
+    | SelectElementProps
+) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue || '',
     isValid: false,
@@ -137,7 +170,7 @@ export const Input = (props: InputElementProps) => {
         >
           {props.sizes &&
             props.sizes.map((size) => (
-              <option value={size.value} id={size._id}>
+              <option value={size.value} id={size.id}>
                 {size.value}
               </option>
             ))}
@@ -168,7 +201,7 @@ export const Input = (props: InputElementProps) => {
         <label htmlFor={props.id}>{props.label}</label>
         {inputElement}
         {!inputReducerState.isValid && inputReducerState.isTouched && (
-          <p>{props.errorText}</p>
+          {props.errorText && <p>{props.errorText}</p>}
         )}
       </>
     </div>
