@@ -2,7 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { validate } from '../../util/validators.js';
 
 interface UserInputState {
-  value: string | number;
+  value: string | string[] | number;
   isValid: boolean;
   isTouched: boolean;
 }
@@ -42,7 +42,7 @@ interface GenericInputElementProps {
   };
 }
 type TextElementProps = GenericInputElementProps & {
-  element: 'input';
+  element: 'text';
   type: string;
   placeholder: string;
   errorText: string;
@@ -56,6 +56,7 @@ type TextAreaElementProps = GenericInputElementProps & {
 type NumberElementProps = GenericInputElementProps & {
   element: 'number';
   type: 'number';
+  errorText: string;
 };
 type CheckboxElementProps = GenericInputElementProps & {
   element: 'checkbox';
@@ -127,7 +128,7 @@ export const Input = (
   };
 
   const inputElement = () => {
-    if (props.element === 'input')
+    if (props.element === 'text')
       return (
         <input
           id={props.id}
@@ -148,6 +149,7 @@ export const Input = (
           onBlur={touchHandler}
           value={inputReducerState.value}
           data-attribute={props.hidden ? props.hidden : ''}
+          errorText={props.errorText}
         />
       );
     if (props.element === 'checkbox')

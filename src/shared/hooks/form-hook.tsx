@@ -11,7 +11,7 @@ interface Inputs {
 interface FormState {
   inputs: {
     size: Inputs;
-    toppings: Inputs;
+    toppings: Inputs[]; //idk what to do here yet
     quantity: Inputs;
     _id: Inputs;
   };
@@ -34,16 +34,16 @@ const formReducer = (formState: FormState, formAction: FormAction) => {
   switch (formAction.type) {
     case 'INPUT_CHANGE':
       /* This for loop goes through all inputs and checks validity.
-      If any of the inputs validity are false, then formIsValid stays false, 
+      If any of the inputs validity are false, then formIsValid becomes and/or stays false, 
       and the whole form becomes invalid */
-      let formIsValid = true;
+      let returnIsFormValid = true;
       for (const inputId in formState.inputs) {
         if (!formState.inputs[inputId as keyof typeof formState.inputs])
           continue;
         inputId === formAction.inputId
-          ? (formIsValid = formIsValid && formAction.isValid)
-          : (formIsValid =
-              formIsValid &&
+          ? (returnIsFormValid = returnIsFormValid && formAction.isValid)
+          : (returnIsFormValid =
+              returnIsFormValid &&
               formState.inputs[inputId as keyof typeof formState.inputs]
                 .isValid);
       }
@@ -56,7 +56,7 @@ const formReducer = (formState: FormState, formAction: FormAction) => {
             isValid: formAction.isValid,
           },
         },
-        isValid: formIsValid,
+        isValid: returnIsFormValid,
       };
     case 'SET_DATA':
       return {
@@ -77,7 +77,7 @@ export const useForm = (
     isFormValid: initialFormValidity,
   });
   const inputHandler = useCallback(
-    (id: string, value: string | number, isValid: boolean) => {
+    (id: string, value: string | string[] | number, isValid: boolean) => {
       dispatch({
         type: 'INPUT_CHANGE',
         value: value,

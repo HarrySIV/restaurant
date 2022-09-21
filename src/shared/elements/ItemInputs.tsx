@@ -2,6 +2,11 @@ import { VALIDATOR_MIN, VALIDATOR_REQUIRE } from '../util/validators';
 import { Input } from './FormElements/Input';
 import { useForm } from '../hooks/form-hook';
 
+type ItemInputsProps = {
+  errorText?: string;
+  id: string;
+};
+
 const toppings = [
   { _id: 'pepperoni', value: 'Pepperoni', isValid: true },
   { _id: 'sausage', value: 'Sausage', isValid: true },
@@ -15,7 +20,7 @@ const sizes = [
   { _id: 'large', value: 'Large', isValid: true },
 ];
 
-export const ItemInputs = () => {
+export const ItemInputs = (props: ItemInputsProps) => {
   const [formState, inputHandler] = useForm(
     {
       size: {
@@ -68,7 +73,6 @@ export const ItemInputs = () => {
           sizes={sizes}
           onInput={inputHandler}
           hidden={false}
-          validators={[VALIDATOR_REQUIRE()]}
         />
       )}
       {hasToppings &&
@@ -92,13 +96,13 @@ export const ItemInputs = () => {
         errorText="You must add at least 1 item"
       />
       <Input
-        id="_id"
-        element="text"
+        id={props.id}
         type="text"
+        placeholder={props.id}
+        element="text"
         label="_id"
         hidden={true}
         onInput={inputHandler}
-        validators={[VALIDATOR_REQUIRE()]}
       />
     </>
   );
