@@ -25,6 +25,7 @@ interface GenericInputElementProps {
   id: string;
   hidden: boolean;
   label: string;
+  errorText: string;
   onInput: (
     id: string,
     value: string | number,
@@ -43,20 +44,17 @@ interface GenericInputElementProps {
 }
 type TextElementProps = GenericInputElementProps & {
   element: 'text';
-  type: string;
+  type: 'text';
   placeholder: string;
-  errorText: string;
 };
 type TextAreaElementProps = GenericInputElementProps & {
   element: 'textarea';
   rows: number;
   placeholder: string;
-  errorText: string;
 };
 type NumberElementProps = GenericInputElementProps & {
   element: 'number';
   type: 'number';
-  errorText: string;
 };
 type CheckboxElementProps = GenericInputElementProps & {
   element: 'checkbox';
@@ -149,7 +147,6 @@ export const Input = (
           onBlur={touchHandler}
           value={inputReducerState.value}
           data-attribute={props.hidden ? props.hidden : ''}
-          errorText={props.errorText}
         />
       );
     if (props.element === 'checkbox')
@@ -202,9 +199,9 @@ export const Input = (
       <>
         <label htmlFor={props.id}>{props.label}</label>
         {inputElement}
-        {!inputReducerState.isValid && inputReducerState.isTouched && (
-          {props.errorText && <p>{props.errorText}</p>}
-        )}
+        {!inputReducerState.isValid &&
+          inputReducerState.isTouched &&
+          props.errorText && <p>{props.errorText}</p>}
       </>
     </div>
   );

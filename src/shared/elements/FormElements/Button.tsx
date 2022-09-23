@@ -1,8 +1,13 @@
 interface ButtonProps {
   type: 'submit' | 'reset';
+  text: string;
   disabled: boolean;
 }
 
-export const Button = ({ type, disabled }: ButtonProps) => {
-  return <button type={type} disabled={disabled}></button>;
+export const Button = (props: ButtonProps) => {
+  return (
+    <button type={props.type} disabled={props.disabled}>
+      {props.text}
+    </button>
+  );
 };

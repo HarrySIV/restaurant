@@ -36,12 +36,15 @@ export const AddItem = () => {
           {items.map((item) => (
             <>
               <legend>{item.name}</legend>
-              <ItemInputs id={item._id} name={item.name} price={item.price} />
+              <ItemInputs id={item._id} />
+              <h2>{item.price}</h2>
             </>
           ))}
-          <Button type="submit" disabled={!formState.isValid}>
-            ADD TO ORDER
-          </Button>
+          <Button
+            type="submit"
+            text="ADD TO ORDER"
+            disabled={!formState.isValid}
+          />
         </fieldset>
       </form>
     </Modal>
