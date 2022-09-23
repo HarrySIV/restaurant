@@ -28,7 +28,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
         isValid: true,
       },
       toppings: {
-        value: [],
+        value: '',
         isValid: true,
       },
       quantity: {

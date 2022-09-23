@@ -2,7 +2,7 @@ import React, { useReducer, useEffect } from 'react';
 import { validate } from '../../util/validators.js';
 
 interface UserInputState {
-  value: string | string[] | number;
+  userInputValue: string | number;
   isValid: boolean;
   isTouched: boolean;
 }
@@ -19,7 +19,7 @@ type InputActions =
       userActionValue: string;
       validators?: { type: string; configVal?: number }[]; // could be wrong
     }
-  | { type: 'TOUCH'; isTouched: boolean };
+  | { type: 'TOUCH' };
 
 interface GenericInputElementProps {
   id: string;
@@ -65,15 +65,28 @@ type SelectElementProps = GenericInputElementProps & {
   sizes: ISizes[];
 };
 
+type InputProps =
+  | TextElementProps
+  | TextAreaElementProps
+  | NumberElementProps
+  | CheckboxElementProps
+  | SelectElementProps;
+
 const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
   switch (userAction.type) {
+    // {
+    //   type: 'CHANGE';
+    //   userActionValue: string;
+    //   validators?: { type: string; configVal?: number }[]; // could be wrong
+    // }
     case 'CHANGE':
       return {
         ...userInputs,
-        value: userAction.userActionValue,
-        isValid: userAction.validators
-          ? validate(userAction.userActionValue, userAction.validators)
-          : true, // added this to make it work but probably shouldn't
+        userInputValue: userAction.userActionValue,
+        isValid:
+          userAction.validators && userAction.validators.length
+            ? validate(userAction.userActionValue, userAction.validators)
+            : true, // added this to make it work but probably shouldn't
       };
     case 'TOUCH':
       return {
@@ -85,14 +98,7 @@ const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
   }
 };
 
-export const Input = (
-  props:
-    | TextElementProps
-    | TextAreaElementProps
-    | NumberElementProps
-    | CheckboxElementProps
-    | SelectElementProps
-) => {
+export const Input = (props: InputProps) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue || '',
     isValid: false,

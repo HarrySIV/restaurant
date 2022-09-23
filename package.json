@@ -10,6 +10,7 @@
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/node-sass": "^4.11.3",
+    "@types/react": "^18.0.21",
     "cra-template-typescript": "^1.2.0",
     "firebase": "^9.8.4",
     "react": "^18.1.0",

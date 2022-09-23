@@ -11,7 +11,7 @@ interface Inputs {
 interface FormState {
   inputs: {
     size: Inputs;
-    toppings: Inputs[]; //idk what to do here yet
+    //toppings: Inputs[]; //idk what to do here yet
     quantity: Inputs;
     _id: Inputs;
   };
@@ -24,8 +24,18 @@ type FormAction =
       value: string | number;
       inputId: string;
       isValid: boolean;
+      payload?: undefined;
     }
-  | { type: 'SET_DATA'; isFormValid: boolean; inputs: Inputs };
+  | {
+      type: 'SET_DATA';
+      isFormValid: boolean;
+      inputs: Inputs;
+      payload?: undefined;
+    };
+
+interface IInitialFormValidity {
+  [key: string]: { value: string | number; isValid: boolean };
+}
 
 /* on input 'change' or 'set', reduces information to either preset in order to be 
    handled by useform. Essentially, the reducer handles the individual inputs to 
@@ -67,9 +77,9 @@ const formReducer = (formState: FormState, formAction: FormAction) => {
       return formState;
   }
 };
-
+//{key: {value: string | number, isValid: boolean}, key: {value: string | number, isValid: boolean}, key: {value: string | number, isValid: boolean}}
 export const useForm = (
-  initialInputs: Inputs,
+  initialInputs: IInitialFormValidity,
   initialFormValidity: boolean
 ) => {
   const [formState, dispatch] = useReducer(formReducer, {
@@ -77,7 +87,7 @@ export const useForm = (
     isFormValid: initialFormValidity,
   });
   const inputHandler = useCallback(
-    (id: string, value: string | string[] | number, isValid: boolean) => {
+    (id: string, value: string | number, isValid: boolean) => {
       dispatch({
         type: 'INPUT_CHANGE',
         value: value,
@@ -88,7 +98,7 @@ export const useForm = (
     []
   );
   const setFormData = useCallback(
-    (userInputData: Inputs[], formValidity: boolean) => {
+    (userInputData: Inputs, formValidity: boolean) => {
       dispatch({
         type: 'SET_DATA',
         inputs: userInputData,
