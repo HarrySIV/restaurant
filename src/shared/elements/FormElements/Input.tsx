@@ -2,9 +2,10 @@ import React, { useReducer, useEffect } from 'react';
 import { validate } from '../../util/validators.js';
 
 interface UserInputState {
-  userInputValue: string | number;
-  isValid: boolean;
-  isTouched: boolean;
+  [key: string]: any;
+  // userInputValue: string | number;
+  // isValid: boolean;
+  // isTouched: boolean;
 }
 
 interface ISizes {
@@ -26,6 +27,9 @@ interface GenericInputElementProps {
   hidden: boolean;
   label: string;
   errorText: string;
+  validators?: { type: string; configVal?: number }[];
+  initialValue?: string;
+  initialValid?: boolean;
   onInput: (
     id: string,
     value: string | number,
@@ -35,11 +39,6 @@ interface GenericInputElementProps {
     value: string | number;
     inputId: string;
     isValid: boolean;
-  };
-  validators?: { type: string; configVal?: number }[];
-  initialValue?: {
-    initialValue: string;
-    initialValid: boolean;
   };
 }
 type TextElementProps = GenericInputElementProps & {
