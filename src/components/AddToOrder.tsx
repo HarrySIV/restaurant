@@ -40,11 +40,11 @@ export const AddItem = () => {
               <h2>{item.price}</h2>
             </>
           ))}
-          <Button
+          {/* <Button
             type="submit"
             text="ADD TO ORDER"
             disabled={!formState.isValid}
-          />
+          /> */}
         </fieldset>
       </form>
     </Modal>

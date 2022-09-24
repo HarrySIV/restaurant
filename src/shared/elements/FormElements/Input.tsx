@@ -2,10 +2,10 @@ import React, { useReducer, useEffect } from 'react';
 import { validate } from '../../util/validators.js';
 
 interface UserInputState {
-  [key: string]: any;
-  // userInputValue: string | number;
-  // isValid: boolean;
-  // isTouched: boolean;
+  // [key: string]: any;
+  userInputValue: string;
+  isValid: boolean;
+  isTouched: boolean;
 }
 
 interface ISizes {
@@ -24,12 +24,12 @@ type InputActions =
 
 interface GenericInputElementProps {
   id: string;
+  element: string;
   hidden: boolean;
   label: string;
   errorText: string;
   validators?: { type: string; configVal?: number }[];
-  initialValue?: string;
-  initialValid?: boolean;
+  initialValue: string;
   onInput: (
     id: string,
     value: string | number,
@@ -41,26 +41,24 @@ interface GenericInputElementProps {
     isValid: boolean;
   };
 }
+
 type TextElementProps = GenericInputElementProps & {
-  element: 'text';
   type: 'text';
   placeholder: string;
 };
 type TextAreaElementProps = GenericInputElementProps & {
-  element: 'textarea';
+  type: 'textArea';
   rows: number;
   placeholder: string;
 };
 type NumberElementProps = GenericInputElementProps & {
-  element: 'number';
   type: 'number';
 };
 type CheckboxElementProps = GenericInputElementProps & {
-  element: 'checkbox';
   type: 'checkbox';
 };
 type SelectElementProps = GenericInputElementProps & {
-  element: 'select';
+  type: 'select';
   sizes: ISizes[];
 };
 
@@ -99,17 +97,17 @@ const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
 
 export const Input = (props: InputProps) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
-    value: props.initialValue || '',
-    isValid: false,
-    isTouched: props.initialValid || false,
+    userInputValue: props.initialValue,
+    isValid: true,
+    isTouched: false,
   });
 
   const { id, onInput } = props;
-  const { value, isValid } = inputReducerState;
+  const { userInputValue, isValid } = inputReducerState;
 
   useEffect(() => {
-    onInput(id, value, isValid);
-  }, [id, value, isValid, onInput]);
+    onInput(id, userInputValue, isValid);
+  }, [id, userInputValue, isValid, onInput]);
 
   const changeHandler = (
     event:
@@ -131,7 +129,7 @@ export const Input = (props: InputProps) => {
   };
 
   const inputElement = () => {
-    if (props.element === 'text')
+    if (props.type === 'text')
       return (
         <input
           id={props.id}
@@ -139,37 +137,37 @@ export const Input = (props: InputProps) => {
           placeholder={props.placeholder}
           onChange={changeHandler}
           onBlur={touchHandler}
-          value={inputReducerState.value}
+          value={inputReducerState.userInputValue}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );
-    if (props.element === 'number')
+    if (props.type === 'number')
       return (
         <input
           id={props.id}
           type={props.type}
           onChange={changeHandler}
           onBlur={touchHandler}
-          value={inputReducerState.value}
+          value={inputReducerState.userInputValue}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );
-    if (props.element === 'checkbox')
+    if (props.type === 'checkbox')
       return (
         <input
           id={props.id}
           type={props.type}
           onChange={changeHandler}
-          value={inputReducerState.value}
+          value={inputReducerState.userInputValue}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );
-    if (props.element === 'select')
+    if (props.type === 'select')
       return (
         <select
           id={props.id}
           onChange={changeHandler}
-          value={inputReducerState.value}
+          value={inputReducerState.userInputValue}
           data-attribute={props.hidden ? props.hidden : ''}
         >
           {props.sizes &&
@@ -180,14 +178,14 @@ export const Input = (props: InputProps) => {
             ))}
         </select>
       );
-    if (props.element === 'textarea')
+    if (props.type === 'textArea')
       return (
         <textarea
           id={props.id}
           rows={props.rows || 3}
           onChange={changeHandler}
           onBlur={touchHandler}
-          value={inputReducerState.value}
+          value={inputReducerState.userInputValue}
           data-attribute={props.hidden ? props.hidden : ''}
         />
       );

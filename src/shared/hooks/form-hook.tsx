@@ -2,7 +2,7 @@ import { useCallback, useReducer } from 'react';
 
 interface Inputs {
   id: string;
-  value: string | number;
+  value: string;
   isValid: boolean;
 }
 
@@ -10,10 +10,7 @@ interface Inputs {
 
 interface FormState {
   inputs: {
-    size: Inputs;
-    //toppings: Inputs[]; //idk what to do here yet
-    quantity: Inputs;
-    _id: Inputs;
+    [key: string]: { value: string; isValid: boolean };
   };
   isFormValid: boolean;
 }
@@ -21,7 +18,7 @@ interface FormState {
 type FormAction =
   | {
       type: 'INPUT_CHANGE';
-      value: string | number;
+      value: string;
       inputId: string;
       isValid: boolean;
       payload?: undefined;
@@ -34,13 +31,13 @@ type FormAction =
     };
 
 interface IInitialFormValidity {
-  [key: string]: { value: string | number; isValid: boolean };
+  [key: string]: { value: string; isValid: boolean };
 }
 
 /* on input 'change' or 'set', reduces information to either preset in order to be 
    handled by useform. Essentially, the reducer handles the individual inputs to 
    be sent to  */
-const formReducer = (formState: FormState, formAction: FormAction) => {
+const formReducer = (formState: any, formAction: FormAction) => {
   switch (formAction.type) {
     case 'INPUT_CHANGE':
       /* This for loop goes through all inputs and checks validity.
@@ -87,7 +84,7 @@ export const useForm = (
     isFormValid: initialFormValidity,
   });
   const inputHandler = useCallback(
-    (id: string, value: string | number, isValid: boolean) => {
+    (id: string, value: string, isValid: boolean) => {
       dispatch({
         type: 'INPUT_CHANGE',
         value: value,

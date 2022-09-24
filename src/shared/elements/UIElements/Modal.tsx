@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { useModal } from '../../hooks/modal-hook';
 
 import './_modal.scss';
 
 export const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const { isModalOpen, setIsModalOpen } = useModal();
 
   const closeModalHandler = () => {
-    if (modalIsOpen) setModalIsOpen(false);
+    if (isModalOpen) setIsModalOpen(false);
   };
 
   const content = (

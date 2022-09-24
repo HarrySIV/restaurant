@@ -32,11 +32,11 @@ export const ItemInputs = (props: ItemInputsProps) => {
         isValid: true,
       },
       quantity: {
-        value: 1,
+        value: '1',
         isValid: true,
       },
       _id: {
-        value: 0,
+        value: '0',
         isValid: true,
       },
     },
@@ -50,10 +50,12 @@ export const ItemInputs = (props: ItemInputsProps) => {
         <Input
           id="size"
           element="select"
+          type="select"
           label="Size"
           sizes={sizes}
           onInput={inputHandler}
           hidden={false}
+          initialValue={sizes[1].value}
           errorText={'Please pick a valid size'}
         />
       )}
@@ -65,6 +67,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
             type="checkbox"
             label={topping.value}
             onInput={inputHandler}
+            initialValue={topping.value}
             hidden={false}
             errorText={'Please pick a valid topping'}
           />
@@ -75,19 +78,21 @@ export const ItemInputs = (props: ItemInputsProps) => {
         type="number"
         label="Quantity"
         onInput={inputHandler}
+        initialValue="1"
         hidden={false}
         validators={[VALIDATOR_MIN(1)]}
         errorText="You must add at least 1 item"
       />
       <Input
         id={props.id}
-        type="text"
-        placeholder={props.id}
         element="text"
+        type="text"
         label="_id"
+        placeholder={props.id}
+        onInput={inputHandler}
+        initialValue={props.id}
         hidden={true}
         errorText={''}
-        onInput={inputHandler}
       />
     </>
   );

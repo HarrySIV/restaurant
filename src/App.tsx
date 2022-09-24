@@ -10,7 +10,7 @@ import { Locations } from './pages/Locations';
 import { Careers } from './pages/Careers';
 import { Order } from './pages/Order';
 import { ErrorPage } from './pages/ErrorPage';
-import { SiteMap } from './shared/SiteMap';
+import { SiteMap } from './shared/sections/SiteMap';
 import { MainHeader } from './shared/sections/Header/MainHeader';
 import { useHttpClient } from './shared/hooks/http-hook';
 import { LoadingSpinner } from './shared/elements/UIElements/LoadingSpinner';
