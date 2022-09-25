@@ -3,7 +3,6 @@ import { Input } from './FormElements/Input';
 import { useForm } from '../hooks/form-hook';
 
 type ItemInputsProps = {
-  errorText?: string;
   id: string;
 };
 
@@ -21,27 +20,7 @@ const sizes = [
 ];
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const [formState, inputHandler] = useForm(
-    {
-      size: {
-        value: '',
-        isValid: true,
-      },
-      toppings: {
-        value: '',
-        isValid: true,
-      },
-      quantity: {
-        value: '1',
-        isValid: true,
-      },
-      _id: {
-        value: '0',
-        isValid: true,
-      },
-    },
-    true
-  );
+  const [formState, inputHandler] = useForm({}, true);
   const hasToppings = true; //delete this later
   const hasSizes = true; //delete this later
   return (
