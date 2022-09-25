@@ -1,24 +1,17 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, Reducer } from 'react';
 import { validate } from '../../util/validators.js';
 
 interface UserInputState {
-  // [key: string]: any;
   userInputValue: string;
-  isValid: boolean;
-  isTouched: boolean;
+  userInputIsValid: boolean;
+  userInputIsTouched: boolean;
 }
 
-interface ISizes {
-  id: string;
-  value: string;
-  isValid: boolean;
-}
-
-type InputActions =
+type UserInputActions =
   | {
       type: 'CHANGE';
       userActionValue: string;
-      validators?: { type: string; configVal?: number }[]; // could be wrong
+      validators?: { type: string; configVal: number }[] | { type: string }[]; // could be wrong
     }
   | { type: 'TOUCH' };
 
@@ -29,17 +22,13 @@ interface GenericInputElementProps {
   label: string;
   errorText: string;
   validators?: { type: string; configVal?: number }[];
-  initialValue: string;
+  initialValue?: string;
+  initialValid?: boolean;
   onInput: (
     id: string,
-    value: string | number,
-    isValid: boolean
-  ) => {
-    type: string;
-    value: string | number;
-    inputId: string;
-    isValid: boolean;
-  };
+    userInputValue: string,
+    userInputIsValid: boolean
+  ) => void;
 }
 
 type TextElementProps = GenericInputElementProps & {
@@ -62,6 +51,12 @@ type SelectElementProps = GenericInputElementProps & {
   sizes: ISizes[];
 };
 
+interface ISizes {
+  id: string;
+  value: string;
+  isValid: boolean;
+}
+
 type InputProps =
   | TextElementProps
   | TextAreaElementProps
@@ -69,45 +64,46 @@ type InputProps =
   | CheckboxElementProps
   | SelectElementProps;
 
-const inputReducer = (userInputs: UserInputState, userAction: InputActions) => {
-  switch (userAction.type) {
-    // {
-    //   type: 'CHANGE';
-    //   userActionValue: string;
-    //   validators?: { type: string; configVal?: number }[]; // could be wrong
-    // }
+const inputReducer: Reducer<UserInputState, UserInputActions> = (
+  userInputState,
+  userInputAction
+) => {
+  switch (userInputAction.type) {
     case 'CHANGE':
       return {
-        ...userInputs,
-        userInputValue: userAction.userActionValue,
-        isValid:
-          userAction.validators && userAction.validators.length
-            ? validate(userAction.userActionValue, userAction.validators)
+        ...userInputState,
+        userInputValue: userInputAction.userActionValue,
+        userInputIsValid:
+          userInputAction.validators && userInputAction.validators.length
+            ? validate(
+                userInputAction.userActionValue,
+                userInputAction.validators
+              )
             : true, // added this to make it work but probably shouldn't
       };
     case 'TOUCH':
       return {
-        ...userInputs,
-        isTouched: true,
+        ...userInputState,
+        userInputIsTouched: true,
       };
     default:
-      return userInputs;
+      return userInputState;
   }
 };
 
 export const Input = (props: InputProps) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
-    userInputValue: props.initialValue,
-    isValid: true,
-    isTouched: false,
+    userInputValue: props.initialValue || '',
+    userInputIsValid: props.initialValid || false,
+    userInputIsTouched: false,
   });
 
   const { id, onInput } = props;
-  const { userInputValue, isValid } = inputReducerState;
+  const { userInputValue, userInputIsValid } = inputReducerState;
 
   useEffect(() => {
-    onInput(id, userInputValue, isValid);
-  }, [id, userInputValue, isValid, onInput]);
+    onInput(id, userInputValue, userInputIsValid);
+  }, [id, userInputValue, userInputIsValid, onInput]);
 
   const changeHandler = (
     event:
@@ -194,16 +190,16 @@ export const Input = (props: InputProps) => {
   return (
     <div
       className={`form-control ${
-        !inputReducerState.isValid &&
-        inputReducerState.isTouched &&
+        !inputReducerState.userInputIsValid &&
+        inputReducerState.userInputIsTouched &&
         `form-control--invalid`
       }`}
     >
       <>
         <label htmlFor={props.id}>{props.label}</label>
         {inputElement}
-        {!inputReducerState.isValid &&
-          inputReducerState.isTouched &&
+        {!inputReducerState.userInputIsValid &&
+          inputReducerState.userInputIsTouched &&
           props.errorText && <p>{props.errorText}</p>}
       </>
     </div>

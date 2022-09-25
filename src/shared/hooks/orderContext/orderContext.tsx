@@ -1,11 +1,21 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { IMenuItem } from '../database/menu-hook';
-import { orderReducer, orderInitializer } from './orderReducer';
+import { orderReducer } from './orderReducer';
 
-const OrderContext = createContext<IMenuItem[]>([]);
+const OrderContext = createContext<IMenuItem[]>([
+  {
+    name: '',
+    description: '',
+    price: 0,
+    _id: -1,
+    cooking_time: '',
+    hasToppings: false,
+    hasSizes: false,
+  },
+]);
 
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
-  const [order, dispatch] = useReducer(orderReducer, [], orderInitializer);
+  const [order, dispatch] = useReducer(orderReducer, []);
 
   const addToOrder = (item) => {
     const updatedOrder = order.items.concat(item);
@@ -29,20 +39,20 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const clearOrder = () => {
-    dispatch({
-      type: 'CLEAR_ORDER',
-      payload: {
-        order: [],
-      },
-    });
-  };
+  // const clearOrder = () => {
+  //   dispatch({
+  //     type: 'CLEAR_ORDER',
+  //     payload: {
+  //       order: [],
+  //     },
+  //   });
+  // };
 
   const value = {
     order: order.items,
     addToOrder,
     deleteFromOrder,
-    clearOrder,
+    // clearOrder,
   };
 
   return (

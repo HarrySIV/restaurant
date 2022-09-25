@@ -1,17 +1,11 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useReducer, Reducer } from 'react';
 
-interface Inputs {
-  id: string;
-  value: string;
-  isValid: boolean;
+interface FormStateInputs {
+  [key: string]: { value: string; isValid: boolean };
 }
 
-/*inputs: { title: { value: 'This is the Title', isValid: true } }*/
-
 interface FormState {
-  inputs: {
-    [key: string]: { value: string; isValid: boolean };
-  };
+  inputs: FormStateInputs;
   isFormValid: boolean;
 }
 
@@ -21,23 +15,17 @@ type FormAction =
       value: string;
       inputId: string;
       isValid: boolean;
-      payload?: undefined;
     }
   | {
       type: 'SET_DATA';
+      inputs: FormStateInputs;
       isFormValid: boolean;
-      inputs: Inputs;
-      payload?: undefined;
     };
-
-interface IInitialFormValidity {
-  [key: string]: { value: string; isValid: boolean };
-}
 
 /* on input 'change' or 'set', reduces information to either preset in order to be 
    handled by useform. Essentially, the reducer handles the individual inputs to 
-   be sent to  */
-const formReducer = (formState: any, formAction: FormAction) => {
+   be sent to the form state, which should ultimately be inserted into the OrderContext */
+const formReducer: Reducer<FormState, FormAction> = (formState, formAction) => {
   switch (formAction.type) {
     case 'INPUT_CHANGE':
       /* This for loop goes through all inputs and checks validity.
@@ -45,14 +33,11 @@ const formReducer = (formState: any, formAction: FormAction) => {
       and the whole form becomes invalid */
       let returnIsFormValid = true;
       for (const inputId in formState.inputs) {
-        if (!formState.inputs[inputId as keyof typeof formState.inputs])
-          continue;
+        if (!formState.inputs[inputId]) continue;
         inputId === formAction.inputId
           ? (returnIsFormValid = returnIsFormValid && formAction.isValid)
           : (returnIsFormValid =
-              returnIsFormValid &&
-              formState.inputs[inputId as keyof typeof formState.inputs]
-                .isValid);
+              returnIsFormValid && formState.inputs[inputId].isValid);
       }
       return {
         ...formState,
@@ -63,39 +48,47 @@ const formReducer = (formState: any, formAction: FormAction) => {
             isValid: formAction.isValid,
           },
         },
-        isValid: returnIsFormValid,
+        isFormValid: returnIsFormValid,
       };
     case 'SET_DATA':
       return {
         inputs: formAction.inputs,
-        isValid: formAction.isFormValid,
+        isFormValid: formAction.isFormValid,
       };
     default:
       return formState;
   }
 };
-//{key: {value: string | number, isValid: boolean}, key: {value: string | number, isValid: boolean}, key: {value: string | number, isValid: boolean}}
+
+/* useForm takes TWO arguments, the initial inputs and the initial form validity. It then uses a reducer to update formState from the
+inputs dispatched from the input handler... setFormData should be used when the form "submit" button is clicked. */
 export const useForm = (
-  initialInputs: IInitialFormValidity,
+  initialInputs: FormStateInputs,
   initialFormValidity: boolean
-) => {
+): [
+  FormState,
+  (id: string, userInputValue: string, userInputIsValid: boolean) => void,
+  (userInputData: FormStateInputs, formValidity: boolean) => void
+] => {
   const [formState, dispatch] = useReducer(formReducer, {
     inputs: initialInputs,
     isFormValid: initialFormValidity,
   });
+
   const inputHandler = useCallback(
-    (id: string, value: string, isValid: boolean) => {
+    (id: string, userInputValue: string, userInputIsValid: boolean) => {
       dispatch({
         type: 'INPUT_CHANGE',
-        value: value,
-        isValid: isValid,
+        value: userInputValue,
+        isValid: userInputIsValid,
         inputId: id,
       });
     },
     []
   );
+
   const setFormData = useCallback(
-    (userInputData: Inputs, formValidity: boolean) => {
+    (userInputData: FormStateInputs, formValidity: boolean) => {
       dispatch({
         type: 'SET_DATA',
         inputs: userInputData,
@@ -104,5 +97,6 @@ export const useForm = (
     },
     []
   );
+
   return [formState, inputHandler, setFormData];
 };

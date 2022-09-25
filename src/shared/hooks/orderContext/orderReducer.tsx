@@ -1,26 +1,31 @@
+import { Reducer } from 'react';
 import { IMenuItem } from '../database/menu-hook';
 
-export type OrderAction = { type: string; menuItem: IMenuItem };
+export type OrderAction = { actionType: string; menuItem: IMenuItem };
 
-export const orderReducer = (state: IMenuItem[], action: OrderAction) => {
-  switch (action.type) {
+export const orderReducer: Reducer<IMenuItem[], OrderAction> = (
+  orderReducerState,
+  orderReducerAction
+) => {
+  switch (orderReducerAction.actionType) {
     case 'ADD_ITEM':
-      return [...state, action.menuItem];
+      return [...orderReducerState, orderReducerAction.menuItem];
     case 'DELETE_ITEM':
-      return state.forEach((menuItem) => {
-        if (action.menuItem._id === menuItem._id) return;
+      return orderReducerState.forEach((menuItem) => {
+        if (orderReducerAction.menuItem._id === menuItem._id) return;
         return menuItem;
       });
     case 'UPDATE_ITEM':
-      return state.forEach((menuItem) => {
-        if (action.menuItem._id === menuItem._id) return { ...action.menuItem };
+      return orderReducerState.forEach((menuItem) => {
+        if (orderReducerAction.menuItem._id === menuItem._id)
+          return { ...orderReducerAction.menuItem };
         return menuItem;
       });
-    case 'CLEAR_ORDER':
-      return [];
+    // case 'CLEAR_ORDER':
+    //   return [];
     default:
-      return state;
+      return orderReducerState;
   }
 };
 
-export const orderInitializer = [];
+// export const orderInitializer = [];
