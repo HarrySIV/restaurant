@@ -1,6 +1,6 @@
-import { Button } from '../shared/elements/FormElements/Button';
+import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
-import { Modal } from '../shared/elements/UIElements/Modal';
+import { Modal } from '../shared/elements/uiElements/Modal';
 
 const items = [
   {

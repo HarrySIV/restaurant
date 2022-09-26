@@ -1,5 +1,5 @@
 import { VALIDATOR_MIN } from '../util/validators';
-import { Input } from './FormElements/Input';
+import { Input } from './formElements/Input';
 import { useForm } from '../hooks/form-hook';
 
 type ItemInputsProps = {
