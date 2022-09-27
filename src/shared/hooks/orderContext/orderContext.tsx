@@ -16,31 +16,44 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addToOrder = (item: IMenuItem) => {
     const newOrder = Object.assign({}, order);
+    const updatedOrder = {}; //idk yet
+    //add logic
+    updatePrice(updatedOrder);
     dispatch({ type: 'ADD_ITEM', orderContext: newOrder, item: item });
   };
 
   const deleteFromOrder = (item: IMenuItem) => {
     const newOrder = Object.assign({}, order);
+    const updatedOrder = {}; //idk yet
+    //delete logic
+    updatePrice(updatedOrder);
     dispatch({ type: 'REMOVE_ITEM', orderContext: newOrder, item: item });
   };
 
   const updateItem = (item: IMenuItem) => {
     const newOrder = Object.assign({}, order);
+    const updatedOrder = {}; //idk yet
+    //update logic
+    updatePrice(updatedOrder);
     dispatch({ type: 'REMOVE_ITEM', orderContext: newOrder, item: item });
   };
 
   const clearOrder = () => {
+    const updatedOrder = {}; //idk yet
+    //clear logic
+    updatePrice(updatedOrder);
     dispatch({ type: 'CLEAR_ORDER', orderContext: order });
   };
 
-  const updatePrice = () => {
+  const updatePrice = (updatedOrder) => {
     let total = 0;
-    order.items.forEach((item) => (total += item.menuItem.price));
+    updatedOrder.items.forEach((item) => (total += item.menuItem.price));
     dispatch({ type: 'UPDATE_PRICE', total: total });
   };
 
   const value = {
     order: order.items,
+    total: order.total,
     addToOrder,
     deleteFromOrder,
     updateItem,
