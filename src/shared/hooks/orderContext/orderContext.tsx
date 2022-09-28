@@ -2,6 +2,11 @@ import React, { createContext, useContext, useReducer } from 'react';
 import { IMenuItem } from '../database/menu-hook';
 import { orderReducer } from './orderReducer';
 
+interface OrderSubmission {
+  menuItem: IMenuItem;
+  quantity: number;
+}
+
 export interface IOrderContext {
   items: { menuItem: IMenuItem; quantity: number }[];
   total: number;
@@ -14,45 +19,62 @@ const OrderContext = createContext<IOrderContext>(initialOrderState);
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
 
-  const addToOrder = (item: IMenuItem) => {
+  const addToOrder = (orderSubmission: OrderSubmission) => {
     const newOrder = Object.assign({}, order);
-    const updatedOrder = {}; //idk yet
-    //add logic
-    updatePrice(updatedOrder);
-    dispatch({ type: 'ADD_ITEM', orderContext: newOrder, item: item });
+    const orderItem = newOrder.items.filter(
+      (newOrderItem) =>
+        orderSubmission.menuItem._id === newOrderItem.menuItem._id
+    );
+    if (orderItem.length) {
+      newOrder.items.forEach((orderItem) => {
+        if (orderItem.menuItem._id === orderSubmission.menuItem._id) {
+          orderItem.quantity += orderSubmission.quantity;
+        }
+      });
+    } else {
+      newOrder.items.push(orderSubmission);
+    }
+    updatePrice(newOrder);
+    dispatch({ type: 'ADD_ITEM', newOrder: newOrder });
   };
 
-  const deleteFromOrder = (item: IMenuItem) => {
-    const newOrder = Object.assign({}, order);
-    const updatedOrder = {}; //idk yet
-    //delete logic
-    updatePrice(updatedOrder);
-    dispatch({ type: 'REMOVE_ITEM', orderContext: newOrder, item: item });
+  const deleteFromOrder = (orderSubmission: OrderSubmission) => {
+    const newOrder = {
+      items: order.items.filter(
+        (orderItem) => orderItem.menuItem._id !== orderSubmission.menuItem._id
+      ),
+      total: order.total,
+    };
+    updatePrice(newOrder);
+    dispatch({ type: 'REMOVE_ITEM', newOrder: newOrder });
   };
 
-  const updateItem = (item: IMenuItem) => {
-    const newOrder = Object.assign({}, order);
-    const updatedOrder = {}; //idk yet
-    //update logic
-    updatePrice(updatedOrder);
-    dispatch({ type: 'REMOVE_ITEM', orderContext: newOrder, item: item });
+  const updateItem = (orderSubmission: OrderSubmission) => {
+    const newOrder = {
+      items: order.items.map((newOrderItem) => {
+        if (newOrderItem.menuItem._id === orderSubmission.menuItem._id) {
+          return orderSubmission;
+        }
+        return newOrderItem;
+      }),
+      total: order.total,
+    };
+    updatePrice(newOrder);
+    dispatch({ type: 'REMOVE_ITEM', newOrder: newOrder });
   };
 
   const clearOrder = () => {
-    const updatedOrder = {}; //idk yet
-    //clear logic
-    updatePrice(updatedOrder);
-    dispatch({ type: 'CLEAR_ORDER', orderContext: order });
+    dispatch({ type: 'CLEAR_ORDER', newOrder: { items: [], total: 0 } });
   };
 
-  const updatePrice = (updatedOrder) => {
+  const updatePrice = (updatedOrder: IOrderContext) => {
     let total = 0;
     updatedOrder.items.forEach((item) => (total += item.menuItem.price));
     dispatch({ type: 'UPDATE_PRICE', total: total });
   };
 
   const value = {
-    order: order.items,
+    items: order.items,
     total: order.total,
     addToOrder,
     deleteFromOrder,
