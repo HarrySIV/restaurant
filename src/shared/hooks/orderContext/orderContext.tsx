@@ -20,24 +20,29 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
 
   const addToOrder = (orderSubmission: OrderSubmission) => {
-    const newOrder = Object.assign({}, order);
-    const orderItem = newOrder.items.filter(
-      (newOrderItem) =>
-        orderSubmission.menuItem._id === newOrderItem.menuItem._id
+    /* finds if item exists in order and either adds to existing quantity or adds to order */
+    const doesOrderItemExist = order.items.filter(
+      (orderItem) => orderSubmission.menuItem._id === orderItem.menuItem._id
     );
-    if (orderItem.length) {
-      newOrder.items.forEach((orderItem) => {
-        if (orderItem.menuItem._id === orderSubmission.menuItem._id) {
-          orderItem.quantity += orderSubmission.quantity;
-        }
-      });
-    } else {
-      newOrder.items.push(orderSubmission);
-    }
+    const newOrder = {
+      items: doesOrderItemExist.length
+        ? order.items.map((orderItem) => {
+            if (orderItem.menuItem._id === orderSubmission.menuItem._id) {
+              const newQuantity = orderSubmission.quantity + orderItem.quantity;
+              return {
+                menuItem: orderSubmission.menuItem,
+                quantity: newQuantity,
+              };
+            } else return { ...orderItem };
+          })
+        : [...order.items, orderSubmission],
+      total: order.total,
+    };
     updatePrice(newOrder);
     dispatch({ type: 'ADD_ITEM', newOrder: newOrder });
   };
 
+  /* returns new array without item submitted */
   const deleteFromOrder = (orderSubmission: OrderSubmission) => {
     const newOrder = {
       items: order.items.filter(
@@ -49,7 +54,8 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'REMOVE_ITEM', newOrder: newOrder });
   };
 
-  const updateItem = (orderSubmission: OrderSubmission) => {
+  /* finds item within order and returns new item */
+  const updateItemQuantity = (orderSubmission: OrderSubmission) => {
     const newOrder = {
       items: order.items.map((newOrderItem) => {
         if (newOrderItem.menuItem._id === orderSubmission.menuItem._id) {
@@ -60,16 +66,17 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       total: order.total,
     };
     updatePrice(newOrder);
-    dispatch({ type: 'REMOVE_ITEM', newOrder: newOrder });
+    dispatch({ type: 'UPDATE_QUANTITY', newOrder: newOrder });
   };
 
   const clearOrder = () => {
     dispatch({ type: 'CLEAR_ORDER', newOrder: { items: [], total: 0 } });
   };
 
-  const updatePrice = (updatedOrder: IOrderContext) => {
+  /* used to update the total after each quantity/item update */
+  const updatePrice = (newOrder: IOrderContext) => {
     let total = 0;
-    updatedOrder.items.forEach((item) => (total += item.menuItem.price));
+    newOrder.items.forEach((item) => (total += item.menuItem.price));
     dispatch({ type: 'UPDATE_PRICE', total: total });
   };
 
@@ -78,7 +85,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     total: order.total,
     addToOrder,
     deleteFromOrder,
-    updateItem,
+    updateItemQuantity,
     clearOrder,
     updatePrice,
   };
