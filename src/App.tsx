@@ -1,4 +1,3 @@
-import React from 'react';
 import './_app.scss';
 
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
@@ -15,8 +14,11 @@ import { MainHeader } from './shared/sections/header/MainHeader';
 import { useHttpClient } from './shared/hooks/http-hook';
 import { LoadingSpinner } from './shared/elements/uiElements/LoadingSpinner';
 import { OrderProvider } from './shared/hooks/orderContext/OrderContext';
+import { AddItem } from './components/AddToOrder';
+import { useModal } from './shared/hooks/modal-hook';
 
 export function App() {
+  const { isModalOpen } = useModal();
   const { isLoading } = useHttpClient();
   const routes = (
     <Routes>
@@ -35,6 +37,7 @@ export function App() {
       <div className="wrapper">
         {/* order provider stores users current order to be pushed to database of all orders */}
         <OrderProvider>
+          {isModalOpen && <AddItem />}
           <MainHeader />
           {/* if anything is loading then the loading spinner replaces the page until it is loaded... */}
           <main>{isLoading ? <LoadingSpinner /> : routes}</main>

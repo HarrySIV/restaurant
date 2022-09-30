@@ -5,8 +5,14 @@ import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { useModal } from '../../hooks/modal-hook';
 
 import './_modal.scss';
+import { Button } from '../formElements/Button';
 
-export const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
+interface IModalProps {
+  children?: React.ReactNode;
+  header: string;
+}
+
+export const Modal = (props: IModalProps) => {
   const { isModalOpen, setIsModalOpen } = useModal();
 
   const closeModalHandler = () => {
@@ -15,11 +21,13 @@ export const Modal: React.FC<{ children?: React.ReactNode }> = (props) => {
 
   const content = (
     <div className="modal">
-      <header>
-        <h2 className="title">Hello</h2>
-        <button onClick={closeModalHandler}>
-          <FontAwesomeIcon icon={faClose} />
-        </button>
+      <header className="modal__header">
+        <h2 className="title">{props.header}</h2>
+        <Button
+          onClick={closeModalHandler}
+          type="submit"
+          text={<FontAwesomeIcon icon={faClose} />}
+        />
       </header>
       <main>{props.children}</main>
     </div>

@@ -1,7 +1,8 @@
 interface ButtonProps {
   type: 'submit' | 'reset';
-  text: string;
-  disabled: boolean;
+  text: string | JSX.Element;
+  disabled?: boolean;
+  onClick: any;
 }
 
 export const Button = (props: ButtonProps) => {
