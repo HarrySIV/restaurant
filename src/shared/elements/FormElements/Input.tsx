@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, Reducer } from 'react';
-import { validate } from '../../util/validators.js';
+import { validate } from '../../util/validators';
 
 interface UserInputState {
   userInputValue: string;
