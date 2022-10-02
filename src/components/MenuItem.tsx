@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
-import { useModal } from '../shared/hooks/modal-hook';
 
 export const MenuItem = () => {
-  const { setIsModalOpen } = useModal();
   const [ID, setID] = useState<number | null>(null);
   const { menu } = useMenu();
 
@@ -14,13 +12,13 @@ export const MenuItem = () => {
     } else {
       setID(null);
     }
-    setIsModalOpen(true);
   };
 
   //displays menu items when menu and menu.length exist... breaks otherwise.
   return (
     <ul className="items">
-      {menu && menu.length ? (
+      {menu &&
+        menu.length &&
         menu.map((item: IMenuItem) => {
           return (
             <li key={item._id} className="list-item">
@@ -36,10 +34,7 @@ export const MenuItem = () => {
               </h4>
             </li>
           );
-        })
-      ) : (
-        <h1>Loading...</h1>
-      )}
+        })}
     </ul>
   );
 };

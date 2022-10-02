@@ -1,13 +1,18 @@
 interface ButtonProps {
-  type: 'submit' | 'reset';
+  type?: 'submit' | 'reset';
   text: string | JSX.Element;
   disabled?: boolean;
-  onClick: any;
+  closeHandler?: any;
+  onClick?: any;
 }
 
 export const Button = (props: ButtonProps) => {
   return (
-    <button type={props.type} disabled={props.disabled}>
+    <button
+      type={props.type}
+      disabled={props.disabled}
+      onClick={props.closeHandler}
+    >
       {props.text}
     </button>
   );
