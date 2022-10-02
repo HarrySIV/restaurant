@@ -14,7 +14,7 @@ interface IModalProps {
 
 export const Modal = (props: IModalProps) => {
   const content = (
-    <div className="modal-backdrop" onClick={props.closeHandler}>
+    <div className="modal-backdrop">
       <div className="modal">
         <header className={`modal__header`}>
           <h2 className="title">{props.header}</h2>
