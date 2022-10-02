@@ -14,16 +14,18 @@ interface IModalProps {
 
 export const Modal = (props: IModalProps) => {
   const content = (
-    <div className="modal">
-      <header className={`modal__header`}>
-        <h2 className="title">{props.header}</h2>
-        <Button
-          closeHandler={props.closeHandler}
-          text={<FontAwesomeIcon icon={faClose} />}
-        />
-      </header>
-      <main>{props.children}</main>
-      <footer className="modal__footer">{props.footer}</footer>
+    <div className="modal-backdrop" onClick={props.closeHandler}>
+      <div className="modal">
+        <header className={`modal__header`}>
+          <h2 className="title">{props.header}</h2>
+          <Button
+            closeHandler={props.closeHandler}
+            text={<FontAwesomeIcon icon={faClose} />}
+          />
+        </header>
+        <main>{props.children}</main>
+        <footer className="modal__footer">{props.footer}</footer>
+      </div>
     </div>
   );
   return ReactDOM.createPortal(
