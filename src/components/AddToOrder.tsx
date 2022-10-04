@@ -3,30 +3,16 @@ import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
 import { useForm } from '../shared/hooks/form-hook';
+import { IMenuItem } from '../shared/hooks/database/menu-hook';
 import { IDeal } from '../shared/hooks/database/deal-hook';
-import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
 
 interface IAddToOrderProps {
   closeHandler: () => void;
+  items: IMenuItem[];
   deal?: IDeal;
-  item?: IMenuItem;
 }
 
 export const AddToOrder = (props: IAddToOrderProps) => {
-  const { menu } = useMenu();
-  const [items, setItems] = useState<IMenuItem[]>([]);
-
-  const { item, deal } = props;
-  useEffect(() => {
-    if (deal) {
-      deal.items.forEach((itemId) => {
-        setItems((items) => [...items, menu[itemId]]);
-      });
-    }
-    if (item) {
-      setItems([item]);
-    }
-  }, [menu, item, deal]);
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // try {
@@ -40,13 +26,13 @@ export const AddToOrder = (props: IAddToOrderProps) => {
     <Modal header="Add to Order" closeHandler={props.closeHandler}>
       <form className="order-form" onSubmit={itemSubmitHandler}>
         <fieldset>
-          {/* {items.map((item) => (
+          {props.items.map((item) => (
             <>
               <legend>{item.name}</legend>
               <ItemInputs id={`${item._id}`} />
-              <h2>{item.price}</h2>
+              {props.deal ? <h2>{props.deal.total}</h2> : <h2>{item.price}</h2>}
             </>
-          ))} */}
+          ))}
         </fieldset>
         <Button
           type="submit"

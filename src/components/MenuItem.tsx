@@ -17,8 +17,7 @@ export const MenuItem = () => {
   //displays menu items when menu and menu.length exist... breaks otherwise.
   return (
     <ul className="items">
-      {menu &&
-        menu.length &&
+      {menu.length &&
         menu.map((item: IMenuItem) => {
           return (
             <li key={item._id} className="list-item">
