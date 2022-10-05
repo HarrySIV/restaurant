@@ -1,3 +1,5 @@
+@import '../../../_app.scss';
+
 .checkout {
   position: relative;
 }
@@ -24,28 +26,28 @@
 }
 
 .header {
-  width: 100%;
   box-shadow: 1px 1px 7px;
+  display: flex;
 }
 
 .menu-bar {
-  background-color: red;
+  background-color: $red;
   text-align: center;
 }
 
 .nav-links {
   display: flex;
-  flex-flow: row nowrap;
   justify-content: space-evenly;
 }
 
 .title {
-  background-color: green;
+  background-color: $green;
   color: white;
-  font-size: 5rem;
+  font-size: 0.75rem;
   margin: 0;
+  padding: 0.5rem;
   text-align: center;
-  width: 100%;
+  width: 5rem;
 }
 
 a {

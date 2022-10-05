@@ -1,3 +1,5 @@
+import './_button.scss';
+
 interface ButtonProps {
   type?: 'submit' | 'reset';
   text: string | JSX.Element;
@@ -9,6 +11,7 @@ interface ButtonProps {
 export const Button = (props: ButtonProps) => {
   return (
     <button
+      className="button"
       type={props.type}
       disabled={props.disabled}
       onClick={props.closeHandler}

@@ -1,3 +1,6 @@
+$green: green;
+$red: red;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -18,11 +21,10 @@ code {
 }
 
 .link {
-  color: red;
-}
-
-.link:hover {
-  color: green;
+  color: $red;
+  &:hover {
+    color: $green;
+  }
 }
 
 hr {

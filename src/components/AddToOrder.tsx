@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
 import { useForm } from '../shared/hooks/form-hook';
 import { IMenuItem } from '../shared/hooks/database/menu-hook';
 import { IDeal } from '../shared/hooks/database/deal-hook';
+
+import './_AddToOrder.scss';
 
 interface IAddToOrderProps {
   closeHandler: () => void;

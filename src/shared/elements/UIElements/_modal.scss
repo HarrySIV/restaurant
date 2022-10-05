@@ -1,5 +1,7 @@
+@import '../../../_app.scss';
+
 .modal-backdrop {
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -10,8 +12,8 @@
 
 .modal {
   z-index: 100;
-  position: fixed;
-  top: 22vh;
+  position: absolute;
+  top: 10vh;
   left: 10%;
   width: 80%;
   background: white;
@@ -20,14 +22,14 @@
 }
 
 .modal__header {
-  width: 100%;
-  padding: 1rem 0.5rem;
-  background: #2a006e;
+  padding: 0.5rem 0.5rem;
+  background: $red;
   color: white;
-}
-
-.modal__header h2 {
-  margin: 0.5rem;
+  display: flex;
+  flex-flow: column nowrap;
+  &h2 {
+    margin: 0;
+  }
 }
 
 .modal__content {
@@ -65,4 +67,15 @@
   transform: translateY(-10rem);
   opacity: 0;
   transition: all 200ms;
+}
+
+.modal__title {
+  align-self: center;
+  background-color: $green;
+  font-size: 3rem;
+  margin: 0;
+  padding: 0.5rem;
+  text-align: center;
+  width: 80%;
+  border: 1px solid black;
 }
