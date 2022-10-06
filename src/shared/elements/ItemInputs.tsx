@@ -4,6 +4,8 @@ import { useForm } from '../hooks/form-hook';
 
 type ItemInputsProps = {
   id: string;
+  hasSizes: boolean;
+  hasToppings: boolean;
 };
 
 const toppings = [
@@ -21,11 +23,9 @@ const sizes = [
 
 export const ItemInputs = (props: ItemInputsProps) => {
   const [formState, inputHandler] = useForm({}, true);
-  const hasToppings = true; //delete this later
-  const hasSizes = true; //delete this later
   return (
     <>
-      {hasSizes && (
+      {props.hasSizes && (
         <Input
           id="size"
           element="select"
@@ -33,12 +33,11 @@ export const ItemInputs = (props: ItemInputsProps) => {
           label="Size"
           sizes={sizes}
           onInput={inputHandler}
-          hidden={false}
           initialValue={sizes[1].value}
-          errorText={'Please pick a valid size'}
+          errorText="Please pick a valid size"
         />
       )}
-      {hasToppings &&
+      {props.hasToppings &&
         toppings.map((topping) => (
           <Input
             key={topping.id}
@@ -48,8 +47,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
             label={topping.value}
             onInput={inputHandler}
             initialValue={topping.value}
-            hidden={false}
-            errorText={'Please pick a valid topping'}
+            errorText="Please pick a valid topping"
           />
         ))}
       <Input
@@ -59,7 +57,6 @@ export const ItemInputs = (props: ItemInputsProps) => {
         label="Quantity"
         onInput={inputHandler}
         initialValue="1"
-        hidden={false}
         validators={[VALIDATOR_MIN(1)]}
         errorText="You must add at least 1 item"
       />
@@ -72,7 +69,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
         onInput={inputHandler}
         initialValue={props.id}
         hidden={true}
-        errorText={''}
+        errorText="A valid ID was not passed"
       />
     </>
   );

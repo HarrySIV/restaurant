@@ -18,7 +18,6 @@ type UserInputActions =
 interface GenericInputElementProps {
   id: string;
   element: string;
-  hidden: boolean;
   label: string;
   errorText: string;
   validators?: { type: string; configVal?: number }[];
@@ -34,6 +33,7 @@ interface GenericInputElementProps {
 type TextElementProps = GenericInputElementProps & {
   type: 'text';
   placeholder: string;
+  hidden: boolean;
 };
 type TextAreaElementProps = GenericInputElementProps & {
   type: 'textArea';
@@ -69,6 +69,8 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
   userInputAction
 ) => {
   switch (userInputAction.type) {
+    /* on input change, determines if input needs to be validated and then returns the input
+    and validation */
     case 'CHANGE':
       return {
         ...userInputState,
@@ -98,9 +100,10 @@ export const Input = (props: InputProps) => {
     userInputIsTouched: false,
   });
 
+  /* on input, updates onInput function with input values on change, 
+  which really just executes "changeHandler" and dispatches to the reducer */
   const { id, onInput } = props;
   const { userInputValue, userInputIsValid } = inputReducerState;
-
   useEffect(() => {
     onInput(id, userInputValue, userInputIsValid);
   }, [id, userInputValue, userInputIsValid, onInput]);
@@ -124,72 +127,60 @@ export const Input = (props: InputProps) => {
     });
   };
 
-  const inputElement = () => {
-    switch (props.type) {
-      case 'text':
-        return (
-          <input
-            id={props.id}
-            type={props.type}
-            placeholder={props.placeholder}
-            onChange={changeHandler}
-            onBlur={touchHandler}
-            value={inputReducerState.userInputValue}
-            data-attribute={props.hidden ? props.hidden : ''}
-          />
-        );
-      case 'number':
-        return (
-          <input
-            id={props.id}
-            type={props.type}
-            onChange={changeHandler}
-            onBlur={touchHandler}
-            value={inputReducerState.userInputValue}
-            data-attribute={props.hidden ? props.hidden : ''}
-          />
-        );
-      case 'checkbox':
-        return (
-          <input
-            id={props.id}
-            type={props.type}
-            onChange={changeHandler}
-            value={inputReducerState.userInputValue}
-            data-attribute={props.hidden ? props.hidden : ''}
-          />
-        );
-      case 'select':
-        return (
-          <select
-            id={props.id}
-            onChange={changeHandler}
-            value={inputReducerState.userInputValue}
-            data-attribute={props.hidden ? props.hidden : ''}
-          >
-            {props.sizes &&
-              props.sizes.map((size) => (
-                <option value={size.value} id={size.id}>
-                  {size.value}
-                </option>
-              ))}
-          </select>
-        );
-      case 'textArea':
-        return (
-          <textarea
-            id={props.id}
-            rows={props.rows || 3}
-            onChange={changeHandler}
-            onBlur={touchHandler}
-            value={inputReducerState.userInputValue}
-            data-attribute={props.hidden ? props.hidden : ''}
-          />
-        );
-      default:
-        throw new Error('The case you passed was not a valid input');
-    }
-  };
+  const text = props.type === 'text' && (
+    <input
+      id={props.id}
+      type={props.type}
+      placeholder={props.placeholder}
+      onChange={changeHandler}
+      onBlur={touchHandler}
+      value={inputReducerState.userInputValue}
+      hidden={props.hidden}
+    />
+  );
+  const number = props.type === 'number' && (
+    <input
+      id={props.id}
+      type={props.type}
+      onChange={changeHandler}
+      onBlur={touchHandler}
+      value={inputReducerState.userInputValue}
+    />
+  );
+  const checkbox = props.type === 'checkbox' && (
+    <>
+      <input
+        id={props.id}
+        type={props.type}
+        onChange={changeHandler}
+        value={inputReducerState.userInputValue}
+      />
+      <label htmlFor={props.id}>{props.label}</label>
+    </>
+  );
+  const select = props.type === 'select' && (
+    <select
+      id={props.id}
+      onChange={changeHandler}
+      value={inputReducerState.userInputValue}
+    >
+      {props.sizes &&
+        props.sizes.map((size) => (
+          <option value={size.value} id={size.id} key={size.id}>
+            {size.value}
+          </option>
+        ))}
+    </select>
+  );
+  const textArea = props.type === 'textArea' && (
+    <textarea
+      id={props.id}
+      rows={props.rows || 3}
+      onChange={changeHandler}
+      onBlur={touchHandler}
+      value={inputReducerState.userInputValue}
+    />
+  );
 
   return (
     <div
@@ -200,8 +191,21 @@ export const Input = (props: InputProps) => {
       }`}
     >
       <>
-        <label htmlFor={props.id}>{props.label}</label>
-        {inputElement}
+        {(props.type === 'text' && !props.hidden) ||
+        (props.type !== 'text' && props.type !== 'checkbox') ? (
+          <label htmlFor={props.id}>{props.label}</label>
+        ) : null}
+        {props.type === 'text'
+          ? text
+          : props.type === 'textArea'
+          ? textArea
+          : props.type === 'number'
+          ? number
+          : props.type === 'checkbox'
+          ? checkbox
+          : props.type === 'select'
+          ? select
+          : null}
         {!inputReducerState.userInputIsValid &&
           inputReducerState.userInputIsTouched &&
           props.errorText && <p>{props.errorText}</p>}

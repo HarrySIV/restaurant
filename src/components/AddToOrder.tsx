@@ -30,7 +30,11 @@ export const AddToOrder = (props: IAddToOrderProps) => {
           {props.items.map((item) => (
             <div key={item._id}>
               <legend>{item.name}</legend>
-              <ItemInputs id={`${item._id}`} />
+              <ItemInputs
+                id={`${item._id}`}
+                hasSizes={item.hasSizes}
+                hasToppings={item.hasToppings}
+              />
               {props.deal ? <h2>{props.deal.total}</h2> : <h2>{item.price}</h2>}
             </div>
           ))}
