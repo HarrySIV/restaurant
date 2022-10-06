@@ -125,66 +125,70 @@ export const Input = (props: InputProps) => {
   };
 
   const inputElement = () => {
-    if (props.type === 'text')
-      return (
-        <input
-          id={props.id}
-          type={props.type}
-          placeholder={props.placeholder}
-          onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputReducerState.userInputValue}
-          data-attribute={props.hidden ? props.hidden : ''}
-        />
-      );
-    if (props.type === 'number')
-      return (
-        <input
-          id={props.id}
-          type={props.type}
-          onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputReducerState.userInputValue}
-          data-attribute={props.hidden ? props.hidden : ''}
-        />
-      );
-    if (props.type === 'checkbox')
-      return (
-        <input
-          id={props.id}
-          type={props.type}
-          onChange={changeHandler}
-          value={inputReducerState.userInputValue}
-          data-attribute={props.hidden ? props.hidden : ''}
-        />
-      );
-    if (props.type === 'select')
-      return (
-        <select
-          id={props.id}
-          onChange={changeHandler}
-          value={inputReducerState.userInputValue}
-          data-attribute={props.hidden ? props.hidden : ''}
-        >
-          {props.sizes &&
-            props.sizes.map((size) => (
-              <option value={size.value} id={size.id}>
-                {size.value}
-              </option>
-            ))}
-        </select>
-      );
-    if (props.type === 'textArea')
-      return (
-        <textarea
-          id={props.id}
-          rows={props.rows || 3}
-          onChange={changeHandler}
-          onBlur={touchHandler}
-          value={inputReducerState.userInputValue}
-          data-attribute={props.hidden ? props.hidden : ''}
-        />
-      );
+    switch (props.type) {
+      case 'text':
+        return (
+          <input
+            id={props.id}
+            type={props.type}
+            placeholder={props.placeholder}
+            onChange={changeHandler}
+            onBlur={touchHandler}
+            value={inputReducerState.userInputValue}
+            data-attribute={props.hidden ? props.hidden : ''}
+          />
+        );
+      case 'number':
+        return (
+          <input
+            id={props.id}
+            type={props.type}
+            onChange={changeHandler}
+            onBlur={touchHandler}
+            value={inputReducerState.userInputValue}
+            data-attribute={props.hidden ? props.hidden : ''}
+          />
+        );
+      case 'checkbox':
+        return (
+          <input
+            id={props.id}
+            type={props.type}
+            onChange={changeHandler}
+            value={inputReducerState.userInputValue}
+            data-attribute={props.hidden ? props.hidden : ''}
+          />
+        );
+      case 'select':
+        return (
+          <select
+            id={props.id}
+            onChange={changeHandler}
+            value={inputReducerState.userInputValue}
+            data-attribute={props.hidden ? props.hidden : ''}
+          >
+            {props.sizes &&
+              props.sizes.map((size) => (
+                <option value={size.value} id={size.id}>
+                  {size.value}
+                </option>
+              ))}
+          </select>
+        );
+      case 'textArea':
+        return (
+          <textarea
+            id={props.id}
+            rows={props.rows || 3}
+            onChange={changeHandler}
+            onBlur={touchHandler}
+            value={inputReducerState.userInputValue}
+            data-attribute={props.hidden ? props.hidden : ''}
+          />
+        );
+      default:
+        throw new Error('The case you passed was not a valid input');
+    }
   };
 
   return (

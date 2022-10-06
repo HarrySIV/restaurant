@@ -6,7 +6,7 @@ export interface IMenuItem {
   name: string;
   description: string;
   price: number;
-  _id: number;
+  _id: string;
   cooking_time: string;
   hasToppings: boolean;
   hasSizes: boolean;

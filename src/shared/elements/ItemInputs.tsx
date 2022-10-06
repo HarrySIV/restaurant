@@ -41,6 +41,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
       {hasToppings &&
         toppings.map((topping) => (
           <Input
+            key={topping.id}
             id={topping.id}
             element="checkbox"
             type="checkbox"

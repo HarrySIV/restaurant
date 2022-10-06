@@ -6,15 +6,19 @@ import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
 export const Deals: React.FC = () => {
   const { deals } = useDeal();
   const { menu } = useMenu();
+  const [selectedDeal, setSelectedDeal] = useState<IDeal>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [items, setItems] = useState<IMenuItem[]>([]);
 
   const openHandler = (deal: IDeal) => {
-    setOpenOrder(true);
+    setSelectedDeal(deal);
     const dealItems = menu.filter(
-      (menuItem) => menuItem._id === deal.items[0] || deal.items[1]
+      (menuItem) =>
+        menuItem._id === deal.items[0].toString() ||
+        menuItem._id === deal.items[1].toString()
     );
     setItems(dealItems);
+    setOpenOrder(true);
   };
 
   const closeHandler = () => {
@@ -35,11 +39,15 @@ export const Deals: React.FC = () => {
               <h2 className="deals-text">${deal.total}.00</h2>
             </div>
           </div>
-          {openOrder && (
-            <AddToOrder items={items} deal={deal} closeHandler={closeHandler} />
-          )}
         </div>
       ))}
+      {openOrder && (
+        <AddToOrder
+          items={items}
+          deal={selectedDeal}
+          closeHandler={closeHandler}
+        />
+      )}
     </>
   );
 };

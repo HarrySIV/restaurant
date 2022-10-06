@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
 
 export const MenuItem = () => {
-  const [ID, setID] = useState<number | null>(null);
+  const [ID, setID] = useState<string>();
   const { menu } = useMenu();
 
   //onClick of menu item, displays menu item description
@@ -10,7 +10,7 @@ export const MenuItem = () => {
     if (ID === null || ID !== item._id) {
       setID(item._id);
     } else {
-      setID(null);
+      setID('');
     }
   };
 

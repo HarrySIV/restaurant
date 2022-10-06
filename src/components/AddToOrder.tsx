@@ -28,11 +28,11 @@ export const AddToOrder = (props: IAddToOrderProps) => {
       <form className="order-form" onSubmit={itemSubmitHandler}>
         <fieldset>
           {props.items.map((item) => (
-            <>
+            <div key={item._id}>
               <legend>{item.name}</legend>
               <ItemInputs id={`${item._id}`} />
               {props.deal ? <h2>{props.deal.total}</h2> : <h2>{item.price}</h2>}
-            </>
+            </div>
           ))}
         </fieldset>
         <Button
