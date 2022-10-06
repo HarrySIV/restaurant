@@ -1,0 +1,48 @@
+@import '../../../app.scss';
+.form-control {
+  margin: 1rem 0;
+}
+
+.form-control label {
+  font-weight: bold;
+  margin: 0 0.5rem 0.5rem 0;
+}
+
+.form-control input,
+.form-control textarea {
+  width: calc(5% + 1rem);
+  font: inherit;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  padding: 0.15rem 0.25rem;
+  text-align: center;
+  &:focus,
+  .form-control select:focus {
+    outline: none;
+    background: #ebebeb;
+    border: 2px solid $blue;
+  }
+}
+
+.form-control select {
+  font: inherit;
+  background: #f8f8f8;
+  padding: 0.15rem 0.25rem;
+  text-align: center;
+  &:focus {
+    outline: none;
+    background: #ebebeb;
+    border: 2px solid $blue;
+  }
+}
+
+.form-control--invalid label,
+.form-control--invalid p {
+  color: $red;
+}
+
+.form-control--invalid input,
+.form-control--invalid textarea {
+  border-color: red;
+  background: #ffd1d1;
+}

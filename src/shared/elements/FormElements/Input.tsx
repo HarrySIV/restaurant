@@ -1,6 +1,8 @@
 import React, { useReducer, useEffect, Reducer } from 'react';
 import { validate } from '../../util/validators';
 
+import './_input.scss';
+
 interface UserInputState {
   userInputValue: string;
   userInputIsValid: boolean;
@@ -21,7 +23,7 @@ interface GenericInputElementProps {
   label: string;
   errorText: string;
   validators?: { type: string; configVal?: number }[];
-  initialValue?: string;
+  initialValue: string;
   initialValid?: boolean;
   onInput: (
     id: string,
@@ -96,7 +98,7 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
 export const Input = (props: InputProps) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
     userInputValue: props.initialValue || '',
-    userInputIsValid: props.initialValid || false,
+    userInputIsValid: props.initialValid ? props.initialValid : true,
     userInputIsTouched: false,
   });
 
@@ -193,7 +195,9 @@ export const Input = (props: InputProps) => {
       <>
         {(props.type === 'text' && !props.hidden) ||
         (props.type !== 'text' && props.type !== 'checkbox') ? (
-          <label htmlFor={props.id}>{props.label}</label>
+          <label htmlFor={props.id} className="form-label">
+            {props.label}
+          </label>
         ) : null}
         {props.type === 'text'
           ? text

@@ -35,9 +35,11 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 hasSizes={item.hasSizes}
                 hasToppings={item.hasToppings}
               />
-              {props.deal ? <h2>{props.deal.total}</h2> : <h2>{item.price}</h2>}
+              {!props.deal ? <h2>{item.price}</h2> : null}
+              <hr />
             </div>
           ))}
+          {props.deal ? <h2>${props.deal.total}.00</h2> : null}
         </fieldset>
         <Button
           type="submit"

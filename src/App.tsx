@@ -29,11 +29,10 @@ export function App() {
       <Route path="/redirect" element={<Navigate to="/error-page" />} />
     </Routes>
   );
-
+  /* order provider stores users current order to be pushed to database of all orders */
   return (
     <BrowserRouter>
       <div className="wrapper">
-        {/* order provider stores users current order to be pushed to database of all orders */}
         <OrderProvider>
           <MainHeader />
           <main>{isLoading ? <LoadingSpinner /> : routes}</main>

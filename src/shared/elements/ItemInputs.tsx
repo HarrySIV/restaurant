@@ -6,6 +6,7 @@ type ItemInputsProps = {
   id: string;
   hasSizes: boolean;
   hasToppings: boolean;
+  size?: string;
 };
 
 const toppings = [
@@ -30,10 +31,10 @@ export const ItemInputs = (props: ItemInputsProps) => {
           id="size"
           element="select"
           type="select"
-          label="Size"
+          label="Size:"
           sizes={sizes}
           onInput={inputHandler}
-          initialValue={sizes[1].value}
+          initialValue={props.size ? props.size : 'Medium'}
           errorText="Please pick a valid size"
         />
       )}
@@ -46,7 +47,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
             type="checkbox"
             label={topping.value}
             onInput={inputHandler}
-            initialValue={topping.value}
+            initialValue={topping.id}
             errorText="Please pick a valid topping"
           />
         ))}
@@ -54,7 +55,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
         id="quanity"
         element="number"
         type="number"
-        label="Quantity"
+        label="Quantity:"
         onInput={inputHandler}
         initialValue="1"
         validators={[VALIDATOR_MIN(1)]}
