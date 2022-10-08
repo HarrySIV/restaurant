@@ -44,6 +44,7 @@ type TextAreaElementProps = GenericInputElementProps & {
 };
 type NumberElementProps = GenericInputElementProps & {
   type: 'number';
+  disabled?: boolean;
 };
 type CheckboxElementProps = GenericInputElementProps & {
   type: 'checkbox';
@@ -51,6 +52,7 @@ type CheckboxElementProps = GenericInputElementProps & {
 type SelectElementProps = GenericInputElementProps & {
   type: 'select';
   sizes: ISizes[];
+  disabled?: boolean;
 };
 
 interface ISizes {
@@ -147,6 +149,7 @@ export const Input = (props: InputProps) => {
       onChange={changeHandler}
       onBlur={touchHandler}
       value={inputReducerState.userInputValue}
+      disabled={props.disabled}
     />
   );
   const checkbox = props.type === 'checkbox' && (
@@ -165,6 +168,7 @@ export const Input = (props: InputProps) => {
       id={props.id}
       onChange={changeHandler}
       value={inputReducerState.userInputValue}
+      disabled={props.disabled}
     >
       {props.sizes &&
         props.sizes.map((size) => (

@@ -7,6 +7,7 @@ type ItemInputsProps = {
   hasSizes: boolean;
   hasToppings: boolean;
   size?: string;
+  disabled?: boolean;
 };
 
 const toppings = [
@@ -36,6 +37,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           onInput={inputHandler}
           initialValue={props.size ? props.size : 'Medium'}
           errorText="Please pick a valid size"
+          disabled={props.disabled}
         />
       )}
       {props.hasToppings &&
@@ -60,6 +62,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
         initialValue="1"
         validators={[VALIDATOR_MIN(1)]}
         errorText="You must add at least 1 item"
+        disabled={props.disabled}
       />
       <Input
         id={props.id}
