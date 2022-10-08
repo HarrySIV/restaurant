@@ -34,6 +34,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 id={`${item._id}`}
                 hasSizes={item.hasSizes}
                 hasToppings={item.hasToppings}
+                deal={props.deal}
                 disabled={props.deal ? true : false}
               />
               {!props.deal ? <h2>{item.price}</h2> : null}

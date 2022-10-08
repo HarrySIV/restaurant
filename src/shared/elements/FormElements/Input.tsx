@@ -13,7 +13,7 @@ type UserInputActions =
   | {
       type: 'CHANGE';
       userActionValue: string;
-      validators?: { type: string; configVal: number }[] | { type: string }[]; // could be wrong
+      validators?: { type: string; configVal: number }[] | { type: string }[];
     }
   | { type: 'TOUCH' };
 
@@ -23,7 +23,7 @@ interface GenericInputElementProps {
   label: string;
   errorText: string;
   validators?: { type: string; configVal?: number }[];
-  initialValue: string;
+  initialValue: string | 0 | undefined;
   initialValid?: boolean;
   onInput: (
     id: string,

@@ -1,12 +1,14 @@
 import { VALIDATOR_MIN } from '../util/validators';
 import { Input } from './formElements/Input';
 import { useForm } from '../hooks/form-hook';
+import { IDeal } from '../hooks/database/deal-hook';
 
 type ItemInputsProps = {
   id: string;
   hasSizes: boolean;
   hasToppings: boolean;
   size?: string;
+  deal?: IDeal;
   disabled?: boolean;
 };
 
@@ -25,6 +27,10 @@ const sizes = [
 
 export const ItemInputs = (props: ItemInputsProps) => {
   const [formState, inputHandler] = useForm({}, true);
+  const quantity = props.deal && {
+    pizzas: props.deal.items.filter((item) => item === 0).length,
+    sodas: props.deal.items.filter((item) => item === 3).length,
+  };
   return (
     <>
       {props.hasSizes && (
@@ -59,7 +65,10 @@ export const ItemInputs = (props: ItemInputsProps) => {
         type="number"
         label="Quantity:"
         onInput={inputHandler}
-        initialValue="1"
+        initialValue={
+          (quantity && quantity.pizzas > 0 && quantity.pizzas.toString()) ||
+          (quantity && quantity.sodas && quantity.sodas.toString())
+        }
         validators={[VALIDATOR_MIN(1)]}
         errorText="You must add at least 1 item"
         disabled={props.disabled}
