@@ -10,6 +10,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-width: 768px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 code {
@@ -37,5 +39,6 @@ hr {
   flex-flow: column nowrap;
   align-items: center;
   height: calc(100vh - 247px);
-  min-height: 638px;
+  min-height: fit-content;
+  min-width: fit-content;
 }
