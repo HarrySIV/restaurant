@@ -1,7 +1,9 @@
+import { useState, useEffect } from 'react';
 import { VALIDATOR_MIN } from '../util/validators';
 import { Input } from './formElements/Input';
 import { useForm } from '../hooks/form-hook';
 import { IDeal } from '../hooks/database/deal-hook';
+import { IMenuItem } from '../hooks/database/menu-hook';
 
 type ItemInputsProps = {
   id: string;
@@ -9,6 +11,8 @@ type ItemInputsProps = {
   hasToppings: boolean;
   size?: string;
   deal?: IDeal;
+  item?: IMenuItem;
+  priceHandler: (quantity: number, itemPrice: number) => void;
   disabled?: boolean;
 };
 
@@ -27,10 +31,19 @@ const sizes = [
 
 export const ItemInputs = (props: ItemInputsProps) => {
   const [formState, inputHandler] = useForm({}, true);
-  const quantity = props.deal && {
+  const [quantity, setQuantity] = useState<number>(0);
+  const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
   };
+
+  //handles the price of each item to update with quantity changes
+  const { priceHandler, item } = props;
+  useEffect(() => {
+    if (item) priceHandler(quantity, item.price);
+  }, [quantity, priceHandler, item]);
+
+  //
   return (
     <>
       {props.hasSizes && (
@@ -65,9 +78,12 @@ export const ItemInputs = (props: ItemInputsProps) => {
         type="number"
         label="Quantity:"
         onInput={inputHandler}
+        setQuantity={setQuantity}
         initialValue={
-          (quantity && quantity.pizzas > 0 && quantity.pizzas.toString()) ||
-          (quantity && quantity.sodas && quantity.sodas.toString())
+          (dealQuantity &&
+            dealQuantity.pizzas > 0 &&
+            dealQuantity.pizzas.toString()) ||
+          (dealQuantity && dealQuantity.sodas && dealQuantity.sodas.toString())
         }
         validators={[VALIDATOR_MIN(1)]}
         errorText="You must add at least 1 item"
