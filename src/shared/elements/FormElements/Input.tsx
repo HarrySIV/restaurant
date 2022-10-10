@@ -99,11 +99,11 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
 };
 /* if props.initialValue exists, set it, otherwise check if the type of input is a number and set initial value
 to 1 or an empty string. If initial validity is important, set it, otherwise assume the program always
-starts a form as invalid and let the validators check */
+starts a form as valid */
 export const Input = (props: InputProps) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
     userInputValue: props.initialValue || props.type === 'number' ? '1' : '',
-    userInputIsValid: props.initialValid ? props.initialValid : false,
+    userInputIsValid: props.initialValid ? props.initialValid : true,
     userInputIsTouched: false,
   });
 
