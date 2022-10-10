@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';

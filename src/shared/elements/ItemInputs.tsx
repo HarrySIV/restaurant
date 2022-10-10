@@ -43,7 +43,6 @@ export const ItemInputs = (props: ItemInputsProps) => {
     if (item) priceHandler(quantity, item.price);
   }, [quantity, priceHandler, item]);
 
-  //
   return (
     <>
       {props.hasSizes && (
