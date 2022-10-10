@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import './_button.scss';
 
 interface ButtonProps {
@@ -9,12 +10,17 @@ interface ButtonProps {
 }
 
 export const Button = (props: ButtonProps) => {
+  const [buttonHandler, setButtonHandler] = useState<any>();
+  useEffect(() => {
+    if (props.onClick) setButtonHandler(true);
+    else setButtonHandler(false);
+  }, [props]);
   return (
     <button
       className="button"
       type={props.type}
       disabled={props.disabled}
-      onClick={props.closeHandler}
+      onClick={buttonHandler ? props.onClick : props.closeHandler}
     >
       {props.text}
     </button>

@@ -35,10 +35,21 @@ hr {
 }
 
 .wrapper {
+  position: relative;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   height: calc(100vh - 247px);
   min-height: fit-content;
   min-width: fit-content;
+}
+
+.faicon {
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: calc(50px + 10%);
+  left: 0;
+  right: 0;
+  color: $blue;
 }

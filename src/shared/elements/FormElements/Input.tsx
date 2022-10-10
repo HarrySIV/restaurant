@@ -44,6 +44,7 @@ type TextAreaElementProps = GenericInputElementProps & {
 };
 type NumberElementProps = GenericInputElementProps & {
   type: 'number';
+  setQuantity: React.Dispatch<React.SetStateAction<number>>;
   disabled?: boolean;
 };
 type CheckboxElementProps = GenericInputElementProps & {
@@ -85,7 +86,7 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
                 userInputAction.userActionValue,
                 userInputAction.validators
               )
-            : true, // added this to make it work but probably shouldn't
+            : false, // added this to make it work but probably shouldn't
       };
     case 'TOUCH':
       return {
@@ -96,11 +97,13 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
       return userInputState;
   }
 };
-
+/* if props.initialValue exists, set it, otherwise check if the type of input is a number and set initial value
+to 1 or an empty string. If initial validity is important, set it, otherwise assume the program always
+starts a form as invalid and let the validators check */
 export const Input = (props: InputProps) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
-    userInputValue: props.initialValue || '',
-    userInputIsValid: props.initialValid ? props.initialValid : true,
+    userInputValue: props.initialValue || props.type === 'number' ? '1' : '',
+    userInputIsValid: props.initialValid ? props.initialValid : false,
     userInputIsTouched: false,
   });
 
@@ -112,6 +115,7 @@ export const Input = (props: InputProps) => {
     onInput(id, userInputValue, userInputIsValid);
   }, [id, userInputValue, userInputIsValid, onInput]);
 
+  //handles input changes and dispatches to inputReducer
   const changeHandler = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -123,6 +127,9 @@ export const Input = (props: InputProps) => {
       userActionValue: event.target.value,
       validators: props.validators,
     });
+    if (props.type === 'number') {
+      props.setQuantity(parseInt(event.target.value));
+    }
   };
 
   const touchHandler = () => {
@@ -131,6 +138,7 @@ export const Input = (props: InputProps) => {
     });
   };
 
+  //these are the different input types and their neccesary props
   const text = props.type === 'text' && (
     <input
       id={props.id}
@@ -150,6 +158,7 @@ export const Input = (props: InputProps) => {
       onBlur={touchHandler}
       value={inputReducerState.userInputValue}
       disabled={props.disabled}
+      min="1"
     />
   );
   const checkbox = props.type === 'checkbox' && (

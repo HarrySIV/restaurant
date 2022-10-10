@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
@@ -14,6 +15,13 @@ interface IAddToOrderProps {
 }
 
 export const AddToOrder = (props: IAddToOrderProps) => {
+  const [price, setPrice] = useState<number>();
+
+  const priceHandler = (quantity: number, itemPrice: number) => {
+    if (quantity > 0) setPrice(quantity * itemPrice);
+    else setPrice(price);
+  };
+
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // try {
@@ -35,9 +43,13 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 hasSizes={item.hasSizes}
                 hasToppings={item.hasToppings}
                 deal={props.deal}
+                item={item}
+                priceHandler={priceHandler}
                 disabled={props.deal ? true : false}
               />
-              {!props.deal ? <h2>{item.price}</h2> : null}
+              {!props.deal ? (
+                <h2>${price ? price.toFixed(2) : item.price}</h2>
+              ) : null}
               <hr />
             </div>
           ))}
