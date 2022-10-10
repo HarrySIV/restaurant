@@ -1,10 +1,12 @@
+@import '../../../app';
+
 .button {
   font: inherit;
-  border: 1px solid #ff0055;
-  border-radius: 4px;
-  background: #ff0055;
-  color: white;
   cursor: pointer;
+  border: 1px solid $pink-red;
+  border-radius: 4px;
+  background: $pink-red;
+  color: white;
   margin-right: 1rem;
   text-decoration: none;
   display: inline-block;
@@ -16,8 +18,8 @@
   }
   &:hover,
   &:active {
-    background: #ff4382;
-    border-color: #ff4382;
+    background: $pink;
+    border-color: $pink;
   }
   &:disabled,
   &:hover:disabled,
@@ -31,21 +33,21 @@
 
 .button--inverse {
   background: transparent;
-  color: #ff0055;
+  color: $pink-red;
   &:hover,
   &:active {
     color: white;
-    background: #ff0055;
+    background: $pink-red;
   }
 }
 
 .button--danger {
-  background: #830000;
-  border-color: #830000;
+  background: $dark-red;
+  border-color: $dark-red;
   &:hover,
   &:active {
-    background: #f34343;
-    border-color: #f34343;
+    background: $light-pink;
+    border-color: $light-pink;
   }
 }
 

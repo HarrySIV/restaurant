@@ -13,7 +13,7 @@
   width: calc(5% + 1rem);
   font: inherit;
   border: 1px solid #ccc;
-  background: #f8f8f8;
+  background: $off-white;
   padding: 0.15rem 0.25rem;
   text-align: center;
   &:focus,
@@ -26,7 +26,7 @@
 
 .form-control select {
   font: inherit;
-  background: #f8f8f8;
+  background: $off-white;
   padding: 0.15rem 0.25rem;
   text-align: center;
   &:focus {
@@ -43,6 +43,6 @@
 
 .form-control--invalid input,
 .form-control--invalid textarea {
-  border-color: red;
+  border-color: $pink-red;
   background: #ffd1d1;
 }

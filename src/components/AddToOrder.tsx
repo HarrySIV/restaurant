@@ -19,7 +19,6 @@ export const AddToOrder = (props: IAddToOrderProps) => {
 
   const priceHandler = (quantity: number, itemPrice: number) => {
     if (quantity > 0) setPrice(quantity * itemPrice);
-    else setPrice(price);
   };
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {

@@ -1,6 +1,11 @@
-$green: green;
-$red: red;
+$green: rgb(0, 128, 0);
+$red: rgb(255, 0, 0);
+$pink-red: rgb(255, 0, 85);
+$dark-red: rgb(131, 0, 0);
+$pink: rgb(255, 67, 130);
+$light-pink: rgb(243, 67, 67);
 $blue: rgb(0, 119, 255);
+$off-white: rgb(248, 248, 248);
 
 body {
   margin: 0;
@@ -24,7 +29,7 @@ code {
 }
 
 .link {
-  color: $red;
+  color: $pink-red;
   &:hover {
     color: $green;
   }
@@ -42,6 +47,7 @@ hr {
   height: calc(100vh - 247px);
   min-height: fit-content;
   min-width: fit-content;
+  background-color: $off-white;
 }
 
 .faicon {
