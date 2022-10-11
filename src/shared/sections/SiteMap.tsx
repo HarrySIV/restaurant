@@ -5,7 +5,7 @@ import './_footer.scss';
 
 export const SiteMap = () => {
   return (
-    <footer>
+    <footer className="footer">
       <hr />
       <div className="site-map">
         <ul className="column">

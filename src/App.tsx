@@ -32,13 +32,15 @@ export function App() {
   /* order provider stores users current order to be pushed to database of all orders */
   return (
     <BrowserRouter>
-      <div className="wrapper">
-        <OrderProvider>
-          <MainHeader />
-          <main>{isLoading ? <LoadingSpinner /> : routes}</main>
-        </OrderProvider>
+      <div className="body">
+        <div className="main-wrapper">
+          <OrderProvider>
+            <MainHeader />
+            <main>{isLoading ? <LoadingSpinner /> : routes}</main>
+          </OrderProvider>
+        </div>
+        <SiteMap />
       </div>
-      <SiteMap />
     </BrowserRouter>
   );
 }

@@ -7,19 +7,19 @@ import { faCashRegister, faCircle } from '@fortawesome/free-solid-svg-icons';
 export const NavLinks = () => {
   return (
     <ul className="nav-links">
-      <li>
+      <li className="nav-li">
         <NavLink to="/">HOME</NavLink>
       </li>
-      <li>
+      <li className="nav-li">
         <NavLink to="/menu">MENU</NavLink>
       </li>
-      <li>
+      <li className="nav-li">
         <NavLink to="/about">ABOUT</NavLink>
       </li>
-      <li>
+      <li className="nav-li">
         <NavLink to="/locations">LOCATIONS</NavLink>
       </li>
-      <li>
+      <li className="nav-li">
         <NavLink to="/order">
           <div className="checkout">
             <FontAwesomeIcon icon={faCircle} className="circle" color="green" />
