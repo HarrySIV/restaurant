@@ -28,6 +28,7 @@
 .header {
   box-shadow: 1px 1px 7px;
   display: flex;
+  width: 100%;
 }
 
 .menu-bar {
@@ -38,6 +39,8 @@
 .nav-links {
   display: flex;
   justify-content: space-evenly;
+  width: calc(100vw - 100px);
+  min-width: 768px;
 }
 
 .title {
@@ -60,8 +63,8 @@ a {
 }
 
 .nav-li {
-  margin: auto 4rem;
-  padding: 1rem;
+  margin: auto 0;
+  padding: 1rem 0;
 }
 
 ul {

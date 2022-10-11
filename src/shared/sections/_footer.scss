@@ -9,13 +9,10 @@
   background-color: lightgray;
   display: flex;
   flex-flow: row nowrap;
+  width: 100%;
 }
 
 .column {
   display: flex;
   flex-flow: column nowrap;
-}
-
-.footer {
-  width: 100%;
 }

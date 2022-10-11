@@ -8,18 +8,15 @@ $blue: rgb(0, 119, 255);
 $off-white: rgb(248, 248, 248);
 
 body {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
   margin: 0;
+  min-width: 768px;
+  overflow-y: auto;
+  overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  min-width: 768px;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 code {
@@ -38,28 +35,18 @@ li {
   text-decoration-line: none;
 }
 
-.active {
-  color: black;
-}
-
-.link {
-  color: $pink-red;
-  &:hover {
-    color: $green;
-  }
-}
-
 .body {
   display: flex;
   flex-flow: column nowrap;
+  height: 100vh;
 }
 
 .main-wrapper {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  flex: 1 1 auto;
-  width: 100%;
+  flex-grow: 2;
+  width: 100vw;
 }
 
 .faicon {
@@ -70,4 +57,15 @@ li {
   left: 0;
   right: 0;
   color: $blue;
+}
+
+.active {
+  color: black;
+}
+
+.link {
+  color: $pink-red;
+  &:hover {
+    color: $green;
+  }
 }
