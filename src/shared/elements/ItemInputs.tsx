@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { VALIDATOR_MIN } from '../util/validators';
 import { Input } from './formElements/Input';
-import { useForm } from '../hooks/form-hook';
 import { IDeal } from '../hooks/database/deal-hook';
 import { IMenuItem } from '../hooks/database/menu-hook';
 
@@ -12,6 +11,11 @@ type ItemInputsProps = {
   size?: string;
   deal?: IDeal;
   item?: IMenuItem;
+  inputHandler: (
+    id: string,
+    userInputValue: string,
+    userInputIsValid: boolean
+  ) => void;
   priceHandler: (quantity: number, itemPrice: number) => void;
   disabled?: boolean;
 };
@@ -30,7 +34,6 @@ const sizes = [
 ];
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const [formState, inputHandler] = useForm({}, true);
   const [quantity, setQuantity] = useState<number>(0);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
@@ -52,7 +55,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           type="select"
           label="Size:"
           sizes={sizes}
-          onInput={inputHandler}
+          onInput={props.inputHandler}
           initialValue={props.size ? props.size : 'Medium'}
           errorText="Please pick a valid size"
           disabled={props.disabled}
@@ -66,7 +69,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
             element="checkbox"
             type="checkbox"
             label={topping.value}
-            onInput={inputHandler}
+            onInput={props.inputHandler}
             initialValue={topping.id}
             errorText="Please pick a valid topping"
           />
@@ -76,7 +79,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
         element="number"
         type="number"
         label="Quantity:"
-        onInput={inputHandler}
+        onInput={props.inputHandler}
         setQuantity={setQuantity}
         initialValue={
           (dealQuantity &&
@@ -89,12 +92,12 @@ export const ItemInputs = (props: ItemInputsProps) => {
         disabled={props.disabled}
       />
       <Input
-        id={props.id}
+        id="_id"
         element="text"
         type="text"
         label="_id"
         placeholder={props.id}
-        onInput={inputHandler}
+        onInput={props.inputHandler}
         initialValue={props.id}
         hidden={true}
         errorText="A valid ID was not passed"

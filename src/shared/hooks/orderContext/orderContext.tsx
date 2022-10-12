@@ -96,9 +96,9 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useOrderContext = () => {
-  const context = useContext(OrderContext);
+  const orderContext = useContext(OrderContext);
 
-  if (context === undefined)
+  if (orderContext === undefined)
     throw new Error('useOrder must only be used within OrderContext');
-  return context;
+  return orderContext;
 };

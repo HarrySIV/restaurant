@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
 import { useForm } from '../shared/hooks/form-hook';
+import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
+
 import { IMenuItem } from '../shared/hooks/database/menu-hook';
 import { IDeal } from '../shared/hooks/database/deal-hook';
 
@@ -15,7 +17,9 @@ interface IAddToOrderProps {
 }
 
 export const AddToOrder = (props: IAddToOrderProps) => {
+  const orderContext = useOrderContext();
   const [price, setPrice] = useState<number>();
+  const [formState, inputHandler] = useForm({}, true);
 
   const priceHandler = (quantity: number, itemPrice: number) => {
     if (quantity > 0) setPrice(quantity * itemPrice);
@@ -23,12 +27,17 @@ export const AddToOrder = (props: IAddToOrderProps) => {
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // try {
-    //   const formData = new FormData();
-    //   formData.append('_id', formState.inputs._id.value);
-    //   formData.append('value', formState.inputs.value.value);
-    //   formData.append('isValid', formState.inputs.isValid.value);
-    // } catch (error) {}
+    try {
+      const formData = new FormData();
+      if (formData.inputs._id)
+        formData.append('_id', formState.inputs.size.value);
+      if (formData.inputs.size)
+        formData.append('size', formState.inputs.size.value);
+      if (formData.inputs.quantity)
+        formData.append('quantity', formState.inputs.quantity.value);
+      if (formData.inputs.size)
+        formData.append('size', formState.inputs.size.value);
+    } catch (error) {}
   };
   return (
     <Modal header="Add to Order" closeHandler={props.closeHandler}>
@@ -43,6 +52,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 hasToppings={item.hasToppings}
                 deal={props.deal}
                 item={item}
+                inputHandler={inputHandler}
                 priceHandler={priceHandler}
                 disabled={props.deal ? true : false}
               />
