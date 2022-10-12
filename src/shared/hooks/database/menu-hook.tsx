@@ -17,11 +17,21 @@ export const useMenu = () => {
   const [menu, setMenu] = useState<IMenuItem[]>([]);
   const [message, setMessage] = useState<string>('');
 
+  //sorts incoming menu by id, from lowest to higest
+  const sortMenu = (prevItem: IMenuItem, nextItem: IMenuItem) => {
+    if (prevItem._id < nextItem._id) {
+      return -1;
+    }
+    if (prevItem._id > nextItem._id) {
+      return 1;
+    }
+  };
+
   useEffect(() => {
     const getMenu = async () => {
       try {
         const responseData = await sendRequest(`${environment.api}/menu`);
-        setMenu(responseData.items);
+        setMenu(responseData.items.sort(sortMenu));
         setMessage(responseData.message);
       } catch (error) {}
     };
