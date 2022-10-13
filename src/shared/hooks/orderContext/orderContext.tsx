@@ -12,10 +12,6 @@ export interface IOrderContext {
   total: number;
 }
 
-const initialOrderState: IOrderContext = { items: [], total: 0 };
-
-const OrderContext = createContext<IOrderContext>(initialOrderState);
-
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
 
@@ -94,6 +90,18 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     <OrderContext.Provider value={value}>{children}</OrderContext.Provider>
   );
 };
+
+const initialOrderState = {
+  items: [],
+  total: 0,
+  clearOrder: () => {},
+  addToOrder: () => {},
+  updateItemQuantity: () => {},
+  deleteFromOrder: () => {},
+  updatePrice: () => {},
+};
+
+const OrderContext = createContext(initialOrderState);
 
 export const useOrderContext = () => {
   const orderContext = useContext(OrderContext);

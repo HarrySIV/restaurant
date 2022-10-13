@@ -86,7 +86,8 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
                 userInputAction.userActionValue,
                 userInputAction.validators
               )
-            : false, // added this to make it work but probably shouldn't
+            : userInputState.userInputIsValid,
+        userInputIsTouched: userInputState.userInputIsTouched,
       };
     case 'TOUCH':
       return {
@@ -102,7 +103,7 @@ to 1 or an empty string. If initial validity is important, set it, otherwise ass
 starts a form as valid */
 export const Input = (props: InputProps) => {
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
-    userInputValue: props.initialValue || props.type === 'number' ? '1' : '',
+    userInputValue: props.initialValue ? props.initialValue : '1',
     userInputIsValid: props.initialValid ? props.initialValid : true,
     userInputIsTouched: false,
   });

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
@@ -27,17 +27,26 @@ export const AddToOrder = (props: IAddToOrderProps) => {
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log(formState);
     try {
       const formData = new FormData();
-      if (formData.inputs._id)
+      if (formState.inputs._id)
         formData.append('_id', formState.inputs.size.value);
-      if (formData.inputs.size)
+      if (formState.inputs.size)
         formData.append('size', formState.inputs.size.value);
-      if (formData.inputs.quantity)
+      if (formState.inputs.quantity)
         formData.append('quantity', formState.inputs.quantity.value);
-      if (formData.inputs.size)
-        formData.append('size', formState.inputs.size.value);
-    } catch (error) {}
+
+      // if (formState.inputs._id)
+      //   formData.append('toppings', formState.inputs.toppings.value);
+    } catch (error) {
+      console.log(error);
+    }
+    try {
+      orderContext.addToOrder(FormData);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Modal header="Add to Order" closeHandler={props.closeHandler}>
@@ -68,7 +77,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
           type="submit"
           text="ADD TO ORDER"
           onClick={itemSubmitHandler}
-          disabled={!true}
+          disabled={!formState.isFormValid}
         />
       </form>
     </Modal>
