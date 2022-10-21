@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
@@ -27,27 +27,9 @@ export const AddToOrder = (props: IAddToOrderProps) => {
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formState);
-    try {
-      const formData = new FormData();
-      if (formState.inputs._id)
-        formData.append('_id', formState.inputs.size.value);
-      if (formState.inputs.size)
-        formData.append('size', formState.inputs.size.value);
-      if (formState.inputs.quantity)
-        formData.append('quantity', formState.inputs.quantity.value);
-
-      // if (formState.inputs._id)
-      //   formData.append('toppings', formState.inputs.toppings.value);
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-      orderContext.addToOrder(FormData);
-    } catch (error) {
-      console.log(error);
-    }
+    orderContext.addToOrder({ ...formState.inputs, price: price });
   };
+
   return (
     <Modal header="Add to Order" closeHandler={props.closeHandler}>
       <form className="order-form" onSubmit={itemSubmitHandler}>
