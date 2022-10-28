@@ -15,7 +15,7 @@ export interface IOrderContext {
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
 
-  const addToOrder = (orderSubmission: OrderSubmission) => {
+  const addToOrder = (orderSubmission: any) => {
     /* finds if item exists in order and either adds to existing quantity or adds to order */
     const doesOrderItemExist = order.items.filter(
       (orderItem) => orderSubmission.menuItem._id === orderItem.menuItem._id
@@ -76,7 +76,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({ type: 'UPDATE_PRICE', total: total });
   };
 
-  const value = {
+  const value: any = {
     items: order.items,
     total: order.total,
     addToOrder,

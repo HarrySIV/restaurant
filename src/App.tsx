@@ -35,8 +35,8 @@ export function App() {
       <div className="body">
         <div className="main-wrapper">
           <OrderProvider>
-            <MainHeader />
-            <main>{isLoading ? <LoadingSpinner /> : routes}</main>
+          <MainHeader />
+          <main>{isLoading ? <LoadingSpinner /> : routes}</main>
           </OrderProvider>
         </div>
         <SiteMap />

@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, Reducer } from 'react';
+import React, { useState, useReducer, useEffect, Reducer } from 'react';
 import { validate } from '../../util/validators';
 
 import './_input.scss';
@@ -49,6 +49,8 @@ type NumberElementProps = GenericInputElementProps & {
 };
 type CheckboxElementProps = GenericInputElementProps & {
   type: 'checkbox';
+  setItemToppings: React.Dispatch<React.SetStateAction<any[]>>;
+  itemToppings: any[];
 };
 type SelectElementProps = GenericInputElementProps & {
   type: 'select';
@@ -102,11 +104,21 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
 to 1 or an empty string. If initial validity is important, set it, otherwise assume the program always
 starts a form as valid */
 export const Input = (props: InputProps) => {
+  const [isChecked, setIsChecked] = useState(false);
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
     userInputValue: props.initialValue ? props.initialValue : '1',
     userInputIsValid: props.initialValid ? props.initialValid : true,
     userInputIsTouched: false,
   });
+
+  //helper function that checks the state of the checkbox input
+  const { setItemToppings, itemToppings, initialValue } = props;
+  useEffect(() => {
+    setItemToppings &&
+      setItemToppings(
+        itemToppings && isChecked ? [...itemToppings, initialValue] : null
+      );
+  }, [isChecked, initialValue, itemToppings]);
 
   /* on input, updates onInput function with input values on change, 
   which really just executes "changeHandler" and dispatches to the reducer */
@@ -123,14 +135,17 @@ export const Input = (props: InputProps) => {
       | React.ChangeEvent<HTMLTextAreaElement>
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
+    if (props.type === 'number') {
+      props.setQuantity(parseInt(event.target.value));
+    }
+    if (props.type === 'checkbox') {
+      setIsChecked(!isChecked);
+    }
     dispatch({
       type: 'CHANGE',
       userActionValue: event.target.value,
       validators: props.validators,
     });
-    if (props.type === 'number') {
-      props.setQuantity(parseInt(event.target.value));
-    }
   };
 
   const touchHandler = () => {
@@ -169,6 +184,7 @@ export const Input = (props: InputProps) => {
         type={props.type}
         onChange={changeHandler}
         value={inputReducerState.userInputValue}
+        checked={isChecked}
       />
       <label htmlFor={props.id}>{props.label}</label>
     </>

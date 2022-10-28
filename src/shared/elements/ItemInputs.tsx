@@ -11,6 +11,8 @@ type ItemInputsProps = {
   size?: string;
   deal?: IDeal;
   item?: IMenuItem;
+  itemToppings: any[];
+  setItemToppings: React.Dispatch<React.SetStateAction<any[]>>;
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -34,6 +36,7 @@ const sizes = [
 ];
 
 export const ItemInputs = (props: ItemInputsProps) => {
+  //handles quantity of item addition to order
   const [quantity, setQuantity] = useState<number>(0);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
@@ -71,6 +74,8 @@ export const ItemInputs = (props: ItemInputsProps) => {
             label={topping.value}
             onInput={props.inputHandler}
             initialValue={topping.id}
+            setItemToppings={props.setItemToppings}
+            itemToppings={props.itemToppings}
             errorText="Please pick a valid topping"
           />
         ))}
