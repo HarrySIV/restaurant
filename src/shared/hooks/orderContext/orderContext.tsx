@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 import { IMenuItem } from '../database/menu-hook';
 import { orderReducer } from './orderReducer';
 
-interface OrderSubmission {
+interface TOrderSubmission {
   menuItem: IMenuItem;
   quantity: number;
 }
@@ -10,11 +10,11 @@ interface OrderSubmission {
 export interface IOrderContext {
   items: { menuItem: IMenuItem; quantity: number }[];
   total: number;
-  clearOrder: () => {};
-  addToOrder: (orderSubmission: any) => {};
-  updateItemQuantity: (orderSubmission: any) => {};
-  deleteFromOrder: (orderSubmission: any) => {};
-  updatePrice: (newOrder: any) => {};
+  clearOrder: () => void;
+  addToOrder: (orderSubmission: any) => void;
+  updateItemQuantity: (orderSubmission: any) => void;
+  deleteFromOrder: (orderSubmission: any) => void;
+  updatePrice: (newOrder: any) => void;
 }
 
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
@@ -44,7 +44,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* returns new array without item submitted */
-  const deleteFromOrder = (orderSubmission: OrderSubmission) => {
+  const deleteFromOrder = (orderSubmission: TOrderSubmission) => {
     const newOrder = {
       items: order.items.filter(
         (orderItem) => orderItem.menuItem._id !== orderSubmission.menuItem._id
@@ -56,7 +56,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* finds item within order and returns new item */
-  const updateItemQuantity = (orderSubmission: OrderSubmission) => {
+  const updateItemQuantity = (orderSubmission: TOrderSubmission) => {
     const newOrder = {
       items: order.items.map((newOrderItem) => {
         if (newOrderItem.menuItem._id === orderSubmission.menuItem._id) {
@@ -98,7 +98,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
 const initialOrderState = {
   items: [] as any,
-  total: 0 as number,
+  total: 0,
   clearOrder: () => {},
   addToOrder: (orderSubmission = null as any) => {},
   updateItemQuantity: (orderSubmission = null as any) => {},
@@ -106,7 +106,7 @@ const initialOrderState = {
   updatePrice: (newOrder = null as any) => {},
 };
 
-const OrderContext = createContext(initialOrderState);
+const OrderContext = createContext<IOrderContext>(initialOrderState);
 
 export const useOrderContext = () => {
   const orderContext = useContext(OrderContext);
