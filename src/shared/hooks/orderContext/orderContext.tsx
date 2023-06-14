@@ -10,6 +10,11 @@ interface OrderSubmission {
 export interface IOrderContext {
   items: { menuItem: IMenuItem; quantity: number }[];
   total: number;
+  clearOrder: () => {};
+  addToOrder: (orderSubmission: any) => {};
+  updateItemQuantity: (orderSubmission: any) => {};
+  deleteFromOrder: (orderSubmission: any) => {};
+  updatePrice: (newOrder: any) => {};
 }
 
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
@@ -92,13 +97,13 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 const initialOrderState = {
-  items: [],
-  total: 0,
+  items: [] as any,
+  total: 0 as number,
   clearOrder: () => {},
-  addToOrder: () => {},
-  updateItemQuantity: () => {},
-  deleteFromOrder: () => {},
-  updatePrice: () => {},
+  addToOrder: (orderSubmission = null as any) => {},
+  updateItemQuantity: (orderSubmission = null as any) => {},
+  deleteFromOrder: (orderSubmission = null as any) => {},
+  updatePrice: (newOrder = null as any) => {},
 };
 
 const OrderContext = createContext(initialOrderState);
