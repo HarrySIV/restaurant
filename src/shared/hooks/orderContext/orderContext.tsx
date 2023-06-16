@@ -2,10 +2,10 @@ import React, { createContext, useContext, useReducer } from 'react';
 import { IMenuItem } from '../database/menu-hook';
 import { orderReducer } from './orderReducer';
 
-interface TOrderSubmission {
-  menuItem: IMenuItem;
-  quantity: number;
-}
+// interface TOrderSubmission {
+//   menuItem: IMenuItem;
+//   quantity: number;
+// }
 
 export interface IOrderContext {
   items: { menuItem: IMenuItem; quantity: number }[];
@@ -44,7 +44,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* returns new array without item submitted */
-  const deleteFromOrder = (orderSubmission: TOrderSubmission) => {
+  const deleteFromOrder = (orderSubmission) => {
     const newOrder = {
       items: order.items.filter(
         (orderItem) => orderItem.menuItem._id !== orderSubmission.menuItem._id
@@ -56,7 +56,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* finds item within order and returns new item */
-  const updateItemQuantity = (orderSubmission: TOrderSubmission) => {
+  const updateItemQuantity = (orderSubmission) => {
     const newOrder = {
       items: order.items.map((newOrderItem) => {
         if (newOrderItem.menuItem._id === orderSubmission.menuItem._id) {
@@ -75,7 +75,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* used to update the total after each quantity/item update */
-  const updatePrice = (newOrder: IOrderContext) => {
+  const updatePrice = (newOrder) => {
     let total = 0;
     newOrder.items.forEach((item) => (total += item.menuItem.price));
     dispatch({ type: 'UPDATE_PRICE', total: total });

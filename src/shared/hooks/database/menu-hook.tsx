@@ -8,8 +8,10 @@ export interface IMenuItem {
   price: number;
   _id: string;
   cooking_time: string;
-  options: string[];
-  hasSizes: boolean;
+  options: { name: string; price: number }[];
+  sizes: string[];
+  basePrice: number;
+  totalPrice: number;
 }
 
 export const useMenu = () => {
