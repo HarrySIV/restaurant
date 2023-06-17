@@ -45,12 +45,11 @@ export const AddToOrder = (props: IAddToOrderProps) => {
               <ItemInputs
                 id={`${item._id}`}
                 hasSizes={item.hasSizes}
-                hasToppings={item.hasToppings}
+                options={item.options}
                 deal={props.deal}
                 item={item}
                 inputHandler={inputHandler}
                 priceHandler={priceHandler}
-                itemToppings={itemToppings}
                 setItemToppings={setItemToppings}
                 disabled={props.deal ? true : false}
               />

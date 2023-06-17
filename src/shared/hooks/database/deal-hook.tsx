@@ -11,7 +11,7 @@ export interface IDeal {
 }
 
 export const useDeal = () => {
-  const { sendRequest } = useHttpClient();
+  const { sendRequest, isLoading } = useHttpClient();
   const [deals, setDeals] = useState<IDeal[]>([]);
   const [message, setMessage] = useState<{ message: string }>();
 
@@ -26,5 +26,5 @@ export const useDeal = () => {
     getDeals();
   }, [sendRequest]);
 
-  return { deals, message };
+  return { deals, message, isLoading };
 };

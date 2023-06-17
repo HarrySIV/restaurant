@@ -7,11 +7,9 @@ import { IMenuItem } from '../hooks/database/menu-hook';
 type ItemInputsProps = {
   id: string;
   hasSizes: boolean;
-  hasToppings: boolean;
   size?: string;
   deal?: IDeal;
   item?: IMenuItem;
-  itemToppings: any[];
   setItemToppings: React.Dispatch<React.SetStateAction<any[]>>;
   inputHandler: (
     id: string,
@@ -22,13 +20,6 @@ type ItemInputsProps = {
   disabled?: boolean;
 };
 
-const toppings = [
-  { id: 'pepperoni', value: 'Pepperoni', isValid: true },
-  { id: 'sausage', value: 'Sausage', isValid: true },
-  { id: 'mushrooms', value: 'Mushrooms', isValid: true },
-  { id: 'greenPeppers', value: 'Green Peppers', isValid: true },
-  { id: 'onions', value: 'Onions', isValid: true },
-];
 const sizes = [
   { id: 'small', value: 'Small', isValid: true },
   { id: 'medium', value: 'Medium', isValid: true },
@@ -64,21 +55,22 @@ export const ItemInputs = (props: ItemInputsProps) => {
           disabled={props.disabled}
         />
       )}
-      {props.hasToppings &&
-        toppings.map((topping) => (
-          <Input
-            key={topping.id}
-            id={topping.id}
-            element="checkbox"
-            type="checkbox"
-            label={topping.value}
-            onInput={props.inputHandler}
-            initialValue={topping.id}
-            setItemToppings={props.setItemToppings}
-            itemToppings={props.itemToppings}
-            errorText="Please pick a valid topping"
-          />
-        ))}
+      {item && item.options && item.options.length
+        ? item.options.map((option) => (
+            <Input
+              key={option.id}
+              id={option.id}
+              element="checkbox"
+              type="checkbox"
+              label={option.name}
+              onInput={props.inputHandler}
+              initialValue={option.price}
+              setItemToppings={props.setItemToppings}
+              itemToppings={props.itemToppings}
+              errorText="Please pick a valid topping"
+            />
+          ))
+        : null}
       <Input
         id="quanity"
         element="number"

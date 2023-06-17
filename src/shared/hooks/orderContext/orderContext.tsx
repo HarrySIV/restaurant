@@ -20,26 +20,31 @@ export interface IOrderContext {
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
 
+  // const addToOrder = (orderSubmission: any) => {
+  //   /* finds if item exists in order and either adds to existing quantity or adds to order */
+  //   const doesOrderItemExist = order.items.filter(
+  //     (orderItem) => orderSubmission.menuItem._id === orderItem.menuItem._id
+  //   );
+  //   const newOrder = {
+  //     items: doesOrderItemExist.length
+  //       ? order.items.map((orderItem) => {
+  //           if (orderItem.menuItem._id === orderSubmission.menuItem._id) {
+  //             const newQuantity = orderSubmission.quantity + orderItem.quantity;
+  //             return {
+  //               menuItem: orderSubmission.menuItem,
+  //               quantity: newQuantity,
+  //             };
+  //           } else return { ...orderItem };
+  //         })
+  //       : [...order.items, orderSubmission],
+  //     total: order.total,
+  //   };
+  //   updatePrice(newOrder);
+  //   dispatch({ type: 'ADD_ITEM', newOrder: newOrder });
+  // };
+
   const addToOrder = (orderSubmission: any) => {
-    /* finds if item exists in order and either adds to existing quantity or adds to order */
-    const doesOrderItemExist = order.items.filter(
-      (orderItem) => orderSubmission.menuItem._id === orderItem.menuItem._id
-    );
-    const newOrder = {
-      items: doesOrderItemExist.length
-        ? order.items.map((orderItem) => {
-            if (orderItem.menuItem._id === orderSubmission.menuItem._id) {
-              const newQuantity = orderSubmission.quantity + orderItem.quantity;
-              return {
-                menuItem: orderSubmission.menuItem,
-                quantity: newQuantity,
-              };
-            } else return { ...orderItem };
-          })
-        : [...order.items, orderSubmission],
-      total: order.total,
-    };
-    updatePrice(newOrder);
+    
     dispatch({ type: 'ADD_ITEM', newOrder: newOrder });
   };
 
