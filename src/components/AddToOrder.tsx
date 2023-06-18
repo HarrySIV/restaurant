@@ -20,7 +20,6 @@ export const AddToOrder = (props: IAddToOrderProps) => {
   const orderContext = useOrderContext();
   const [price, setPrice] = useState<number>();
   const [formState, inputHandler] = useForm({}, true);
-  const [itemToppings, setItemToppings] = useState<any[]>([]);
 
   const priceHandler = (quantity: number, itemPrice: number) => {
     if (quantity > 0) setPrice(quantity * itemPrice);
@@ -28,10 +27,9 @@ export const AddToOrder = (props: IAddToOrderProps) => {
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(formState.inputs, itemToppings);
     orderContext.addToOrder({
       ...formState.inputs,
-      price: deal ? deal.total : props.items[0].price,
+      price: props.deal ? props.deal.total : props.items[0].price,
     });
   };
 
@@ -44,13 +42,11 @@ export const AddToOrder = (props: IAddToOrderProps) => {
               <legend>{item.name}</legend>
               <ItemInputs
                 id={`${item._id}`}
-                hasSizes={item.hasSizes}
                 options={item.options}
                 deal={props.deal}
                 item={item}
                 inputHandler={inputHandler}
                 priceHandler={priceHandler}
-                setItemToppings={setItemToppings}
                 disabled={props.deal ? true : false}
               />
               {!props.deal ? (

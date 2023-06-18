@@ -14,7 +14,7 @@ interface IOrder {
 
 export const useOrder = () => {
   const context = useOrderContext();
-  const { sendRequest } = useHttpClient();
+  const { sendRequest, isLoading } = useHttpClient();
   const [orders, setOrders] = useState<IOrder[]>();
   const [message, setMessage] = useState<{ message: string }>();
 
@@ -40,5 +40,5 @@ export const useOrder = () => {
     } catch (error) {}
   };
 
-  return { orders, addOrder, message };
+  return { orders, addOrder, message, isLoading };
 };

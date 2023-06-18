@@ -6,11 +6,10 @@ import { IMenuItem } from '../hooks/database/menu-hook';
 
 type ItemInputsProps = {
   id: string;
-  hasSizes: boolean;
+  options: { name: string; price: number }[];
   size?: string;
   deal?: IDeal;
   item?: IMenuItem;
-  setItemToppings: React.Dispatch<React.SetStateAction<any[]>>;
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -42,7 +41,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
 
   return (
     <>
-      {props.hasSizes && (
+      {props.size && props.size.length && (
         <Input
           id="size"
           element="select"
@@ -58,15 +57,13 @@ export const ItemInputs = (props: ItemInputsProps) => {
       {item && item.options && item.options.length
         ? item.options.map((option) => (
             <Input
-              key={option.id}
-              id={option.id}
+              key={option.name}
+              id={option.name}
               element="checkbox"
               type="checkbox"
               label={option.name}
               onInput={props.inputHandler}
-              initialValue={option.price}
-              setItemToppings={props.setItemToppings}
-              itemToppings={props.itemToppings}
+              initialValue={option.price.toString()}
               errorText="Please pick a valid topping"
             />
           ))
