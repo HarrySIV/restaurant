@@ -2,15 +2,17 @@ import { useState, useEffect } from 'react';
 import { useHttpClient } from '../http-hook';
 import { environment } from '../../../config/settings';
 
+export type TItemOptions = { name: string; price: number; checked?: boolean }[];
+
 export interface IMenuItem {
   name: string;
   description: string;
   price: number;
   _id: string;
   cooking_time: string;
-  options: { name: string; price: number }[];
-  sizes: string[];
-  basePrice: number;
+  options: TItemOptions;
+  optionsPrice: number;
+  hasSizes: boolean;
   totalPrice: number;
 }
 

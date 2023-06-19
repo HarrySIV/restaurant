@@ -1,4 +1,5 @@
 import React, { useState, useReducer, useEffect, Reducer } from 'react';
+import { TItemOptions } from '../../hooks/database/menu-hook';
 import { validate } from '../../util/validators';
 
 import './_input.scss';
@@ -14,6 +15,10 @@ type UserInputActions =
       type: 'CHANGE';
       userActionValue: string;
       validators?: { type: string; configVal: number }[] | { type: string }[];
+    }
+  | {
+      type: 'CHECKBOX';
+      userActionValue: TItemOptions;
     }
   | { type: 'TOUCH' };
 
@@ -49,8 +54,6 @@ type NumberElementProps = GenericInputElementProps & {
 };
 type CheckboxElementProps = GenericInputElementProps & {
   type: 'checkbox';
-  setItemToppings: React.Dispatch<React.SetStateAction<any[]>>;
-  itemToppings: any[];
 };
 type SelectElementProps = GenericInputElementProps & {
   type: 'select';
@@ -91,6 +94,8 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
             : userInputState.userInputIsValid,
         userInputIsTouched: userInputState.userInputIsTouched,
       };
+    case 'CHECKBOX':
+      return { userInputValue: userInputAction.userActionValue };
     case 'TOUCH':
       return {
         ...userInputState,
@@ -111,15 +116,6 @@ export const Input = (props: InputProps) => {
     userInputIsTouched: false,
   });
 
-  //helper function that checks the state of the checkbox input
-  const { setItemToppings, itemToppings, initialValue } = props;
-  useEffect(() => {
-    setItemToppings &&
-      setItemToppings(
-        itemToppings && isChecked ? [...itemToppings, initialValue] : null
-      );
-  }, [isChecked, initialValue, itemToppings]);
-
   /* on input, updates onInput function with input values on change, 
   which really just executes "changeHandler" and dispatches to the reducer */
   const { id, onInput } = props;
@@ -133,19 +129,33 @@ export const Input = (props: InputProps) => {
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLSelectElement>,
+    options?: TItemOptions,
+    index?: number
   ) => {
-    if (props.type === 'number') {
-      props.setQuantity(parseInt(event.target.value));
-    }
     if (props.type === 'checkbox') {
       setIsChecked(!isChecked);
+      dispatch({
+        type: 'CHECKBOX',
+        userActionValue: options!.map((option, currentIndex) =>
+          currentIndex === index
+            ? {
+                ...option,
+                checked: !option.checked,
+              }
+            : option
+        ),
+      });
+    } else {
+      if (props.type === 'number') {
+        props.setQuantity(parseInt(event.target.value));
+      }
+      dispatch({
+        type: 'CHANGE',
+        userActionValue: event.target.value,
+        validators: props.validators,
+      });
     }
-    dispatch({
-      type: 'CHANGE',
-      userActionValue: event.target.value,
-      validators: props.validators,
-    });
   };
 
   const touchHandler = () => {
@@ -183,7 +193,6 @@ export const Input = (props: InputProps) => {
         id={props.id}
         type={props.type}
         onChange={changeHandler}
-        value={inputReducerState.userInputValue}
         checked={isChecked}
       />
       <label htmlFor={props.id}>{props.label}</label>

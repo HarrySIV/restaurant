@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { Modal } from '../shared/elements/uiElements/Modal';
-import { Button } from '../shared/elements/formElements/Button';
-import { ItemInputs } from '../shared/elements/ItemInputs';
+
 import { useForm } from '../shared/hooks/form-hook';
 import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
 
 import { IMenuItem } from '../shared/hooks/database/menu-hook';
 import { IDeal } from '../shared/hooks/database/deal-hook';
+
+import { Modal } from '../shared/elements/uiElements/Modal';
+import { Button } from '../shared/elements/formElements/Button';
+import { ItemInputs } from '../shared/elements/ItemInputs';
 
 import './_AddToOrder.scss';
 
@@ -47,6 +49,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 item={item}
                 inputHandler={inputHandler}
                 priceHandler={priceHandler}
+                hasSizes={item.hasSizes}
                 disabled={props.deal ? true : false}
               />
               {!props.deal ? (

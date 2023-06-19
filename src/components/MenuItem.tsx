@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '../shared/elements/formElements/Button';
 import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,8 +9,25 @@ import { LoadingSpinner } from '../shared/elements/uiElements/LoadingSpinner';
 export const MenuItem = () => {
   const [ID, setID] = useState<string>();
   const { menu, isLoading } = useMenu();
+  const [updatedMenu, setUpdatedMenu] = useState(menu);
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [item, setItem] = useState<IMenuItem[]>([]);
+
+  useEffect(() => {
+    const newMenu = menu.map((item) => {
+      if (item.options && item.options.length > 0) {
+        return {
+          ...item,
+          options: item.options.map((option) => {
+            return { name: option.name, price: option.price, checked: false };
+          }),
+        };
+      }
+      if (!item.options) return { ...item, options: [] };
+      return item;
+    });
+    setUpdatedMenu(newMenu);
+  }, [menu]);
 
   //onClick of menu item, displays menu item description
   const descriptionHandler = (item: IMenuItem) => {
@@ -38,8 +55,8 @@ export const MenuItem = () => {
         <LoadingSpinner />
       ) : (
         <ul className="items">
-          {menu.length &&
-            menu.map((item: IMenuItem) => {
+          {updatedMenu.length &&
+            updatedMenu.map((item: IMenuItem) => {
               return (
                 <li key={item._id} className="list-item">
                   <div className="li-inner">

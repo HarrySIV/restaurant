@@ -21,10 +21,22 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
 ) => {
   switch (orderReducerAction.type) {
     case 'ADD_ITEM':
+      let optionTotal = 0;
+      orderReducerAction.newOrder.items.forEach((item) => {
+        if (item.menuItem.options.length) {
+          item.menuItem.options.forEach(
+            (option) => (optionTotal += option.price)
+          );
+        }
+        optionTotal *= item.quantity;
+      });
       return {
         ...orderReducerState,
         items: [...orderReducerState.items, orderReducerAction.newOrder.items],
-        total: orderReducerAction.newOrder.total + orderReducerState.total,
+        total:
+          orderReducerAction.newOrder.total +
+          orderReducerState.total +
+          optionTotal,
       };
     case 'REMOVE_ITEM':
       return {

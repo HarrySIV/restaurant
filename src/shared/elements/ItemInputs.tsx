@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
+
 import { VALIDATOR_MIN } from '../util/validators';
 import { Input } from './formElements/Input';
+
 import { IDeal } from '../hooks/database/deal-hook';
-import { IMenuItem } from '../hooks/database/menu-hook';
+import { IMenuItem, TItemOptions } from '../hooks/database/menu-hook';
 
 type ItemInputsProps = {
   id: string;
-  options: { name: string; price: number }[];
+  options: TItemOptions;
   size?: string;
+  hasSizes?: boolean;
   deal?: IDeal;
   item?: IMenuItem;
   inputHandler: (
@@ -27,7 +30,7 @@ const sizes = [
 
 export const ItemInputs = (props: ItemInputsProps) => {
   //handles quantity of item addition to order
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState(0);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
@@ -41,7 +44,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
 
   return (
     <>
-      {props.size && props.size.length && (
+      {props.hasSizes && (
         <Input
           id="size"
           element="select"
