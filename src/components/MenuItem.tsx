@@ -8,7 +8,7 @@ import { LoadingSpinner } from '../shared/elements/uiElements/LoadingSpinner';
 
 export const MenuItem = () => {
   const [ID, setID] = useState<string>();
-  const { menu, isLoading } = useMenu();
+  const { menu } = useMenu();
   const [updatedMenu, setUpdatedMenu] = useState(menu);
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [item, setItem] = useState<IMenuItem[]>([]);
@@ -51,7 +51,7 @@ export const MenuItem = () => {
   //displays menu items when menu and menu.length exist... breaks otherwise.
   return (
     <>
-      {isLoading ? (
+      {!menu.length ? (
         <LoadingSpinner />
       ) : (
         <ul className="items">

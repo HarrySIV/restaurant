@@ -1,11 +1,11 @@
-export type Environment = {
-  backendBaseUrl: string;
+type Environment = {
+  api: string;
 };
 
 declare global {
   const environment: Environment;
 }
 
-export const environment = {
+export const environment: Environment = {
   api: 'https://sleepy-plateau-22458.herokuapp.com/api',
 };

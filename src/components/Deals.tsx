@@ -5,7 +5,7 @@ import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
 import { LoadingSpinner } from '../shared/elements/uiElements/LoadingSpinner';
 
 export const Deals: React.FC = () => {
-  const { deals, isLoading } = useDeal();
+  const { deals } = useDeal();
   const { menu } = useMenu();
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
@@ -31,7 +31,7 @@ export const Deals: React.FC = () => {
     <>
       <h2 className="deal-text">DEALS</h2>
 
-      {isLoading ? (
+      {!deals.length && !menu.length ? (
         <LoadingSpinner />
       ) : (
         deals.map((deal) => (

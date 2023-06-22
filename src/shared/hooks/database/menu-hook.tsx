@@ -17,7 +17,7 @@ export interface IMenuItem {
 }
 
 export const useMenu = () => {
-  const { sendRequest, isLoading } = useHttpClient();
+  const { sendRequest } = useHttpClient();
   const [menu, setMenu] = useState<IMenuItem[]>([]);
   const [message, setMessage] = useState<string>('');
 
@@ -42,5 +42,5 @@ export const useMenu = () => {
     getMenu();
   }, [sendRequest]);
 
-  return { menu, message, isLoading };
+  return { menu, message };
 };
