@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect, Reducer } from 'react';
-import { TItemOptions } from '../../hooks/database/menu-hook';
+import { TItemOption } from '../../hooks/database/menu-hook';
 import { validate } from '../../util/validators';
 
 import './_input.scss';
@@ -15,10 +15,6 @@ type UserInputActions =
       type: 'CHANGE';
       userActionValue: string;
       validators?: { type: string; configVal: number }[] | { type: string }[];
-    }
-  | {
-      type: 'CHECKBOX';
-      userActionValue: TItemOptions;
     }
   | { type: 'TOUCH' };
 
@@ -54,6 +50,8 @@ type NumberElementProps = GenericInputElementProps & {
 };
 type CheckboxElementProps = GenericInputElementProps & {
   type: 'checkbox';
+  option: TItemOption;
+  optionsHandler: (userOption: TItemOption, isChecked: boolean) => void;
 };
 type SelectElementProps = GenericInputElementProps & {
   type: 'select';
@@ -94,8 +92,6 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
             : userInputState.userInputIsValid,
         userInputIsTouched: userInputState.userInputIsTouched,
       };
-    case 'CHECKBOX':
-      return { userInputValue: userInputAction.userActionValue };
     case 'TOUCH':
       return {
         ...userInputState,
@@ -124,28 +120,20 @@ export const Input = (props: InputProps) => {
     onInput(id, userInputValue, userInputIsValid);
   }, [id, userInputValue, userInputIsValid, onInput]);
 
+  useEffect(() => {
+    if (props.type === 'checkbox')
+      props.optionsHandler(props.option, isChecked);
+  }, [isChecked]);
+
   //handles input changes and dispatches to inputReducer
   const changeHandler = (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
-      | React.ChangeEvent<HTMLSelectElement>,
-    options?: TItemOptions,
-    index?: number
+      | React.ChangeEvent<HTMLSelectElement>
   ) => {
     if (props.type === 'checkbox') {
       setIsChecked(!isChecked);
-      dispatch({
-        type: 'CHECKBOX',
-        userActionValue: options!.map((option, currentIndex) =>
-          currentIndex === index
-            ? {
-                ...option,
-                checked: !option.checked,
-              }
-            : option
-        ),
-      });
     } else {
       if (props.type === 'number') {
         props.setQuantity(parseInt(event.target.value));

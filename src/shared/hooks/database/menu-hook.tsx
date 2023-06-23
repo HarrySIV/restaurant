@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useHttpClient } from '../http-hook';
 import { environment } from '../../../config/settings';
 
-export type TItemOptions = { name: string; price: number; checked?: boolean }[];
+export type TItemOption = { name: string; price: number; checked?: boolean };
 
 export interface IMenuItem {
   name: string;
@@ -10,10 +10,8 @@ export interface IMenuItem {
   price: number;
   _id: string;
   cooking_time: string;
-  options: TItemOptions;
-  optionsPrice: number;
+  options: TItemOption[];
   hasSizes: boolean;
-  totalPrice: number;
 }
 
 export const useMenu = () => {

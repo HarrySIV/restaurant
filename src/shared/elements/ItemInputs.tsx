@@ -4,11 +4,11 @@ import { VALIDATOR_MIN } from '../util/validators';
 import { Input } from './formElements/Input';
 
 import { IDeal } from '../hooks/database/deal-hook';
-import { IMenuItem, TItemOptions } from '../hooks/database/menu-hook';
+import { IMenuItem, TItemOption } from '../hooks/database/menu-hook';
 
 type ItemInputsProps = {
   id: string;
-  options: TItemOptions;
+  options: TItemOption[];
   size?: string;
   hasSizes?: boolean;
   deal?: IDeal;
@@ -23,14 +23,15 @@ type ItemInputsProps = {
 };
 
 const sizes = [
-  { id: 'small', value: 'Small', isValid: true },
-  { id: 'medium', value: 'Medium', isValid: true },
-  { id: 'large', value: 'Large', isValid: true },
+  { id: 'small', value: 'Small', isValid: true, price: 8.99, inches: 10 },
+  { id: 'medium', value: 'Medium', isValid: true, price: 11.99, inches: 14 },
+  { id: 'large', value: 'Large', isValid: true, price: 15.99, inches: 16 },
 ];
 
 export const ItemInputs = (props: ItemInputsProps) => {
   //handles quantity of item addition to order
   const [quantity, setQuantity] = useState(0);
+  const [options, setOptions] = useState<TItemOption[]>([]);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
@@ -39,8 +40,22 @@ export const ItemInputs = (props: ItemInputsProps) => {
   //handles the price of each item to update with quantity changes
   const { priceHandler, item } = props;
   useEffect(() => {
-    if (item) priceHandler(quantity, item.price);
-  }, [quantity, priceHandler, item]);
+    if (item) {
+      let optionsTotal = 0;
+      let itemTotal = 0;
+      options.forEach((option) => {
+        optionsTotal += option.price;
+      });
+      itemTotal = item.price + optionsTotal;
+      priceHandler(quantity, itemTotal);
+    }
+  }, [quantity, priceHandler, item, options]);
+
+  const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
+    if (isChecked) setOptions([...options, userOption]);
+    if (!isChecked)
+      setOptions(options.filter((option) => option.name !== userOption.name));
+  };
 
   return (
     <>
@@ -57,7 +72,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           disabled={props.disabled}
         />
       )}
-      {item && item.options && item.options.length
+      {item && item.options.length
         ? item.options.map((option) => (
             <Input
               key={option.name}
@@ -66,7 +81,10 @@ export const ItemInputs = (props: ItemInputsProps) => {
               type="checkbox"
               label={option.name}
               onInput={props.inputHandler}
-              initialValue={option.price.toString()}
+              option={option}
+              options={options}
+              optionsHandler={optionsHandler}
+              initialValue={option.name}
               errorText="Please pick a valid topping"
             />
           ))
