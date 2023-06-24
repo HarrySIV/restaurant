@@ -12,6 +12,7 @@ export interface IMenuItem {
   cooking_time: string;
   options: TItemOption[];
   hasSizes: boolean;
+  flavors?: string[];
 }
 
 export const useMenu = () => {

@@ -47,6 +47,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 options={item.options}
                 deal={props.deal}
                 item={item}
+                flavors={item.flavors}
                 inputHandler={inputHandler}
                 priceHandler={priceHandler}
                 hasSizes={item.hasSizes}

@@ -55,7 +55,8 @@ type CheckboxElementProps = GenericInputElementProps & {
 };
 type SelectElementProps = GenericInputElementProps & {
   type: 'select';
-  sizes: ISizes[];
+  sizes?: ISizes[];
+  flavors?: string[];
   disabled?: boolean;
 };
 
@@ -101,6 +102,7 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
       return userInputState;
   }
 };
+
 /* if props.initialValue exists, set it, otherwise check if the type of input is a number and set initial value
 to 1 or an empty string. If initial validity is important, set it, otherwise assume the program always
 starts a form as valid */

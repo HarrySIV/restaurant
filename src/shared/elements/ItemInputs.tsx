@@ -13,6 +13,7 @@ type ItemInputsProps = {
   hasSizes?: boolean;
   deal?: IDeal;
   item?: IMenuItem;
+  flavors?: string[];
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -29,7 +30,7 @@ const sizes = [
 ];
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  //handles quantity of item addition to order
+  const { priceHandler, item } = props;
   const [quantity, setQuantity] = useState(0);
   const [options, setOptions] = useState<TItemOption[]>([]);
   const dealQuantity = props.deal && {
@@ -38,7 +39,6 @@ export const ItemInputs = (props: ItemInputsProps) => {
   };
 
   //handles the price of each item to update with quantity changes
-  const { priceHandler, item } = props;
   useEffect(() => {
     if (item) {
       let optionsTotal = 0;
@@ -72,6 +72,19 @@ export const ItemInputs = (props: ItemInputsProps) => {
           disabled={props.disabled}
         />
       )}
+      {props.flavors && (
+        <Input
+          id="flavor"
+          element="select"
+          type="select"
+          label="Flavor:"
+          flavors={props.flavors}
+          onInput={props.inputHandler}
+          initialValue="Pepsi"
+          errorText="Please pick a valid flavor"
+          disabled={props.disabled}
+        />
+      )}
       {item && item.options.length
         ? item.options.map((option) => (
             <Input
@@ -82,7 +95,6 @@ export const ItemInputs = (props: ItemInputsProps) => {
               label={option.name}
               onInput={props.inputHandler}
               option={option}
-              options={options}
               optionsHandler={optionsHandler}
               initialValue={option.name}
               errorText="Please pick a valid topping"
