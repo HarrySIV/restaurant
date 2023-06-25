@@ -9,11 +9,11 @@ import { IMenuItem, TItemOption } from '../hooks/database/menu-hook';
 type ItemInputsProps = {
   id: string;
   options: TItemOption[];
-  size?: string;
+  size?: TSize;
   hasSizes?: boolean;
   deal?: IDeal;
   item?: IMenuItem;
-  flavors?: string[];
+  flavors?: TFlavor[];
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -23,13 +23,27 @@ type ItemInputsProps = {
   disabled?: boolean;
 };
 
-const sizes = [
+export type TSize = {
+  id: string;
+  value: string;
+  isValid: boolean;
+  price: number;
+  inches: number;
+};
+
+export type TFlavor = {
+  id: string;
+  value: string;
+  isValid: boolean;
+};
+
+const sizes: TSize[] = [
   { id: 'small', value: 'Small', isValid: true, price: 8.99, inches: 10 },
   { id: 'medium', value: 'Medium', isValid: true, price: 11.99, inches: 14 },
   { id: 'large', value: 'Large', isValid: true, price: 15.99, inches: 16 },
 ];
 
-const flavors = [
+export const flavors: TFlavor[] = [
   { id: 'pepsi', value: 'Pepsi', isValid: true },
   { id: 'drpepper', value: 'Dr. Pepper', isValid: true },
   { id: 'mountaindew', value: 'Mountain Dew', isValid: true },
@@ -73,7 +87,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           label="Size:"
           selection={sizes}
           onInput={props.inputHandler}
-          initialValue={props.size ? props.size : 'Medium'}
+          initialValue={props.size ? props.size.value : 'Medium'}
           errorText="Please pick a valid size"
           disabled={props.disabled}
         />

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useHttpClient } from '../http-hook';
 import { environment } from '../../../config/settings';
+import { TFlavor, TSize } from '../../elements/ItemInputs';
 
 export type TItemOption = { name: string; price: number; checked?: boolean };
 
@@ -12,7 +13,8 @@ export interface IMenuItem {
   cooking_time: string;
   options: TItemOption[];
   hasSizes: boolean;
-  flavors?: string[];
+  size?: TSize;
+  flavors?: TFlavor;
 }
 
 export const useMenu = () => {

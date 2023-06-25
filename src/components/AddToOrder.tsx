@@ -11,6 +11,7 @@ import { Button } from '../shared/elements/formElements/Button';
 import { ItemInputs } from '../shared/elements/ItemInputs';
 
 import './_AddToOrder.scss';
+import { flavors } from './../shared/elements/ItemInputs';
 
 interface IAddToOrderProps {
   closeHandler: () => void;
@@ -47,7 +48,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 options={item.options}
                 deal={props.deal}
                 item={item}
-                flavors={item.flavors}
+                flavors={flavors}
                 inputHandler={inputHandler}
                 priceHandler={priceHandler}
                 hasSizes={item.hasSizes}
