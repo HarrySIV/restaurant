@@ -55,16 +55,15 @@ type CheckboxElementProps = GenericInputElementProps & {
 };
 type SelectElementProps = GenericInputElementProps & {
   type: 'select';
-  sizes?: ISizes[];
-  flavors?: string[];
+  selection?: TSelection[];
   disabled?: boolean;
 };
 
-interface ISizes {
+type TSelection = {
   id: string;
   value: string;
   isValid: boolean;
-}
+};
 
 type InputProps =
   | TextElementProps
@@ -195,10 +194,10 @@ export const Input = (props: InputProps) => {
       value={inputReducerState.userInputValue}
       disabled={props.disabled}
     >
-      {props.sizes &&
-        props.sizes.map((size) => (
-          <option value={size.value} id={size.id} key={size.id}>
-            {size.value}
+      {props.selection &&
+        props.selection.map((selection) => (
+          <option value={selection.value} id={selection.id} key={selection.id}>
+            {selection.value}
           </option>
         ))}
     </select>

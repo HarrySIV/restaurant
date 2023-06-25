@@ -29,6 +29,12 @@ const sizes = [
   { id: 'large', value: 'Large', isValid: true, price: 15.99, inches: 16 },
 ];
 
+const flavors = [
+  { id: 'pepsi', value: 'Pepsi', isValid: true },
+  { id: 'drpepper', value: 'Dr. Pepper', isValid: true },
+  { id: 'mountaindew', value: 'Mountain Dew', isValid: true },
+];
+
 export const ItemInputs = (props: ItemInputsProps) => {
   const { priceHandler, item } = props;
   const [quantity, setQuantity] = useState(0);
@@ -65,7 +71,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           element="select"
           type="select"
           label="Size:"
-          sizes={sizes}
+          selection={sizes}
           onInput={props.inputHandler}
           initialValue={props.size ? props.size : 'Medium'}
           errorText="Please pick a valid size"
@@ -78,11 +84,11 @@ export const ItemInputs = (props: ItemInputsProps) => {
           element="select"
           type="select"
           label="Flavor:"
-          flavors={props.flavors}
+          selection={flavors}
           onInput={props.inputHandler}
           initialValue="Pepsi"
           errorText="Please pick a valid flavor"
-          disabled={props.disabled}
+          disabled={false}
         />
       )}
       {item && item.options.length
