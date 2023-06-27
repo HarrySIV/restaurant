@@ -64,7 +64,7 @@ export const MenuItem = () => {
                       className="menu-item"
                       onClick={() => descriptionHandler(item)}
                     >
-                      {`${item.name} $${item.price}`}
+                      {item.name}
                     </button>
                     <Button
                       text={<FontAwesomeIcon icon={faPlus} />}

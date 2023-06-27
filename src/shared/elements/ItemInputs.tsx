@@ -8,12 +8,9 @@ import { IMenuItem, TItemOption } from '../hooks/database/menu-hook';
 
 type ItemInputsProps = {
   id: string;
-  options: TItemOption[];
-  size?: TSize;
-  hasSizes?: boolean;
+  size?: string;
   deal?: IDeal;
   item?: IMenuItem;
-  flavors?: TFlavor[];
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -23,36 +20,11 @@ type ItemInputsProps = {
   disabled?: boolean;
 };
 
-export type TSize = {
-  id: string;
-  value: string;
-  isValid: boolean;
-  price: number;
-  inches: number;
-};
-
-export type TFlavor = {
-  id: string;
-  value: string;
-  isValid: boolean;
-};
-
-const sizes: TSize[] = [
-  { id: 'small', value: 'Small', isValid: true, price: 8.99, inches: 10 },
-  { id: 'medium', value: 'Medium', isValid: true, price: 11.99, inches: 14 },
-  { id: 'large', value: 'Large', isValid: true, price: 15.99, inches: 16 },
-];
-
-export const flavors: TFlavor[] = [
-  { id: 'pepsi', value: 'Pepsi', isValid: true },
-  { id: 'drpepper', value: 'Dr. Pepper', isValid: true },
-  { id: 'mountaindew', value: 'Mountain Dew', isValid: true },
-];
-
 export const ItemInputs = (props: ItemInputsProps) => {
   const { priceHandler, item } = props;
   const [quantity, setQuantity] = useState(0);
   const [options, setOptions] = useState<TItemOption[]>([]);
+  const [initialValue, setInitialValue] = useState<string>();
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
@@ -71,6 +43,21 @@ export const ItemInputs = (props: ItemInputsProps) => {
     }
   }, [quantity, priceHandler, item, options]);
 
+  // finds and sets the initial value for 'select' input
+  useEffect(() => {
+    const selection = item!.sizes
+      ? item!.sizes
+      : item!.flavors
+      ? item!.flavors
+      : null;
+    console.log(selection);
+    if (selection?.length)
+      setInitialValue(
+        selection.find((selectionValue) => selectionValue.checked === true)!
+          .value
+      );
+  }, [props.item?.sizes, props.item?.flavors, item]);
+
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
     if (isChecked) setOptions([...options, userOption]);
     if (!isChecked)
@@ -79,28 +66,28 @@ export const ItemInputs = (props: ItemInputsProps) => {
 
   return (
     <>
-      {props.hasSizes && (
+      {!!props.item?.sizes?.length && (
         <Input
           id="size"
           element="select"
           type="select"
           label="Size:"
-          selection={sizes}
+          selection={props.item.sizes}
           onInput={props.inputHandler}
-          initialValue={props.size ? props.size.value : 'Medium'}
+          initialValue={initialValue}
           errorText="Please pick a valid size"
           disabled={props.disabled}
         />
       )}
-      {props.flavors && (
+      {!!props.item?.flavors?.length && (
         <Input
           id="flavor"
           element="select"
           type="select"
           label="Flavor:"
-          selection={flavors}
+          selection={props.item.flavors}
           onInput={props.inputHandler}
-          initialValue="Pepsi"
+          initialValue={initialValue}
           errorText="Please pick a valid flavor"
           disabled={false}
         />

@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect, Reducer } from 'react';
-import { TItemOption } from '../../hooks/database/menu-hook';
+import { TFlavor, TItemOption, TSize } from '../../hooks/database/menu-hook';
 import { validate } from '../../util/validators';
 
 import './_input.scss';
@@ -24,7 +24,6 @@ interface GenericInputElementProps {
   label: string;
   errorText: string;
   validators?: { type: string; configVal?: number }[];
-  initialValue: string | 0 | undefined;
   initialValid?: boolean;
   onInput: (
     id: string,
@@ -36,34 +35,35 @@ interface GenericInputElementProps {
 type TextElementProps = GenericInputElementProps & {
   type: 'text';
   placeholder: string;
+  initialValue: string | undefined;
   hidden: boolean;
 };
 type TextAreaElementProps = GenericInputElementProps & {
   type: 'textArea';
   rows: number;
+  initialValue: string | undefined;
   placeholder: string;
 };
 type NumberElementProps = GenericInputElementProps & {
   type: 'number';
   setQuantity: React.Dispatch<React.SetStateAction<number>>;
+  initialValue: string | 0 | undefined;
   disabled?: boolean;
 };
 type CheckboxElementProps = GenericInputElementProps & {
   type: 'checkbox';
   option: TItemOption;
   optionsHandler: (userOption: TItemOption, isChecked: boolean) => void;
+  initialValue: string | undefined;
 };
 type SelectElementProps = GenericInputElementProps & {
   type: 'select';
-  selection?: TSelection[];
+  selection: TSelection[];
+  initialValue: string;
   disabled?: boolean;
 };
 
-type TSelection = {
-  id: string;
-  value: string;
-  isValid: boolean;
-};
+type TSelection = TSize | TFlavor;
 
 type InputProps =
   | TextElementProps
