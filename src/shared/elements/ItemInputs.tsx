@@ -11,6 +11,7 @@ type ItemInputsProps = {
   size?: string;
   deal?: IDeal;
   item?: IMenuItem;
+  initialValue: string;
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -20,11 +21,12 @@ type ItemInputsProps = {
   disabled?: boolean;
 };
 
+const DEFAULTPIZZAPRICE = 11.99;
+
 export const ItemInputs = (props: ItemInputsProps) => {
-  const { priceHandler, item } = props;
+  const { priceHandler, item, initialValue } = props;
   const [quantity, setQuantity] = useState(0);
   const [options, setOptions] = useState<TItemOption[]>([]);
-  const [initialValue, setInitialValue] = useState<string>();
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
@@ -35,28 +37,18 @@ export const ItemInputs = (props: ItemInputsProps) => {
     if (item) {
       let optionsTotal = 0;
       let itemTotal = 0;
+      let itemPrice = DEFAULTPIZZAPRICE;
       options.forEach((option) => {
         optionsTotal += option.price;
       });
-      itemTotal = item.price + optionsTotal;
+      if (item.sizes?.length) {
+        const size = item.sizes.find((size) => size.checked);
+        if (size) itemPrice = size.price;
+        itemTotal = itemPrice + optionsTotal;
+      } else itemTotal = item.price + optionsTotal;
       priceHandler(quantity, itemTotal);
     }
   }, [quantity, priceHandler, item, options]);
-
-  // finds and sets the initial value for 'select' input
-  useEffect(() => {
-    const selection = item!.sizes
-      ? item!.sizes
-      : item!.flavors
-      ? item!.flavors
-      : null;
-    console.log(selection);
-    if (selection?.length)
-      setInitialValue(
-        selection.find((selectionValue) => selectionValue.checked === true)!
-          .value
-      );
-  }, [props.item?.sizes, props.item?.flavors, item]);
 
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
     if (isChecked) setOptions([...options, userOption]);

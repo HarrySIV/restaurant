@@ -4,7 +4,6 @@ import { useForm } from '../shared/hooks/form-hook';
 import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
 
 import { IMenuItem } from '../shared/hooks/database/menu-hook';
-import { IDeal } from '../shared/hooks/database/deal-hook';
 
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
@@ -14,13 +13,13 @@ import './_AddToOrder.scss';
 
 interface IAddToOrderProps {
   closeHandler: () => void;
-  items: IMenuItem[];
-  deal?: IDeal;
+  initialValue: string;
+  item: IMenuItem;
 }
 
 export const AddToOrder = (props: IAddToOrderProps) => {
   const orderContext = useOrderContext();
-  const [price, setPrice] = useState<number>();
+  const [price, setPrice] = useState<number>(props.item.price);
   const [formState, inputHandler] = useForm({}, true);
 
   const priceHandler = (quantity: number, itemPrice: number) => {
@@ -31,7 +30,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
     event.preventDefault();
     orderContext.addToOrder({
       ...formState.inputs,
-      price: props.deal ? props.deal.total : props.items[0].price,
+      price: props.item?.price,
     });
   };
 
@@ -39,24 +38,21 @@ export const AddToOrder = (props: IAddToOrderProps) => {
     <Modal header="Add to Order" closeHandler={props.closeHandler}>
       <form className="order-form" onSubmit={itemSubmitHandler}>
         <fieldset>
-          {props.items.map((item) => (
-            <div key={item._id}>
-              <legend>{item.name}</legend>
+          {props.item && props.initialValue && (
+            <div key={props.item._id}>
+              <legend>{props.item.name}</legend>
               <ItemInputs
-                id={`${item._id}`}
-                deal={props.deal}
-                item={item}
+                id={`${props.item._id}`}
+                item={props.item}
                 inputHandler={inputHandler}
                 priceHandler={priceHandler}
-                disabled={props.deal ? true : false}
+                initialValue={props.initialValue}
+                disabled={false}
               />
-              {!props.deal ? (
-                <h2>${price ? price.toFixed(2) : item.price}</h2>
-              ) : null}
+              <h2>${price.toFixed(2)}</h2>
               <hr />
             </div>
-          ))}
-          {props.deal ? <h2>${props.deal.total}.00</h2> : null}
+          )}
         </fieldset>
         <Button
           type="submit"

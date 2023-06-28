@@ -47,13 +47,13 @@ export const Deals: React.FC = () => {
           </div>
         ))
       )}
-      {openOrder && (
+      {/* {openOrder && (
         <AddToOrder
-          items={items}
+          item={items}
           deal={selectedDeal}
           closeHandler={closeHandler}
         />
-      )}
+      )} */}
     </>
   );
 };
