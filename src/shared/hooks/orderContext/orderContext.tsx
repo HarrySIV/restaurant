@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { IMenuItem } from '../database/menu-hook';
-import { orderReducer } from './orderReducer';
+import { OrderAction, orderReducer } from './orderReducer';
 
-// interface TOrderSubmission {
-//   menuItem: IMenuItem;
-//   quantity: number;
-// }
+type TOrderSubmission = {
+  menuItem: IMenuItem;
+  quantity: number;
+} | null;
 
 export interface IOrderContext {
   items: { menuItem: IMenuItem; quantity: number }[];
   total: number;
   clearOrder: () => void;
-  addToOrder: (orderSubmission: any) => void;
+  addToOrder: (orderSubmission: TOrderSubmission) => void;
   updateItemQuantity: (orderSubmission: any) => void;
   deleteFromOrder: (orderSubmission: any) => void;
   updatePrice: (newOrder: any) => void;
@@ -20,12 +20,14 @@ export interface IOrderContext {
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
 
-  const addToOrder = (orderSubmission: any) => {
+  const addToOrder = (orderSubmission: TOrderSubmission) => {
+    console.log(order);
+    if (orderSubmission === null) return;
     const doesOrderItemExist = order.items.filter(
-      (orderItem) =>
-        orderSubmission.menuItem._id === orderItem.menuItem._id &&
+      (orderItem: IMenuItem) =>
+        orderSubmission.menuItem._id === orderItem._id &&
         orderSubmission.menuItem.options.forEach((submissionOption: any) =>
-          orderItem.menuItem.options.filter(
+          orderItem.options.filter(
             (itemOption) => submissionOption.name === itemOption.name
           ).length > 0
             ? true
@@ -34,9 +36,10 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     );
     const newOrder = {
       items: doesOrderItemExist
-        ? order.items.map((orderItem) => {
-            if (orderItem.menuItem._id === orderSubmission.menuItem._id) {
-              const newQuantity = orderSubmission.quantity + orderItem.quantity;
+        ? order.items.map((orderItem: IMenuItem) => {
+            if (orderItem._id === orderSubmission.menuItem._id) {
+              const newQuantity =
+                orderSubmission.quantity + orderSubmission.quantity;
               return {
                 menuItem: orderSubmission.menuItem,
                 quantity: newQuantity,
@@ -51,7 +54,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* returns new array without item submitted */
-  const deleteFromOrder = (orderSubmission) => {
+  const deleteFromOrder = (orderSubmission: TOrderSubmission) => {
     const newOrder = {
       items: order.items.filter(
         (orderItem) => orderItem.menuItem._id !== orderSubmission.menuItem._id
@@ -63,7 +66,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* finds item within order and returns new item */
-  const updateItemQuantity = (orderSubmission) => {
+  const updateItemQuantity = (orderSubmission: TOrderSubmission) => {
     const newOrder = {
       items: order.items.map((newOrderItem) => {
         if (newOrderItem.menuItem._id === orderSubmission.menuItem._id) {
@@ -107,10 +110,10 @@ const initialOrderState = {
   items: [] as any,
   total: 0,
   clearOrder: () => {},
-  addToOrder: (orderSubmission = null as any) => {},
-  updateItemQuantity: (orderSubmission = null as any) => {},
-  deleteFromOrder: (orderSubmission = null as any) => {},
-  updatePrice: (newOrder = null as any) => {},
+  addToOrder: (orderSubmission = null) => {},
+  updateItemQuantity: (orderSubmission = null) => {},
+  deleteFromOrder: (orderSubmission = null) => {},
+  updatePrice: (newOrder = null) => {},
 };
 
 const OrderContext = createContext<IOrderContext>(initialOrderState);

@@ -1,7 +1,7 @@
 import { useCallback, useReducer, Reducer } from 'react';
 
 interface FormStateInputs {
-  [key: string]: { value: string; isValid: boolean };
+  [key: string]: { value: string; isValid: boolean; checked?: boolean };
 }
 
 interface FormState {
@@ -15,6 +15,7 @@ type FormAction =
       value: string;
       inputId: string;
       isValid: boolean;
+      checked?: boolean;
     }
   | {
       type: 'SET_DATA';

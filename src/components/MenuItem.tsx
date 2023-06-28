@@ -10,24 +10,24 @@ export const MenuItem = () => {
   const { menu } = useMenu();
   const [ID, setID] = useState<string>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
-  const [item, setItem] = useState<IMenuItem | null>(null);
+  const [menuItem, setMenuItem] = useState<IMenuItem | null>(null);
   const [initialValue, setInitialValue] = useState<string>();
 
   //onClick of menu item, displays menu item description
-  const descriptionHandler = (item: IMenuItem) => {
-    if (ID === null || ID !== item._id) {
-      setID(item._id);
+  const descriptionHandler = (menuItem: IMenuItem) => {
+    if (ID === null || ID !== menuItem._id) {
+      setID(menuItem._id);
     } else {
       setID('');
     }
   };
 
-  const addHandler = (item: IMenuItem) => {
-    setItem(item);
-    const selection = item.sizes?.length
-      ? item.sizes
-      : item.flavors?.length
-      ? item.flavors
+  const addHandler = (menuItem: IMenuItem) => {
+    setMenuItem(menuItem);
+    const selection = menuItem.sizes?.length
+      ? menuItem.sizes
+      : menuItem.flavors?.length
+      ? menuItem.flavors
       : null;
     if (selection?.length)
       setInitialValue(
@@ -39,7 +39,7 @@ export const MenuItem = () => {
 
   const closeHandler = () => {
     setOpenOrder(false);
-    setItem(null);
+    setMenuItem(null);
   };
 
   //displays menu items when menu and menu.length exist... breaks otherwise.
@@ -50,27 +50,27 @@ export const MenuItem = () => {
       ) : (
         <ul className="items">
           {menu.length &&
-            menu.map((item: IMenuItem) => {
+            menu.map((menuItem: IMenuItem) => {
               return (
-                <li key={item._id} className="list-item">
+                <li key={menuItem._id} className="list-item">
                   <div className="li-inner">
                     <button
                       className="menu-item"
-                      onClick={() => descriptionHandler(item)}
+                      onClick={() => descriptionHandler(menuItem)}
                     >
-                      {item.name}
+                      {menuItem.name}
                     </button>
                     <Button
                       text={<FontAwesomeIcon icon={faPlus} />}
-                      onClick={() => addHandler(item)}
+                      onClick={() => addHandler(menuItem)}
                     />
                   </div>
                   <h4
                     className={`menu-description ${
-                      ID === item._id ? 'active-item' : 'none'
+                      ID === menuItem._id ? 'active-item' : 'none'
                     }`}
                   >
-                    {item.description}
+                    {menuItem.description}
                   </h4>
                 </li>
               );
@@ -78,9 +78,9 @@ export const MenuItem = () => {
         </ul>
       )}
 
-      {openOrder && item && initialValue && (
+      {openOrder && menuItem && initialValue && (
         <AddToOrder
-          item={item}
+          menuItem={menuItem}
           initialValue={initialValue}
           closeHandler={closeHandler}
         />

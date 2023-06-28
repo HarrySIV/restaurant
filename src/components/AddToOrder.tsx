@@ -14,12 +14,12 @@ import './_AddToOrder.scss';
 interface IAddToOrderProps {
   closeHandler: () => void;
   initialValue: string;
-  item: IMenuItem;
+  menuItem: IMenuItem;
 }
 
 export const AddToOrder = (props: IAddToOrderProps) => {
   const orderContext = useOrderContext();
-  const [price, setPrice] = useState<number>(props.item.price);
+  const [price, setPrice] = useState<number>(props.menuItem.price);
   const [formState, inputHandler] = useForm({}, true);
 
   const priceHandler = (quantity: number, itemPrice: number) => {
@@ -30,7 +30,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
     event.preventDefault();
     orderContext.addToOrder({
       ...formState.inputs,
-      price: props.item?.price,
+      price: props.menuItem?.price,
     });
   };
 
@@ -38,12 +38,12 @@ export const AddToOrder = (props: IAddToOrderProps) => {
     <Modal header="Add to Order" closeHandler={props.closeHandler}>
       <form className="order-form" onSubmit={itemSubmitHandler}>
         <fieldset>
-          {props.item && props.initialValue && (
-            <div key={props.item._id}>
-              <legend>{props.item.name}</legend>
+          {props.menuItem && props.initialValue && (
+            <div key={props.menuItem._id}>
+              <legend>{props.menuItem.name}</legend>
               <ItemInputs
-                id={`${props.item._id}`}
-                item={props.item}
+                id={`${props.menuItem._id}`}
+                item={props.menuItem}
                 inputHandler={inputHandler}
                 priceHandler={priceHandler}
                 initialValue={props.initialValue}

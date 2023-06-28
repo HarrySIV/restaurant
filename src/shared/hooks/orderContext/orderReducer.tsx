@@ -19,6 +19,7 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
   orderReducerState,
   orderReducerAction
 ) => {
+  console.log(orderReducerState);
   switch (orderReducerAction.type) {
     case 'ADD_ITEM':
       let optionTotal = 0;
