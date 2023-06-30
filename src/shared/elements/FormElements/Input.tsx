@@ -61,6 +61,7 @@ type SelectElementProps = GenericInputElementProps & {
   selection: TSelection[];
   initialValue: string;
   disabled?: boolean;
+  selectionHandler: (event: any) => void;
 };
 
 type TSelection = TSize | TFlavor;
@@ -121,11 +122,6 @@ export const Input = (props: InputProps) => {
     onInput(id, userInputValue, userInputIsValid);
   }, [id, userInputValue, userInputIsValid, onInput]);
 
-  useEffect(() => {
-    if (props.type === 'checkbox')
-      props.optionsHandler(props.option, isChecked);
-  }, [isChecked]);
-
   //handles input changes and dispatches to inputReducer
   const changeHandler = (
     event:
@@ -134,10 +130,14 @@ export const Input = (props: InputProps) => {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     if (props.type === 'checkbox') {
+      props.optionsHandler(props.option, !isChecked);
       setIsChecked(!isChecked);
     } else {
       if (props.type === 'number') {
         props.setQuantity(parseInt(event.target.value));
+      }
+      if (props.type === 'select') {
+        props.selectionHandler(event);
       }
       dispatch({
         type: 'CHANGE',

@@ -47,6 +47,7 @@ const formReducer: Reducer<FormState, FormAction> = (formState, formAction) => {
           [formAction.inputId]: {
             value: formAction.value,
             isValid: formAction.isValid,
+            checked: formAction.checked,
           },
         },
         isFormValid: returnIsFormValid,
@@ -77,12 +78,18 @@ export const useForm = (
   });
 
   const inputHandler = useCallback(
-    (id: string, userInputValue: string, userInputIsValid: boolean) => {
+    (
+      id: string,
+      userInputValue: string,
+      userInputIsValid: boolean,
+      checked?: boolean
+    ) => {
       dispatch({
         type: 'INPUT_CHANGE',
         value: userInputValue,
         isValid: userInputIsValid,
         inputId: id,
+        checked: checked,
       });
     },
     []

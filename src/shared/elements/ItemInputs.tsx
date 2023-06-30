@@ -8,7 +8,6 @@ import { IMenuItem, TItemOption } from '../hooks/database/menu-hook';
 
 type ItemInputsProps = {
   id: string;
-  size?: string;
   deal?: IDeal;
   item?: IMenuItem;
   initialValue: string;
@@ -17,16 +16,17 @@ type ItemInputsProps = {
     userInputValue: string,
     userInputIsValid: boolean
   ) => void;
-  priceHandler: (quantity: number, itemPrice: number) => void;
+  totalHandler: (quantity: number, itemPrice: number) => void;
   disabled?: boolean;
 };
 
 const DEFAULTPIZZAPRICE = 11.99;
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const { priceHandler, item, initialValue } = props;
-  const [quantity, setQuantity] = useState(0);
+  const { totalHandler, item, initialValue } = props;
+  const [quantity, setQuantity] = useState(1);
   const [options, setOptions] = useState<TItemOption[]>([]);
+  const [size, setSize] = useState(initialValue);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
@@ -34,26 +34,28 @@ export const ItemInputs = (props: ItemInputsProps) => {
 
   //handles the price of each item to update with quantity changes
   useEffect(() => {
-    if (item) {
-      let optionsTotal = 0;
-      let itemTotal = 0;
-      let itemPrice = DEFAULTPIZZAPRICE;
-      options.forEach((option) => {
-        optionsTotal += option.price;
-      });
-      if (item.sizes?.length) {
-        const size = item.sizes.find((size) => size.checked);
-        if (size) itemPrice = size.price;
-        itemTotal = itemPrice + optionsTotal;
-      } else itemTotal = item.price + optionsTotal;
-      priceHandler(quantity, itemTotal);
-    }
-  }, [quantity, priceHandler, item, options]);
+    if (!item) return;
+    let optionsTotal = 0;
+    let itemTotal = 0;
+    let itemPrice = DEFAULTPIZZAPRICE;
+    options.forEach((option) => {
+      optionsTotal += option.price;
+    });
+    if (item.sizes?.length) {
+      itemPrice = item.sizes.find((itemSize) => itemSize.value === size)!.price;
+      itemTotal = itemPrice + optionsTotal;
+    } else itemTotal = item.price + optionsTotal;
+    totalHandler(quantity, itemTotal);
+  }, [quantity, totalHandler, item, options, size]);
 
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
     if (isChecked) setOptions([...options, userOption]);
     if (!isChecked)
       setOptions(options.filter((option) => option.name !== userOption.name));
+  };
+
+  const sizeHandler = (event: any) => {
+    setSize(event.target.value);
   };
 
   return (
@@ -67,6 +69,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           selection={props.item.sizes}
           onInput={props.inputHandler}
           initialValue={initialValue}
+          selectionHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={props.disabled}
         />
@@ -80,6 +83,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           selection={props.item.flavors}
           onInput={props.inputHandler}
           initialValue={initialValue}
+          selectionHandler={sizeHandler}
           errorText="Please pick a valid flavor"
           disabled={false}
         />
