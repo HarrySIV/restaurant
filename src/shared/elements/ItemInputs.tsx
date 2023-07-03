@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
 import { VALIDATOR_MIN } from '../util/validators';
 import { Input } from './formElements/Input';
@@ -10,6 +10,7 @@ type ItemInputsProps = {
   id: string;
   deal?: IDeal;
   item?: IMenuItem;
+  setItem?: Dispatch<SetStateAction<IMenuItem | null>>;
   initialValue: string;
   inputHandler: (
     id: string,
@@ -20,12 +21,12 @@ type ItemInputsProps = {
   disabled?: boolean;
 };
 
-const DEFAULTPIZZAPRICE = 11.99;
-
 export const ItemInputs = (props: ItemInputsProps) => {
   const { totalHandler, item, initialValue } = props;
   const [quantity, setQuantity] = useState(1);
-  const [options, setOptions] = useState<TItemOption[]>([]);
+  const [options, setOptions] = useState<TItemOption[]>(
+    props.item?.options || []
+  );
   const [size, setSize] = useState(initialValue);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
@@ -37,23 +38,37 @@ export const ItemInputs = (props: ItemInputsProps) => {
     if (!item) return;
     let optionsTotal = 0;
     let itemTotal = 0;
-    let itemPrice = DEFAULTPIZZAPRICE;
     options.forEach((option) => {
       optionsTotal += option.price;
     });
     if (item.sizes?.length) {
-      itemPrice = item.sizes.find((itemSize) => itemSize.value === size)!.price;
+      const itemPrice = item.sizes.find(
+        (itemSize) => itemSize.value === size
+      )!.price;
       itemTotal = itemPrice + optionsTotal;
     } else itemTotal = item.price + optionsTotal;
     totalHandler(quantity, itemTotal);
   }, [quantity, totalHandler, item, options, size]);
 
+  //needs to be fixed...
+  useEffect(() => {
+    props.setItem &&
+      props.item?.name &&
+      props.setItem({
+        ...props.item,
+        options: options,
+      });
+    console.log(props.item);
+  }, [props, options]);
+
+  //sets options array based on checked inputs
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
     if (isChecked) setOptions([...options, userOption]);
     if (!isChecked)
       setOptions(options.filter((option) => option.name !== userOption.name));
   };
 
+  //gets size value from select input
   const sizeHandler = (event: any) => {
     setSize(event.target.value);
   };
