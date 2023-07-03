@@ -22,7 +22,7 @@ type ItemInputsProps = {
 };
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const { totalHandler, item, initialValue } = props;
+  const { totalHandler, item, setItem, initialValue } = props;
   const [quantity, setQuantity] = useState(1);
   const [options, setOptions] = useState<TItemOption[]>(
     props.item?.options || []
@@ -39,7 +39,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
     let optionsTotal = 0;
     let itemTotal = 0;
     options.forEach((option) => {
-      optionsTotal += option.price;
+      if (option.checked) optionsTotal += option.price;
     });
     if (item.sizes?.length) {
       const itemPrice = item.sizes.find(
@@ -50,22 +50,20 @@ export const ItemInputs = (props: ItemInputsProps) => {
     totalHandler(quantity, itemTotal);
   }, [quantity, totalHandler, item, options, size]);
 
-  //needs to be fixed...
+  //needs to be fixed... stop filtering out options, checked needs to change from true to false to true
   useEffect(() => {
-    props.setItem &&
-      props.item?.name &&
-      props.setItem({
-        ...props.item,
+    item &&
+      setItem &&
+      setItem({
+        ...item,
         options: options,
       });
-    console.log(props.item);
-  }, [props, options]);
+    console.log(item);
+  }, [setItem, options]);
 
   //sets options array based on checked inputs
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
     if (isChecked) setOptions([...options, userOption]);
-    if (!isChecked)
-      setOptions(options.filter((option) => option.name !== userOption.name));
   };
 
   //gets size value from select input
