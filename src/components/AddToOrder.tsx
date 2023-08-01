@@ -15,7 +15,6 @@ interface IAddToOrderProps {
   closeHandler: () => void;
   initialValue: string;
   menuItem: IMenuItem;
-  setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
 }
 
 export const AddToOrder = (props: IAddToOrderProps) => {
@@ -44,8 +43,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
               <legend>{props.menuItem.name}</legend>
               <ItemInputs
                 id={`${props.menuItem._id}`}
-                item={props.menuItem}
-                setItem={props.setMenuItem}
+                menuItem={props.menuItem}
                 inputHandler={inputHandler}
                 totalHandler={totalHandler}
                 initialValue={props.initialValue}

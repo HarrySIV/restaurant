@@ -81,7 +81,6 @@ export const MenuItem = () => {
       {openOrder && menuItem && initialValue && (
         <AddToOrder
           menuItem={menuItem}
-          setMenuItem={setMenuItem}
           initialValue={initialValue}
           closeHandler={closeHandler}
         />

@@ -9,7 +9,7 @@ import { IMenuItem, TItemOption } from '../hooks/database/menu-hook';
 type ItemInputsProps = {
   id: string;
   deal?: IDeal;
-  item?: IMenuItem;
+  menuItem?: IMenuItem;
   setItem?: Dispatch<SetStateAction<IMenuItem | null>>;
   initialValue: string;
   inputHandler: (
@@ -22,12 +22,10 @@ type ItemInputsProps = {
 };
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const { totalHandler, item, setItem, initialValue } = props;
+  const { totalHandler, menuItem, initialValue } = props;
   const [quantity, setQuantity] = useState(1);
-  const [options, setOptions] = useState<TItemOption[]>(
-    props.item?.options || []
-  );
   const [size, setSize] = useState(initialValue);
+  const [item, setItem] = useState(menuItem);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
@@ -38,7 +36,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
     if (!item) return;
     let optionsTotal = 0;
     let itemTotal = 0;
-    options.forEach((option) => {
+    item.options.forEach((option) => {
       if (option.checked) optionsTotal += option.price;
     });
     if (item.sizes?.length) {
@@ -48,34 +46,20 @@ export const ItemInputs = (props: ItemInputsProps) => {
       itemTotal = itemPrice + optionsTotal;
     } else itemTotal = item.price + optionsTotal;
     totalHandler(quantity, itemTotal);
-  }, [quantity, totalHandler, item, options, size]);
-
-  //needs to be fixed... stop filtering out options, checked needs to change from true to false to true
-  useEffect(() => {
-    item &&
-      setItem &&
-      setItem({
-        ...item,
-        options: options,
-      });
-  }, [setItem, options]);
+  }, [quantity, totalHandler, item, size]);
 
   //sets options array based on checked inputs
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
-    if (isChecked) {
-      const newOptions = [...options];
-      newOptions.find(
-        (newOption) => (newOption.name = userOption.name)
-      )!.checked = isChecked;
-      setOptions([...newOptions]);
-    }
-    if (!isChecked) {
-      const newOptions = [...options];
-      newOptions.find(
-        (newOption) => (newOption.name = userOption.name)
-      )!.checked = isChecked;
-      setOptions([...newOptions]);
-    }
+    if (!item || !setItem) return;
+    const newOptions = [...item.options];
+    const newItem = {
+      ...item,
+    };
+    newOptions.find(
+      (newOption) => (newOption.name = userOption.name)
+    )!.checked = isChecked;
+    newItem.options = newOptions;
+    setItem(newItem);
   };
 
   //gets size value from select input
@@ -85,13 +69,13 @@ export const ItemInputs = (props: ItemInputsProps) => {
 
   return (
     <>
-      {!!props.item?.sizes?.length && (
+      {!!item?.sizes?.length && (
         <Input
           id="size"
           element="select"
           type="select"
           label="Size:"
-          selection={props.item.sizes}
+          selection={item?.sizes}
           onInput={props.inputHandler}
           initialValue={initialValue}
           selectionHandler={sizeHandler}
@@ -99,13 +83,13 @@ export const ItemInputs = (props: ItemInputsProps) => {
           disabled={props.disabled}
         />
       )}
-      {!!props.item?.flavors?.length && (
+      {!!item?.flavors?.length && (
         <Input
           id="flavor"
           element="select"
           type="select"
           label="Flavor:"
-          selection={props.item.flavors}
+          selection={item.flavors}
           onInput={props.inputHandler}
           initialValue={initialValue}
           selectionHandler={sizeHandler}
