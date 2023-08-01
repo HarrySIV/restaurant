@@ -58,12 +58,24 @@ export const ItemInputs = (props: ItemInputsProps) => {
         ...item,
         options: options,
       });
-    console.log(item);
   }, [setItem, options]);
 
   //sets options array based on checked inputs
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
-    if (isChecked) setOptions([...options, userOption]);
+    if (isChecked) {
+      const newOptions = [...options];
+      newOptions.find(
+        (newOption) => (newOption.name = userOption.name)
+      )!.checked = isChecked;
+      setOptions([...newOptions]);
+    }
+    if (!isChecked) {
+      const newOptions = [...options];
+      newOptions.find(
+        (newOption) => (newOption.name = userOption.name)
+      )!.checked = isChecked;
+      setOptions([...newOptions]);
+    }
   };
 
   //gets size value from select input
