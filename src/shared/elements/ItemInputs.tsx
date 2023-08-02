@@ -10,7 +10,7 @@ type ItemInputsProps = {
   id: string;
   deal?: IDeal;
   menuItem?: IMenuItem;
-  setItem?: Dispatch<SetStateAction<IMenuItem | null>>;
+  setMenuItem?: Dispatch<SetStateAction<IMenuItem | null>>;
   initialValue: string;
   inputHandler: (
     id: string,
@@ -22,10 +22,9 @@ type ItemInputsProps = {
 };
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const { totalHandler, menuItem, initialValue } = props;
+  const { totalHandler, menuItem, setMenuItem, initialValue } = props;
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState(initialValue);
-  const [item, setItem] = useState(menuItem);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
     sodas: props.deal.items.filter((item) => item === 3).length,
@@ -33,33 +32,36 @@ export const ItemInputs = (props: ItemInputsProps) => {
 
   //handles the price of each item to update with quantity changes
   useEffect(() => {
-    if (!item) return;
+    if (!menuItem) return;
     let optionsTotal = 0;
     let itemTotal = 0;
-    item.options.forEach((option) => {
+    menuItem.options.forEach((option) => {
       if (option.checked) optionsTotal += option.price;
     });
-    if (item.sizes?.length) {
-      const itemPrice = item.sizes.find(
+    if (menuItem.sizes?.length) {
+      const itemPrice = menuItem.sizes.find(
         (itemSize) => itemSize.value === size
       )!.price;
       itemTotal = itemPrice + optionsTotal;
-    } else itemTotal = item.price + optionsTotal;
+    } else itemTotal = menuItem.price + optionsTotal;
     totalHandler(quantity, itemTotal);
-  }, [quantity, totalHandler, item, size]);
+  }, [quantity, totalHandler, menuItem, size]);
 
   //sets options array based on checked inputs
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
-    if (!item || !setItem) return;
-    const newOptions = [...item.options];
+    if (!menuItem || !setMenuItem) return;
+    const newOptions = [...menuItem.options];
+    console.log(newOptions);
     const newItem = {
-      ...item,
+      ...menuItem,
     };
+    console.log(newItem);
     newOptions.find(
       (newOption) => (newOption.name = userOption.name)
     )!.checked = isChecked;
     newItem.options = newOptions;
-    setItem(newItem);
+    console.log(newItem.options.length, menuItem.options.length);
+    setMenuItem(newItem);
   };
 
   //gets size value from select input
@@ -69,13 +71,13 @@ export const ItemInputs = (props: ItemInputsProps) => {
 
   return (
     <>
-      {!!item?.sizes?.length && (
+      {!!menuItem?.sizes?.length && (
         <Input
           id="size"
           element="select"
           type="select"
           label="Size:"
-          selection={item?.sizes}
+          selection={menuItem?.sizes}
           onInput={props.inputHandler}
           initialValue={initialValue}
           selectionHandler={sizeHandler}
@@ -83,13 +85,13 @@ export const ItemInputs = (props: ItemInputsProps) => {
           disabled={props.disabled}
         />
       )}
-      {!!item?.flavors?.length && (
+      {!!menuItem?.flavors?.length && (
         <Input
           id="flavor"
           element="select"
           type="select"
           label="Flavor:"
-          selection={item.flavors}
+          selection={menuItem.flavors}
           onInput={props.inputHandler}
           initialValue={initialValue}
           selectionHandler={sizeHandler}
@@ -97,8 +99,8 @@ export const ItemInputs = (props: ItemInputsProps) => {
           disabled={false}
         />
       )}
-      {item && item.options.length
-        ? item.options.map((option) => (
+      {menuItem && menuItem.options.length
+        ? menuItem.options.map((option) => (
             <Input
               key={option.name}
               id={option.name}

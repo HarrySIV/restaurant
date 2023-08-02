@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, useState, SetStateAction } from 'react';
 
 import { useForm } from '../shared/hooks/form-hook';
 import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
@@ -15,6 +15,7 @@ interface IAddToOrderProps {
   closeHandler: () => void;
   initialValue: string;
   menuItem: IMenuItem;
+  setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
 }
 
 export const AddToOrder = (props: IAddToOrderProps) => {
@@ -44,6 +45,7 @@ export const AddToOrder = (props: IAddToOrderProps) => {
               <ItemInputs
                 id={`${props.menuItem._id}`}
                 menuItem={props.menuItem}
+                setMenuItem={props.setMenuItem}
                 inputHandler={inputHandler}
                 totalHandler={totalHandler}
                 initialValue={props.initialValue}
