@@ -51,16 +51,13 @@ export const ItemInputs = (props: ItemInputsProps) => {
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
     if (!menuItem || !setMenuItem) return;
     const newOptions = [...menuItem.options];
-    console.log(newOptions);
     const newItem = {
       ...menuItem,
     };
-    console.log(newItem);
     newOptions.find(
-      (newOption) => (newOption.name = userOption.name)
+      (newOption) => newOption.name === userOption.name
     )!.checked = isChecked;
     newItem.options = newOptions;
-    console.log(newItem.options.length, menuItem.options.length);
     setMenuItem(newItem);
   };
 
