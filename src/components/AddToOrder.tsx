@@ -21,6 +21,7 @@ interface IAddToOrderProps {
 export const AddToOrder = (props: IAddToOrderProps) => {
   const orderContext = useOrderContext();
   const [total, setTotal] = useState(props.menuItem.price);
+  const [quantity, setQuantity] = useState(1);
   const [formState, inputHandler] = useForm({}, true);
 
   const totalHandler = (quantity: number, itemPrice: number) => {
@@ -29,10 +30,12 @@ export const AddToOrder = (props: IAddToOrderProps) => {
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // orderContext.addToOrder({
-    //   ...formState.inputs,
-    //   price: props.menuItem?.price,
-    // });
+    if (props.menuItem)
+      orderContext.addToOrder({
+        item: props.menuItem,
+        quantity: quantity,
+        total: total,
+      });
   };
 
   return (
@@ -49,6 +52,8 @@ export const AddToOrder = (props: IAddToOrderProps) => {
                 inputHandler={inputHandler}
                 totalHandler={totalHandler}
                 initialValue={props.initialValue}
+                quantity={quantity}
+                setQuantity={setQuantity}
                 disabled={false}
               />
               <h2>${total.toFixed(2)}</h2>

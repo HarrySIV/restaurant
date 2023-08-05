@@ -3,8 +3,9 @@ import { IMenuItem } from '../database/menu-hook';
 import { orderReducer } from './orderReducer';
 
 type TOrderSubmission = {
-  menuItem: IMenuItem;
+  item: IMenuItem;
   quantity: number;
+  total: number;
 } | null;
 
 export interface IOrderContext {
@@ -22,31 +23,13 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addToOrder = (orderSubmission: TOrderSubmission) => {
     if (orderSubmission === null) return;
-    const doesOrderItemExist = order.items.filter((orderItem: any) => {
-      return orderSubmission.menuItem._id === orderItem._id;
-    }).length
-      ? true
-      : false;
 
-    const newOrder = {
-      items: doesOrderItemExist
-        ? order.items.map((orderItem: TOrderSubmission) => {
-            if (
-              orderItem !== null &&
-              orderItem.menuItem._id === orderSubmission.menuItem._id
-            ) {
-              const newQuantity =
-                orderSubmission.quantity + orderSubmission.quantity;
-              return {
-                menuItem: orderSubmission.menuItem,
-                quantity: newQuantity,
-              };
-            } else return orderItem;
-          })
-        : [...order.items, orderSubmission],
+    const updatedOrder = {
+      ...order,
+      items: [...order.items, orderSubmission],
     };
-    updatePrice(newOrder);
-    dispatch({ type: 'ADD_ITEM', newOrder: newOrder, total: order.total });
+    updatePrice(updatedOrder);
+    dispatch({ type: 'ADD_ITEM', newOrder: updatedOrder, total: order.total });
   };
 
   /* returns new array without item submitted */
@@ -55,8 +38,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     const newOrder = {
       items: order.items.filter(
         (orderItem) =>
-          orderItem !== null &&
-          orderItem.menuItem._id !== orderSubmission.menuItem._id
+          orderItem !== null && orderItem.item._id !== orderSubmission.item._id
       ),
     };
     updatePrice(newOrder);
@@ -70,7 +52,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       items: order.items.map((newOrderItem) => {
         if (
           newOrderItem !== null &&
-          newOrderItem.menuItem._id === orderSubmission.menuItem._id
+          newOrderItem.item._id === orderSubmission.item._id
         ) {
           return orderSubmission;
         }

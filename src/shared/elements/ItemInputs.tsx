@@ -12,6 +12,8 @@ type ItemInputsProps = {
   menuItem?: IMenuItem;
   setMenuItem?: Dispatch<SetStateAction<IMenuItem | null>>;
   initialValue: string;
+  quantity: number;
+  setQuantity: Dispatch<SetStateAction<number>>;
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -22,8 +24,14 @@ type ItemInputsProps = {
 };
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const { totalHandler, menuItem, setMenuItem, initialValue } = props;
-  const [quantity, setQuantity] = useState(1);
+  const {
+    totalHandler,
+    menuItem,
+    setMenuItem,
+    initialValue,
+    quantity,
+    setQuantity,
+  } = props;
   const [size, setSize] = useState(initialValue);
   const dealQuantity = props.deal && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
