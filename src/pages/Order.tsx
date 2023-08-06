@@ -6,13 +6,14 @@ export const Order = () => {
   const { items, total } = orderContext;
 
   useEffect(() => {
-    console.log(items);
-  }, [items, total]);
+    console.log(items[0]);
+  }, [items]);
 
   return (
     <>
+      <h1>{total}</h1>
       {items.length ? (
-        items.map((item) => <h1>Ordered</h1>)
+        items.map((item) => <h1>{item?.quantity}</h1>)
       ) : (
         <h1>
           No items have been added to the order. Try ordering from our menu!

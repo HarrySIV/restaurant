@@ -4,7 +4,7 @@ import { IOrderContext, TOrderSubmission } from './OrderContext';
 export type OrderAction =
   | {
       type: 'ADD_ITEM' | 'UPDATE_QUANTITY';
-      newOrder: any;
+      newOrder: TOrderSubmission;
       total: number;
     }
   | {
@@ -28,9 +28,10 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
 ) => {
   switch (orderReducerAction.type) {
     case 'ADD_ITEM':
+      if (orderReducerAction.newOrder === null) return;
       return {
         ...orderReducerState,
-        items: [...orderReducerState.items, orderReducerAction.newOrder.items],
+        items: [...orderReducerState.items, orderReducerAction.newOrder.item],
         total: orderReducerAction.newOrder.total + orderReducerState.total,
       };
     case 'REMOVE_ITEM':
@@ -40,9 +41,10 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
         total: orderReducerState.total - orderReducerAction.total,
       };
     case 'UPDATE_QUANTITY':
+      if (orderReducerAction.newOrder === null) return;
       return {
         ...orderReducerState,
-        items: orderReducerAction.newOrder.items,
+        items: orderReducerAction.newOrder.item,
       };
     case 'CLEAR_ORDER':
       return { ...orderReducerAction.newOrder };
