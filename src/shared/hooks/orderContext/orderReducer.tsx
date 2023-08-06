@@ -1,10 +1,15 @@
 import { Reducer } from 'react';
-import { IOrderContext } from './OrderContext';
+import { IOrderContext, TOrderSubmission } from './OrderContext';
 
 export type OrderAction =
   | {
-      type: 'ADD_ITEM' | 'REMOVE_ITEM' | 'UPDATE_QUANTITY';
+      type: 'ADD_ITEM' | 'UPDATE_QUANTITY';
       newOrder: any;
+      total: number;
+    }
+  | {
+      type: 'REMOVE_ITEM';
+      updatedOrderItems: TOrderSubmission[];
       total: number;
     }
   | {
@@ -31,7 +36,7 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
     case 'REMOVE_ITEM':
       return {
         ...orderReducerState,
-        items: orderReducerAction.newOrder.items,
+        items: orderReducerAction.updatedOrderItems,
         total: orderReducerState.total - orderReducerAction.total,
       };
     case 'UPDATE_QUANTITY':

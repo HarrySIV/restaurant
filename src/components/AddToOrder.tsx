@@ -30,12 +30,14 @@ export const AddToOrder = (props: IAddToOrderProps) => {
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (props.menuItem)
+    if (props.menuItem) {
       orderContext.addToOrder({
         item: props.menuItem,
         quantity: quantity,
         total: total,
       });
+      props.closeHandler();
+    }
   };
 
   return (
