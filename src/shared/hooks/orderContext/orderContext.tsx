@@ -25,12 +25,9 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     if (orderSubmission === null) return;
     const { item, quantity, total } = orderSubmission;
 
-    const updatedOrder = {
-      ...order,
-      items: [...order.items, { item, quantity, total }],
-    };
+    const newItem = { item, quantity, total };
     updatePrice(total);
-    dispatch({ type: 'ADD_ITEM', newOrder: updatedOrder, total: order.total });
+    dispatch({ type: 'ADD_ITEM', newItem: newItem, total: order.total });
   };
 
   /* returns new array without item submitted */
@@ -48,28 +45,28 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  /* finds item within order and returns new item */
+  /* finds item within order and returns new item. current logic is super wrong*/
   const updateItemQuantity = (orderSubmission: TOrderSubmission) => {
-    if (orderSubmission === null) return;
-    const { item, total } = orderSubmission;
-    const newOrder = {
-      items: order.items.map((newOrderItem) => {
-        if (newOrderItem !== null && newOrderItem.item._id === item._id) {
-          return orderSubmission;
-        }
-        return newOrderItem;
-      }),
-    };
-    updatePrice(total);
-    dispatch({
-      type: 'UPDATE_QUANTITY',
-      newOrder: newOrder,
-      total: order.total,
-    });
+    // if (orderSubmission === null) return;
+    // const { item, total } = orderSubmission;
+    // const newOrder = {
+    //   items: order.items.map((newOrderItem) => {
+    //     if (newOrderItem !== null && newOrderItem.item._id === item._id) {
+    //       return orderSubmission;
+    //     }
+    //     return newOrderItem;
+    //   }),
+    // };
+    // updatePrice(total);
+    // dispatch({
+    //   type: 'UPDATE_QUANTITY',
+    //   newOrder: newOrder,
+    //   total: order.total,
+    // });
   };
 
   const clearOrder = () => {
-    dispatch({ type: 'CLEAR_ORDER', newOrder: { items: [] }, total: 0 });
+    dispatch({ type: 'CLEAR_ORDER' });
   };
 
   /* used to update the total after each quantity/item update */

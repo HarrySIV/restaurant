@@ -1,0 +1,13 @@
+.order-page {
+  min-width: 850;
+  max-width: 1500px;
+  width: 80vw;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+.order-line-item {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}

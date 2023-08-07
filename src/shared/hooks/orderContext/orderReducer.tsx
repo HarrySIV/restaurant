@@ -3,10 +3,11 @@ import { IOrderContext, TOrderSubmission } from './OrderContext';
 
 export type OrderAction =
   | {
-      type: 'ADD_ITEM' | 'UPDATE_QUANTITY';
-      newOrder: TOrderSubmission;
+      type: 'ADD_ITEM';
+      newItem: TOrderSubmission;
       total: number;
     }
+  | { type: 'UPDATE_QUANTITY' }
   | {
       type: 'REMOVE_ITEM';
       updatedOrderItems: TOrderSubmission[];
@@ -14,8 +15,6 @@ export type OrderAction =
     }
   | {
       type: 'CLEAR_ORDER';
-      newOrder: any;
-      total: 0;
     }
   | {
       type: 'UPDATE_PRICE';
@@ -28,11 +27,10 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
 ) => {
   switch (orderReducerAction.type) {
     case 'ADD_ITEM':
-      if (orderReducerAction.newOrder === null) return;
       return {
         ...orderReducerState,
-        items: [...orderReducerState.items, orderReducerAction.newOrder.item],
-        total: orderReducerAction.newOrder.total + orderReducerState.total,
+        items: [...orderReducerState.items, orderReducerAction.newItem],
+        total: orderReducerAction.total + orderReducerState.total,
       };
     case 'REMOVE_ITEM':
       return {
@@ -40,14 +38,14 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
         items: orderReducerAction.updatedOrderItems,
         total: orderReducerState.total - orderReducerAction.total,
       };
-    case 'UPDATE_QUANTITY':
-      if (orderReducerAction.newOrder === null) return;
-      return {
-        ...orderReducerState,
-        items: orderReducerAction.newOrder.item,
-      };
+    // case 'UPDATE_QUANTITY':
+    //   if (orderReducerAction.newOrder === null) return;
+    //   return {
+    //     ...orderReducerState,
+    //     items: orderReducerAction.newOrder.item,
+    //   };
     case 'CLEAR_ORDER':
-      return { ...orderReducerAction.newOrder };
+      return { ...orderReducerState, items: [], total: 0 };
     case 'UPDATE_PRICE':
       return {
         ...orderReducerState,
