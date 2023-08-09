@@ -6,8 +6,12 @@
   flex-flow: column wrap;
 }
 
-.order-line-item {
+.order-line-item-box {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+}
+
+.options-display {
+  display: none;
 }
