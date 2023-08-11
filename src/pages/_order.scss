@@ -12,6 +12,21 @@
   justify-content: space-between;
 }
 
+.order-line-item-inner-box {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  position: relative;
+}
+
 .options-display {
   display: none;
+  position: absolute;
+  background-color: rgba(128, 128, 128, 0.31);
+  left: 150px;
+  top: 60px;
+}
+
+.active {
+  display: block;
 }

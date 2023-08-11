@@ -10,7 +10,7 @@ export const Order = () => {
 
   return (
     <div className="order-page">
-      {total === 0 ? null : <h1>${total}</h1>}
+      {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
       {items.length ? (
         items.map(
           (item) =>
@@ -27,18 +27,22 @@ export const Order = () => {
                 ) : null}
                 <h1 className="order-line-item">{item.item.name}</h1>
                 {item.item.options ? (
-                  <div className="order-line-item-box">
-                    {item.item.options.map((option) =>
-                      option.checked === true ? (
-                        <h3
-                          className={`options-display ${
-                            displayOptions ? 'active' : ''
-                          }`}
-                        >
-                          {option.name}
-                        </h3>
-                      ) : null
-                    )}
+                  <div className="order-line-item-inner-box">
+                    <h1
+                      onMouseEnter={() => setDisplayOptions(true)}
+                      onMouseLeave={() => setDisplayOptions(false)}
+                    >
+                      toppings
+                    </h1>
+                    <div
+                      className={`options-display ${
+                        displayOptions ? 'active' : ''
+                      }`}
+                    >
+                      {item.item.options.map((option) =>
+                        option.checked === true ? <h3>{option.name}</h3> : null
+                      )}
+                    </div>
                   </div>
                 ) : null}
                 <h1 className="order-line-item">${item.total.toFixed(2)}</h1>
