@@ -11,14 +11,14 @@ import { ItemInputs } from '../shared/elements/ItemInputs';
 
 import './_AddToOrder.scss';
 
-interface IAddToOrderProps {
+interface IAddMenuItemToOrderProps {
   closeHandler: () => void;
   initialValue: string;
   menuItem: IMenuItem;
   setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
 }
 
-export const AddToOrder = (props: IAddToOrderProps) => {
+export const AddToOrder = (props: IAddMenuItemToOrderProps) => {
   const orderContext = useOrderContext();
   const [total, setTotal] = useState(props.menuItem.price);
   const [quantity, setQuantity] = useState(1);

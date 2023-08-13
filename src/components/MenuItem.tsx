@@ -3,7 +3,7 @@ import { Button } from '../shared/elements/formElements/Button';
 import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { AddToOrder } from './AddToOrder';
+import { AddToOrder } from './AddMenuItemToOrder';
 import { LoadingSpinner } from '../shared/elements/uiElements/LoadingSpinner';
 
 export const MenuItem = () => {

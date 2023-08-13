@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { IDeal, useDeal } from '../shared/hooks/database/deal-hook';
-import { AddToOrder } from './AddToOrder';
 import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
 import { LoadingSpinner } from '../shared/elements/uiElements/LoadingSpinner';
+import { AddDealToOrder } from './AddDealToOrder';
 
 export const Deals: React.FC = () => {
   const { deals } = useDeal();
@@ -47,13 +47,9 @@ export const Deals: React.FC = () => {
           </div>
         ))
       )}
-      {/* {openOrder && (
-        <AddToOrder
-          item={items}
-          deal={selectedDeal}
-          closeHandler={closeHandler}
-        />
-      )} */}
+      {openOrder && selectedDeal && (
+        <AddDealToOrder deal={selectedDeal} closeHandler={closeHandler} />
+      )}
     </>
   );
 };
