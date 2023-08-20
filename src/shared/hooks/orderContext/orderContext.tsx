@@ -3,7 +3,8 @@ import { IMenuItem } from '../database/menu-hook';
 import { orderReducer } from './orderReducer';
 
 export type TOrderSubmission = {
-  item: IMenuItem;
+  item?: IMenuItem;
+  items?: IMenuItem[];
   quantity: number;
   total: number;
 } | null;
@@ -35,7 +36,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     if (orderSubmission === null) return;
     const { item, total } = orderSubmission;
     const updatedOrderItems = order.items.filter(
-      (orderItem) => orderItem !== null && orderItem.item._id !== item._id
+      (orderItem) => orderItem !== null && orderItem.item?._id !== item?._id
     );
     updatePrice(total);
     dispatch({

@@ -17,7 +17,7 @@ export const Order = () => {
             item !== null && (
               <div className="order-line-item-box">
                 <h1 className="order-line-item">({item.quantity})</h1>
-                {item.item.sizes ? (
+                {item.item?.sizes ? (
                   <h1 className="order-line-item">
                     {
                       item.item.sizes.find((size) => size.checked === true)
@@ -25,8 +25,8 @@ export const Order = () => {
                     }
                   </h1>
                 ) : null}
-                <h1 className="order-line-item">{item.item.name}</h1>
-                {item.item.options ? (
+                <h1 className="order-line-item">{item.item?.name}</h1>
+                {item.item?.options ? (
                   <div className="order-line-item-inner-box">
                     <h1
                       onMouseEnter={() => setDisplayOptions(true)}

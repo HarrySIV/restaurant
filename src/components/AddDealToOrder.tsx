@@ -18,13 +18,13 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 
   const dealSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (props.deal) {
-      orderContext.addToOrder({
-        item: props.deal.items,
-        quantity: 1,
-        total: props.deal.total,
-      });
-    }
+    // if (props.deal) {
+    //   orderContext.addToOrder({
+    //     item: props.deal.items,
+    //     quantity: 1,
+    //     total: props.deal.total,
+    //   });
+    // }
   };
 
   return (
@@ -35,6 +35,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
             <legend>{props.deal.name}</legend>
             {props.deal.items.map((item) => (
               <ItemInputs
+                type="deal"
                 id={`${props.deal._id}`}
                 deal={props.deal}
                 inputHandler={inputHandler}

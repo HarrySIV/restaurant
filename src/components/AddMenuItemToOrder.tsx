@@ -48,6 +48,7 @@ export const AddToOrder = (props: IAddMenuItemToOrderProps) => {
             <div key={props.menuItem._id}>
               <legend>{props.menuItem.name}</legend>
               <ItemInputs
+                type="menu-item"
                 id={`${props.menuItem._id}`}
                 menuItem={props.menuItem}
                 setMenuItem={props.setMenuItem}
