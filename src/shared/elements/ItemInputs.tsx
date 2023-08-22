@@ -11,7 +11,6 @@ type ItemInputsProps = (GenericProps & DealProps) | (GenericProps & MenuProps);
 type GenericProps = {
   id: string;
   initialValue: string;
-  quantity: number;
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -25,6 +24,7 @@ type MenuProps = {
   type: 'menu-item';
   menuItem: IMenuItem;
   setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
+  quantity: number;
   setQuantity: Dispatch<SetStateAction<number>>;
 };
 
@@ -107,7 +107,7 @@ export const ItemInputs = (props: ItemInputsProps) => {
           disabled={false}
         />
       )}
-      {type === "menu-item" && props.menuItem.options.length
+      {type === 'menu-item' && props.menuItem.options.length
         ? props.menuItem.options.map((option) => (
             <Input
               key={option.name}
@@ -129,7 +129,6 @@ export const ItemInputs = (props: ItemInputsProps) => {
         type="number"
         label="Quantity:"
         onInput={props.inputHandler}
-        setQuantity={props.setQuantity}
         initialValue={
           (dealQuantity &&
             dealQuantity.pizzas > 0 &&
