@@ -41,8 +41,6 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
                 inputHandler={inputHandler}
                 // totalHandler={totalHandler}
                 initialValue={props.initialValue}
-                quantity={quantity}
-                setQuantity={setQuantity}
                 disabled={false}
               ></ItemInputs>
             ))}
