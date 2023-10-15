@@ -34,7 +34,7 @@ type DealProps = {
 };
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const { type, totalHandler, initialValue, quantity } = props;
+  const { type, totalHandler, initialValue } = props;
   const [size, setSize] = useState(initialValue);
   const dealQuantity = props.type === 'deal' && {
     pizzas: props.deal.items.filter((item) => item === 0).length,
@@ -55,8 +55,8 @@ export const ItemInputs = (props: ItemInputsProps) => {
       )!.price;
       itemTotal = itemPrice + optionsTotal;
     } else itemTotal = props.menuItem.price + optionsTotal;
-    totalHandler(quantity, itemTotal);
-  }, [quantity, totalHandler, size, type]);
+    totalHandler(props.quantity, itemTotal);
+  }, [props.quantity, totalHandler, size, type]);
 
   //sets options array based on checked inputs
   const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
@@ -131,9 +131,12 @@ export const ItemInputs = (props: ItemInputsProps) => {
         onInput={props.inputHandler}
         initialValue={
           (dealQuantity &&
-            dealQuantity.pizzas > 0 &&
-            dealQuantity.pizzas.toString()) ||
-          (dealQuantity && dealQuantity.sodas && dealQuantity.sodas.toString())
+            (dealQuantity.pizzas > 0
+              ? dealQuantity.pizzas.toString()
+              : dealQuantity.sodas > 0
+              ? dealQuantity.sodas.toString()
+              : null)) ||
+          undefined
         }
         validators={[VALIDATOR_MIN(1)]}
         errorText="You must add at least 1 item"
