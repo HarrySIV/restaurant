@@ -135,9 +135,10 @@ export const ItemInputs = (props: ItemInputsProps) => {
               ? dealQuantity.pizzas.toString()
               : dealQuantity.sodas > 0
               ? dealQuantity.sodas.toString()
-              : null)) ||
+              : '1')) ||
           undefined
         }
+        setQuantity={props.}
         validators={[VALIDATOR_MIN(1)]}
         errorText="You must add at least 1 item"
         disabled={props.disabled}
