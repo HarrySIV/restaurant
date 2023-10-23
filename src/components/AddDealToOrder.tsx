@@ -4,7 +4,7 @@ import { IDeal } from '../shared/hooks/database/deal-hook';
 import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
 import { useForm } from '../shared/hooks/form-hook';
 import { Modal } from '../shared/elements/uiElements/Modal';
-import { ItemInputs } from '../shared/elements/ItemInputs';
+import { ItemInputs } from '../shared/elements/MenuItemInputs';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
@@ -42,7 +42,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
                 // totalHandler={totalHandler}
                 initialValue={props.initialValue}
                 disabled={false}
-              ></ItemInputs>
+              />
             ))}
           </div>
         )}

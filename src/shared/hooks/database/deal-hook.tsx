@@ -6,9 +6,14 @@ export interface IDeal {
   name: string;
   img: string;
   _id: string;
-  items: number[];
+  items: TItem[];
   total: number;
 }
+
+type TItem = {
+  id: number;
+  quantity: number;
+};
 
 export const useDeal = () => {
   const { sendRequest } = useHttpClient();

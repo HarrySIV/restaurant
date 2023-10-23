@@ -7,7 +7,7 @@ import { IMenuItem } from '../shared/hooks/database/menu-hook';
 
 import { Modal } from '../shared/elements/uiElements/Modal';
 import { Button } from '../shared/elements/formElements/Button';
-import { ItemInputs } from '../shared/elements/ItemInputs';
+import { MenuItemInputs } from '../shared/elements/MenuItemInputs';
 
 import './_AddToOrder.scss';
 
@@ -47,7 +47,7 @@ export const AddToOrder = (props: IAddMenuItemToOrderProps) => {
           {props.menuItem && props.initialValue && (
             <div key={props.menuItem._id}>
               <legend>{props.menuItem.name}</legend>
-              <ItemInputs
+              <MenuItemInputs
                 type="menu-item"
                 id={`${props.menuItem._id}`}
                 menuItem={props.menuItem}
