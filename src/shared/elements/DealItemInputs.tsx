@@ -1,23 +1,31 @@
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
+
 import { IDeal } from '../hooks/database/deal-hook';
 import { Input } from './formElements/Input';
+import { VALIDATOR_MIN } from './../util/validators';
 
 type DealItemInputsProps = {
-  type: 'deal';
   deal: IDeal;
+  id: string;
+  quantity: number;
+  setQuantity: Dispatch<SetStateAction<number>>;
+  type: 'deal';
+  disabled: true;
 };
 
 export const DealItemInputs = (props: DealItemInputsProps) => {
-  const dealQuantity = props.type === 'deal' && {
-    pizzas: props.deal.items.filter((item) => item.id === 0).length,
-    sodas: props.deal.items.filter((item) => item.id === 3).length,
+  const { deal, type } = props;
+  const dealQuantity = {
+    pizzas: deal.items.filter((item) => item.id === 0).length,
+    sodas: deal.items.filter((item) => item.id === 3).length,
   };
 
   return (
     <>
-            <Input
-        id="quanity"
+      <Input
         element="number"
-        type="number"
+        errorText="You must add at least 1 item"
+        id="quanity"
         label="Quantity:"
         onInput={props.inputHandler}
         initialValue={
@@ -29,11 +37,26 @@ export const DealItemInputs = (props: DealItemInputsProps) => {
               : '1')) ||
           undefined
         }
-        setQuantity={props.}
-        validators={type === 'deal' ? [VALIDATOR_MIN(props.deal.items), VALIDATOR_MAX()] : [VALIDATOR_MIN(1)]}
-        errorText="You must add at least 1 item"
+        setQuantity={
+          dealQuantity.pizzas ? dealQuantity.pizzas : dealQuantity.sodas
+        }
+        type="number"
+        validators={[VALIDATOR_MIN(1)]}
         disabled={props.disabled}
       />
     </>
   );
 };
+
+/* 
+type="menu-item"
+id={`${props.menuItem._id}`}
+menuItem={props.menuItem}
+setMenuItem={props.setMenuItem}
+inputHandler={inputHandler}
+totalHandler={totalHandler}
+initialValue={props.initialValue}
+quantity={quantity}
+setQuantity={setQuantity}
+disabled={false}
+*/

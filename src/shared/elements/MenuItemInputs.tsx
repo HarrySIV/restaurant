@@ -15,10 +15,10 @@ type ItemInputsProps = {
   ) => void;
   menuItem: IMenuItem;
   quantity: number;
-  totalHandler: (quantity: number, itemPrice: number) => void;
-  type: 'menu-item';
   setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
   setQuantity: Dispatch<SetStateAction<number>>;
+  totalHandler: (quantity: number, itemPrice: number) => void;
+  type: 'menu-item';
   disabled?: boolean;
 };
 
@@ -31,6 +31,7 @@ export const MenuItemInputs = (props: ItemInputsProps) => {
     menuItem,
     quantity,
     setMenuItem,
+    setQuantity,
     totalHandler,
     type,
   } = props;
@@ -108,7 +109,7 @@ export const MenuItemInputs = (props: ItemInputsProps) => {
           disabled={false}
         />
       )}
-      {type === 'menu-item' && menuItem.options.length
+      {menuItem.options.length
         ? menuItem.options.map((option) => (
             <Input
               key={option.name}
@@ -127,12 +128,13 @@ export const MenuItemInputs = (props: ItemInputsProps) => {
       <Input
         id="quanity"
         element="number"
-        type="number"
+        errorText="You must add at least 1 item"
+        initialValue={'1'}
         label="Quantity:"
         onInput={inputHandler}
-        initialValue={'1'}
+        setQuantity={setQuantity}
+        type="number"
         validators={[VALIDATOR_MIN(1)]}
-        errorText="You must add at least 1 item"
         disabled={disabled}
       />
       <Input

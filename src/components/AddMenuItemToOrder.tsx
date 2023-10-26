@@ -18,11 +18,11 @@ interface IAddMenuItemToOrderProps {
   setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
 }
 
-export const AddToOrder = (props: IAddMenuItemToOrderProps) => {
+export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
   const orderContext = useOrderContext();
+  const [formState, inputHandler] = useForm({}, true);
   const [total, setTotal] = useState(props.menuItem.price);
   const [quantity, setQuantity] = useState(1);
-  const [formState, inputHandler] = useForm({}, true);
 
   const totalHandler = (quantity: number, itemPrice: number) => {
     if (quantity > 0) setTotal(quantity * itemPrice);
