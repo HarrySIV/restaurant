@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IDeal, useDeal } from '../shared/hooks/database/deal-hook';
 import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
-import { LoadingSpinner } from '../shared/elements/uiElements/LoadingSpinner';
+import { LoadingSpinner } from '../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder } from './AddDealToOrder';
 
 export const Deals: React.FC = () => {

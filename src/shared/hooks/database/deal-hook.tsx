@@ -13,6 +13,7 @@ export interface IDeal {
 type TItem = {
   id: number;
   quantity: number;
+  size?: string;
 };
 
 export const useDeal = () => {

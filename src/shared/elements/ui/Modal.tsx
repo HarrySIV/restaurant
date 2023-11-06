@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 import './_modal.scss';
-import { Button } from '../formElements/Button';
+import { Button } from '../form/Button';
 
 interface IModalProps {
   closeHandler: () => void;
