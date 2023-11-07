@@ -11,18 +11,18 @@ export const Deals: React.FC = () => {
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [items, setItems] = useState<IMenuItem[]>([]);
 
-  const openHandler = (deal: IDeal) => {
+  const openAddToOrderHandler = (deal: IDeal) => {
     setSelectedDeal(deal);
     const dealItems = menu.filter(
       (menuItem) =>
-        menuItem._id === deal.items[0].toString() ||
-        menuItem._id === deal.items[1].toString()
+        menuItem._id === deal.items[0].id.toString() ||
+        menuItem._id === deal.items[1].id.toString()
     );
     setItems(dealItems);
     setOpenOrder(true);
   };
 
-  const closeHandler = () => {
+  const closeAddToOrderHandler = () => {
     setOpenOrder(false);
     setItems([]);
   };
@@ -37,7 +37,10 @@ export const Deals: React.FC = () => {
         deals.map((deal) => (
           <div className="deal" key={deal._id}>
             <img src={deal.img} alt={deal.name} className="deals-img" />
-            <div className="deals-backdrop" onClick={() => openHandler(deal)}>
+            <div
+              className="deals-backdrop"
+              onClick={() => openAddToOrderHandler(deal)}
+            >
               <div className="details">
                 <h3 className="add-to-order">ADD TO ORDER</h3>
                 <h4 className="deals-text">{deal.name}</h4>
@@ -48,7 +51,10 @@ export const Deals: React.FC = () => {
         ))
       )}
       {openOrder && selectedDeal && (
-        <AddDealToOrder deal={selectedDeal} closeHandler={closeHandler} />
+        <AddDealToOrder
+          deal={selectedDeal}
+          closeHandler={closeAddToOrderHandler}
+        />
       )}
     </>
   );

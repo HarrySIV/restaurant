@@ -8,7 +8,7 @@ import { Modal } from '../shared/elements/ui/Modal';
 import { Button } from '../shared/elements/form/Button';
 import { Input } from '../shared/elements/form/Input';
 
-import { VALIDATOR_MIN } from '../shared/util/validators';
+import { VALIDATOR_MAX, VALIDATOR_MIN } from '../shared/util/validators';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
@@ -18,13 +18,18 @@ interface IAddDealToOrderProps {
 type DealItemInputsProps = {
   deal: IDeal;
   id: string;
+  inputHandler: (
+    id: string,
+    userInputValue: string,
+    userInputIsValid: boolean
+  ) => void;
   quantity: number;
   setQuantity: Dispatch<SetStateAction<number>>;
-  type: 'deal';
   disabled: true;
 };
 
 export const AddDealToOrder = (props: IAddDealToOrderProps) => {
+  const { deal, closeHandler } = props;
   const orderContext = useOrderContext();
   const [formState, inputHandler] = useForm({}, true);
   const [total, setTotal] = useState(props.deal.total);
@@ -32,13 +37,12 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 
   const dealSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // if (props.deal) {
-    //   orderContext.addToOrder({
-    //     item: props.deal.items,
-    //     quantity: 1,
-    //     total: props.deal.total,
-    //   });
-    // }
+
+    orderContext.addToOrder({
+      item: deal,
+      quantity: 1,
+      total: props.deal.total,
+    });
   };
 
   return (
@@ -52,11 +56,10 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
                   <legend>{props.deal.name}</legend>
                   {props.deal.items.map(() => (
                     <DealItemInputs
-                      type="deal"
+                      deal={deal}
                       id={`${props.deal._id}`}
                       inputHandler={inputHandler}
                       // totalHandler={totalHandler}
-                      initialValue={props.initialValue}
                       quantity={quantity}
                       setQuantity={setQuantity}
                       disabled={true}
@@ -73,7 +76,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
         <Button
           type="submit"
           text="ADD TO ORDER"
-          onClick={itemSubmitHandler}
+          onClick={dealSubmitHandler}
           disabled={!formState.isFormValid}
         />
       </form>
@@ -82,36 +85,24 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 };
 
 const DealItemInputs = (props: DealItemInputsProps) => {
-  const { deal, type } = props;
-  const dealQuantity = {
-    pizzas: deal.items.filter((item) => item.id === 0).length,
-    sodas: deal.items.filter((item) => item.id === 3).length,
-  };
+  const { deal, inputHandler, setQuantity } = props;
 
   return (
     <>
-      <Input
-        element="number"
-        errorText="You must add at least 1 item"
-        id="quanity"
-        label="Quantity:"
-        onInput={props.inputHandler}
-        initialValue={
-          (dealQuantity &&
-            (dealQuantity.pizzas > 0
-              ? dealQuantity.pizzas.toString()
-              : dealQuantity.sodas > 0
-              ? dealQuantity.sodas.toString()
-              : '1')) ||
-          undefined
-        }
-        setQuantity={
-          dealQuantity.pizzas ? dealQuantity.pizzas : dealQuantity.sodas
-        }
-        type="number"
-        validators={[VALIDATOR_MIN(1)]}
-        disabled={props.disabled}
-      />
+      {deal.items.map((item) => (
+        <Input
+          element="number"
+          errorText="You must add at least 1 item"
+          id="quanity"
+          label="Quantity:"
+          onInput={inputHandler}
+          initialValue={item.quantity.toString()}
+          setQuantity={setQuantity}
+          type="number"
+          validators={[VALIDATOR_MIN(1), VALIDATOR_MAX(1)]}
+          disabled={props.disabled}
+        />
+      ))}
     </>
   );
 };

@@ -6,7 +6,7 @@ export const Join = () => {
     <h2 className="join">
       Join our team
       <NavLink to="/careers">
-        <span className="link">here!</span>
+        <span className="link"> here!</span>
       </NavLink>
     </h2>
   );
