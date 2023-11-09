@@ -1,14 +1,15 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 
-import { IDeal } from '../shared/hooks/database/deal-hook';
+import { IDeal, TItem } from '../shared/hooks/database/deal-hook';
 import { useForm } from '../shared/hooks/form-hook';
+import { TItemOption, useMenu } from '../shared/hooks/database/menu-hook';
 import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
 
 import { Modal } from '../shared/elements/ui/Modal';
 import { Button } from '../shared/elements/form/Button';
 import { Input } from '../shared/elements/form/Input';
 
-import { VALIDATOR_MAX, VALIDATOR_MIN } from '../shared/util/validators';
+import { VALIDATOR_MIN, VALIDATOR_MAX } from '../shared/util/validators';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
@@ -16,7 +17,7 @@ interface IAddDealToOrderProps {
 }
 
 type DealItemInputsProps = {
-  deal: IDeal;
+  dealItem: TItem;
   id: string;
   inputHandler: (
     id: string,
@@ -25,7 +26,6 @@ type DealItemInputsProps = {
   ) => void;
   quantity: number;
   setQuantity: Dispatch<SetStateAction<number>>;
-  disabled: true;
 };
 
 export const AddDealToOrder = (props: IAddDealToOrderProps) => {
@@ -39,33 +39,28 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
     event.preventDefault();
 
     orderContext.addToOrder({
-      item: deal,
-      quantity: 1,
-      total: props.deal.total,
+      deal: deal,
+      type: 'deal',
     });
   };
 
   return (
-    <Modal header="Add to Order" closeHandler={props.closeHandler}>
+    <Modal header="Add to Order" closeHandler={closeHandler}>
       <form className="order-form" onSubmit={dealSubmitHandler}>
         <fieldset>
-          {props.deal && (
+          {deal && (
             <>
-              {props.deal.items.map((item) => (
-                <div key={props.deal._id}>
-                  <legend>{props.deal.name}</legend>
-                  {props.deal.items.map(() => (
-                    <DealItemInputs
-                      deal={deal}
-                      id={`${props.deal._id}`}
-                      inputHandler={inputHandler}
-                      // totalHandler={totalHandler}
-                      quantity={quantity}
-                      setQuantity={setQuantity}
-                      disabled={true}
-                    />
-                  ))}
-
+              {deal.items.map((dealItem) => (
+                <div key={deal._id}>
+                  <legend>{deal.name}</legend>
+                  <DealItemInputs
+                    dealItem={dealItem}
+                    id={`${deal._id}`}
+                    inputHandler={inputHandler}
+                    // totalHandler={totalHandler}
+                    quantity={quantity}
+                    setQuantity={setQuantity}
+                  />
                   <h2>${total.toFixed(2)}</h2>
                   <hr />
                 </div>
@@ -85,24 +80,96 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 };
 
 const DealItemInputs = (props: DealItemInputsProps) => {
-  const { deal, inputHandler, setQuantity } = props;
+  const { menu } = useMenu();
+  const { dealItem, inputHandler, setQuantity } = props;
+  const [menuItem, setMenuItem] = useState(
+    menu.find((item) => item._id === dealItem.id.toString())
+  );
+
+  if (!menuItem) return <h1>No menu item found</h1>;
+
+  //sets options array based on checked inputs
+  const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
+    const newOptions = [...menuItem.options];
+    const newItem = {
+      ...menuItem,
+    };
+    newOptions.find(
+      (newOption) => newOption.name === userOption.name
+    )!.checked = isChecked;
+    newItem.options = newOptions;
+    setMenuItem(newItem);
+  };
 
   return (
     <>
-      {deal.items.map((item) => (
+      {!!menuItem.sizes?.length && (
         <Input
-          element="number"
-          errorText="You must add at least 1 item"
-          id="quanity"
-          label="Quantity:"
+          id="size"
+          element="select"
+          type="select"
+          label="Size:"
+          selection={menuItem?.sizes}
           onInput={inputHandler}
-          initialValue={item.quantity.toString()}
-          setQuantity={setQuantity}
-          type="number"
-          validators={[VALIDATOR_MIN(1), VALIDATOR_MAX(1)]}
-          disabled={props.disabled}
+          initialValue={initialValue}
+          selectionHandler={sizeHandler}
+          errorText="Please pick a valid size"
+          disabled={true}
         />
-      ))}
+      )}
+      {!!menuItem.flavors?.length && (
+        <Input
+          id="flavor"
+          element="select"
+          type="select"
+          label="Flavor:"
+          selection={menuItem.flavors}
+          onInput={inputHandler}
+          initialValue={initialValue}
+          selectionHandler={sizeHandler}
+          errorText="Please pick a valid flavor"
+          disabled={false}
+        />
+      )}
+      {menuItem.options.length
+        ? menuItem.options.map((option) => (
+            <Input
+              key={option.name}
+              id={option.name}
+              element="checkbox"
+              type="checkbox"
+              label={option.name}
+              onInput={inputHandler}
+              option={option}
+              optionsHandler={optionsHandler}
+              initialValue={option.name}
+              errorText="Please pick a valid topping"
+            />
+          ))
+        : null}
+      <Input
+        id="quanity"
+        element="number"
+        errorText="You must add at least 1 item"
+        initialValue={'1'}
+        label="Quantity:"
+        onInput={inputHandler}
+        setQuantity={setQuantity}
+        type="number"
+        validators={[VALIDATOR_MIN(1)]}
+        disabled={true}
+      />
+      <Input
+        id="_id"
+        element="text"
+        type="text"
+        label="_id"
+        placeholder={menuItem._id}
+        onInput={inputHandler}
+        initialValue={menuItem._id}
+        hidden={true}
+        errorText="A valid ID was not passed"
+      />
     </>
   );
 };

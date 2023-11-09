@@ -1,13 +1,20 @@
 import React, { createContext, useContext, useReducer } from 'react';
+import { IDeal } from '../database/deal-hook';
 import { IMenuItem } from '../database/menu-hook';
 import { orderReducer } from './orderReducer';
 
-export type TOrderSubmission = {
-  item?: IMenuItem;
-  items?: IMenuItem[];
-  quantity: number;
-  total: number;
-} | null;
+export type TOrderSubmission =
+  | {
+      item: IMenuItem;
+      quantity: number;
+      total: number;
+      type: 'menuItem';
+    }
+  | {
+      deal: IDeal;
+      type: 'deal';
+    }
+  | null;
 
 export interface IOrderContext {
   items: TOrderSubmission[];
@@ -24,26 +31,42 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addToOrder = (orderSubmission: TOrderSubmission) => {
     if (orderSubmission === null) return;
-    const { item, quantity, total } = orderSubmission;
 
-    const newItem = { item, quantity, total };
-    updatePrice(total);
-    dispatch({ type: 'ADD_ITEM', newItem: newItem, total: order.total });
+    if (orderSubmission.type === 'menuItem') {
+      const { item, quantity, total, type } = orderSubmission;
+      const newItem = { item, quantity, total, type };
+      updatePrice(total);
+      dispatch({ type: 'ADD_ITEM', newItem: newItem, total: order.total });
+    }
+
+    if (orderSubmission.type === 'deal') {
+      const { deal, type } = orderSubmission;
+      updatePrice(deal.total);
+      dispatch({
+        type: 'ADD_ITEM',
+        newItem: { deal, type },
+        total: order.total,
+      });
+    }
   };
 
   /* returns new array without item submitted */
   const deleteFromOrder = (orderSubmission: TOrderSubmission) => {
-    if (orderSubmission === null) return;
-    const { item, total } = orderSubmission;
-    const updatedOrderItems = order.items.filter(
-      (orderItem) => orderItem !== null && orderItem.item?._id !== item?._id
-    );
-    updatePrice(total);
-    dispatch({
-      type: 'REMOVE_ITEM',
-      updatedOrderItems: updatedOrderItems,
-      total: order.total,
-    });
+    // if (orderSubmission === null) return;
+    // if (orderSubmission.type === 'menuItem') {
+    //   const { item, total } = orderSubmission;
+    //   const updatedOrderItems = order.items.filter(
+    //     (orderItem) => orderItem !== null && orderItem.item._id !== item?._id
+    //   );
+    //   updatePrice(total);
+    //   dispatch({
+    //     type: 'REMOVE_ITEM',
+    //     updatedOrderItems: updatedOrderItems,
+    //     total: order.total,
+    //   });
+    // }
+    // if (orderSubmission.type === 'deal') {
+    // }
   };
 
   /* finds item within order and returns new item. current logic is super wrong*/

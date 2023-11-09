@@ -10,7 +10,7 @@ export interface IDeal {
   total: number;
 }
 
-type TItem = {
+export type TItem = {
   id: number;
   quantity: number;
   size?: string;

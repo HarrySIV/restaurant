@@ -33,14 +33,14 @@ type MenuItemInputsProps = {
   setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
   setQuantity: Dispatch<SetStateAction<number>>;
   totalHandler: (quantity: number, itemPrice: number) => void;
-  type: 'menu-item';
   disabled?: boolean;
 };
 
 export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
+  const { closeHandler, initialValue, menuItem, setMenuItem } = props;
   const orderContext = useOrderContext();
   const [formState, inputHandler] = useForm({}, true);
-  const [total, setTotal] = useState(props.menuItem.price);
+  const [total, setTotal] = useState(menuItem.price);
   const [quantity, setQuantity] = useState(1);
 
   const totalHandler = (quantity: number, itemPrice: number) => {
@@ -49,31 +49,31 @@ export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (props.menuItem) {
+    if (menuItem) {
       orderContext.addToOrder({
-        item: props.menuItem,
+        item: menuItem,
         quantity: quantity,
         total: total,
+        type: 'menuItem',
       });
-      props.closeHandler();
+      closeHandler();
     }
   };
 
   return (
-    <Modal header="Add to Order" closeHandler={props.closeHandler}>
+    <Modal header="Add to Order" closeHandler={closeHandler}>
       <form className="order-form" onSubmit={itemSubmitHandler}>
         <fieldset>
-          {props.menuItem && props.initialValue && (
-            <div key={props.menuItem._id}>
-              <legend>{props.menuItem.name}</legend>
+          {menuItem && initialValue && (
+            <div key={menuItem._id}>
+              <legend>{menuItem.name}</legend>
               <MenuItemInputs
-                type="menu-item"
-                id={`${props.menuItem._id}`}
-                menuItem={props.menuItem}
-                setMenuItem={props.setMenuItem}
+                id={`${menuItem._id}`}
+                menuItem={menuItem}
+                setMenuItem={setMenuItem}
                 inputHandler={inputHandler}
                 totalHandler={totalHandler}
-                initialValue={props.initialValue}
+                initialValue={initialValue}
                 quantity={quantity}
                 setQuantity={setQuantity}
                 disabled={false}
@@ -105,7 +105,6 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
     setMenuItem,
     setQuantity,
     totalHandler,
-    type,
   } = props;
   const [size, setSize] = useState(initialValue);
 
@@ -127,7 +126,6 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
     quantity,
     totalHandler,
     size,
-    type,
     menuItem.options,
     menuItem.sizes,
     menuItem.price,
