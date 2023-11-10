@@ -2,12 +2,12 @@ import './_app.scss';
 
 import { BrowserRouter, Route, Navigate, Routes } from 'react-router-dom';
 
-import { Home } from './pages/Home';
-import { Menu } from './pages/Menu';
+import { Home } from './pages/home/Home';
+import { Menu } from './pages/menu/Menu';
 import { About } from './pages/About';
 import { Locations } from './pages/Locations';
 import { Careers } from './pages/Careers';
-import { Order } from './pages/Order';
+import { Order } from './pages/order/Order';
 import { ErrorPage } from './pages/ErrorPage';
 import { SiteMap } from './shared/sections/SiteMap';
 import { MainHeader } from './shared/sections/header/MainHeader';

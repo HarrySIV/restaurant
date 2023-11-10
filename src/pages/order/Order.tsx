@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { IDeal } from '../shared/hooks/database/deal-hook';
-import { IMenuItem } from '../shared/hooks/database/menu-hook';
-import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
+import { IDeal } from '../../shared/hooks/database/deal-hook';
+import { IMenuItem } from '../../shared/hooks/database/menu-hook';
+import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
 import './_order.scss';
 

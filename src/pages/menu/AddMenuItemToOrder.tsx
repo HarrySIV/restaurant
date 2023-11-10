@@ -1,17 +1,17 @@
 import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 
-import { useForm } from '../shared/hooks/form-hook';
-import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
+import { useForm } from '../../shared/hooks/form-hook';
+import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
-import { IMenuItem, TItemOption } from '../shared/hooks/database/menu-hook';
+import { IMenuItem, TItemOption } from '../../shared/hooks/database/menu-hook';
 
-import { Modal } from '../shared/elements/ui/Modal';
-import { Button } from '../shared/elements/form/Button';
-import { Input } from '../shared/elements/form/Input';
+import { Modal } from '../../shared/elements/ui/Modal';
+import { Button } from '../../shared/elements/form/Button';
+import { Input } from '../../shared/elements/form/Input';
 
-import { VALIDATOR_MIN } from '../shared/util/validators';
+import { VALIDATOR_MIN } from '../../shared/util/validators';
 
-import './_AddToOrder.scss';
+import '../_AddToOrder.scss';
 
 interface IAddMenuItemToOrderProps {
   closeHandler: () => void;

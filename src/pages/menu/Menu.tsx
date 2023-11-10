@@ -1,4 +1,4 @@
-import { MenuItem } from '../components/MenuItem';
+import { MenuItem } from './MenuItem';
 
 import './_menu.scss';
 

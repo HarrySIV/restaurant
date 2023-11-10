@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Button } from '../shared/elements/form/Button';
-import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
+import { Button } from '../../shared/elements/form/Button';
+import { useMenu, IMenuItem } from '../../shared/hooks/database/menu-hook';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AddMenuItemToOrder } from './AddMenuItemToOrder';
-import { LoadingSpinner } from '../shared/elements/ui/LoadingSpinner';
+import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 
 export const MenuItem = () => {
   const { menu } = useMenu();

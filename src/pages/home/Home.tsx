@@ -1,6 +1,6 @@
 import React from 'react';
-import { Deals } from '../components/Deals';
-import { Join } from '../components/Join';
+import { Deals } from './Deals';
+import { Join } from './Join';
 
 import './_home.scss';
 

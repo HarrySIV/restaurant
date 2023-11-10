@@ -1,15 +1,15 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 
-import { IDeal, TItem } from '../shared/hooks/database/deal-hook';
-import { useForm } from '../shared/hooks/form-hook';
-import { TItemOption, useMenu } from '../shared/hooks/database/menu-hook';
-import { useOrderContext } from '../shared/hooks/orderContext/OrderContext';
+import { IDeal, TItem } from '../../shared/hooks/database/deal-hook';
+import { useForm } from '../../shared/hooks/form-hook';
+import { TItemOption, useMenu } from '../../shared/hooks/database/menu-hook';
+import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
-import { Modal } from '../shared/elements/ui/Modal';
-import { Button } from '../shared/elements/form/Button';
-import { Input } from '../shared/elements/form/Input';
+import { Modal } from '../../shared/elements/ui/Modal';
+import { Button } from '../../shared/elements/form/Button';
+import { Input } from '../../shared/elements/form/Input';
 
-import { VALIDATOR_MIN, VALIDATOR_MAX } from '../shared/util/validators';
+import { VALIDATOR_MIN, VALIDATOR_MAX } from '../../shared/util/validators';
 
 interface IAddDealToOrderProps {
   deal: IDeal;

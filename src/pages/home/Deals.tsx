@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { IDeal, useDeal } from '../shared/hooks/database/deal-hook';
-import { useMenu, IMenuItem } from '../shared/hooks/database/menu-hook';
-import { LoadingSpinner } from '../shared/elements/ui/LoadingSpinner';
+import { IDeal, useDeal } from '../../shared/hooks/database/deal-hook';
+import { useMenu, IMenuItem } from '../../shared/hooks/database/menu-hook';
+import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder } from './AddDealToOrder';
 
 export const Deals: React.FC = () => {
@@ -13,11 +13,9 @@ export const Deals: React.FC = () => {
 
   const openAddToOrderHandler = (deal: IDeal) => {
     setSelectedDeal(deal);
-    const dealItems = menu.filter(
-      (menuItem) =>
-        menuItem._id === deal.items[0].id.toString() ||
-        menuItem._id === deal.items[1].id.toString()
-    );
+    const dealItems = menu.filter((menuItem) => {
+      dealItems.map((item) => item._id);
+    });
     setItems(dealItems);
     setOpenOrder(true);
   };
