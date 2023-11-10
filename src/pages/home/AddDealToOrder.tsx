@@ -13,12 +13,14 @@ import { VALIDATOR_MIN, VALIDATOR_MAX } from '../../shared/util/validators';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
+  initialValues: { type: string; value: string }[];
   closeHandler: () => void;
 }
 
 type DealItemInputsProps = {
   dealItem: TItem;
   id: string;
+  initialValues: { type: string; value: string }[];
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -29,7 +31,7 @@ type DealItemInputsProps = {
 };
 
 export const AddDealToOrder = (props: IAddDealToOrderProps) => {
-  const { deal, closeHandler } = props;
+  const { deal, initialValues, closeHandler } = props;
   const orderContext = useOrderContext();
   const [formState, inputHandler] = useForm({}, true);
   const [total, setTotal] = useState(props.deal.total);
@@ -56,6 +58,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
                   <DealItemInputs
                     dealItem={dealItem}
                     id={`${deal._id}`}
+                    initialValues={initialValues}
                     inputHandler={inputHandler}
                     // totalHandler={totalHandler}
                     quantity={quantity}
@@ -81,7 +84,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 
 const DealItemInputs = (props: DealItemInputsProps) => {
   const { menu } = useMenu();
-  const { dealItem, inputHandler, setQuantity } = props;
+  const { dealItem, initialValues, inputHandler, setQuantity } = props;
   const [menuItem, setMenuItem] = useState(
     menu.find((item) => item._id === dealItem.id.toString())
   );
@@ -101,6 +104,10 @@ const DealItemInputs = (props: DealItemInputsProps) => {
     setMenuItem(newItem);
   };
 
+  const sizeHandler = (event: any) => {
+    setSize(event.target.value);
+  };
+
   return (
     <>
       {!!menuItem.sizes?.length && (
@@ -111,8 +118,10 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           label="Size:"
           selection={menuItem?.sizes}
           onInput={inputHandler}
-          initialValue={initialValue}
-          selectionHandler={sizeHandler}
+          initialValue={
+            initialValues.find((value) => value.type === 'size')?.value
+          }
+          sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={true}
         />
@@ -125,8 +134,9 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           label="Flavor:"
           selection={menuItem.flavors}
           onInput={inputHandler}
-          initialValue={initialValue}
-          selectionHandler={sizeHandler}
+          initialValue={
+            initialValues.find((value) => value.type === 'flavor')?.value
+          }
           errorText="Please pick a valid flavor"
           disabled={false}
         />

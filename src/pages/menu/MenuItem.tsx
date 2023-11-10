@@ -22,7 +22,7 @@ export const MenuItem = () => {
     }
   };
 
-  const addHandler = (menuItem: IMenuItem) => {
+  const openAddToOrderHandler = (menuItem: IMenuItem) => {
     setMenuItem(menuItem);
     const selection = menuItem.sizes?.length
       ? menuItem.sizes
@@ -62,7 +62,7 @@ export const MenuItem = () => {
                     </button>
                     <Button
                       text={<FontAwesomeIcon icon={faPlus} />}
-                      onClick={() => addHandler(menuItem)}
+                      onClick={() => openAddToOrderHandler(menuItem)}
                     />
                   </div>
                   <h4

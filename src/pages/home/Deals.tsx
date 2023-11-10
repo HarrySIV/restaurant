@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IDeal, useDeal } from '../../shared/hooks/database/deal-hook';
-import { useMenu, IMenuItem } from '../../shared/hooks/database/menu-hook';
+import { useMenu } from '../../shared/hooks/database/menu-hook';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder } from './AddDealToOrder';
 
@@ -9,20 +9,60 @@ export const Deals: React.FC = () => {
   const { menu } = useMenu();
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
-  const [items, setItems] = useState<IMenuItem[]>([]);
+  const [initialValues, setInitialValues] = useState<
+    { type: string; value: string }[]
+  >([]);
 
   const openAddToOrderHandler = (deal: IDeal) => {
     setSelectedDeal(deal);
-    const dealItems = menu.filter((menuItem) => {
-      dealItems.map((item) => item._id);
+    const newItems = menu.filter((menuItem) => {
+      return deal.items.map((item) => item.id.toString() === menuItem._id);
     });
-    setItems(dealItems);
+    newItems.forEach((item) => {
+      if (item.flavors) {
+        setInitialValues([
+          ...initialValues,
+          {
+            type: 'flavor',
+            value:
+              item.flavors.find((flavor) => flavor.checked)?.value || 'pepsi',
+          },
+        ]);
+      }
+
+      if (item.sizes) {
+        setInitialValues([
+          ...initialValues,
+          {
+            type: 'size',
+            value: item.sizes.find((size) => size.checked)?.value || 'medium',
+          },
+        ]);
+      }
+    });
     setOpenOrder(true);
   };
 
+  /*
+    const openAddToOrderHandler = (menuItem: IMenuItem) => {
+    setMenuItem(menuItem);
+    const selection = menuItem.sizes?.length
+      ? menuItem.sizes
+      : menuItem.flavors?.length
+      ? menuItem.flavors
+      : null;
+    if (selection?.length)
+      setInitialValue(
+        selection.find((selectionValue) => selectionValue.checked === true)!
+          .value
+      );
+    setOpenOrder(true);
+  }; 
+  */
+
   const closeAddToOrderHandler = () => {
     setOpenOrder(false);
-    setItems([]);
+    setInitialValues([]);
   };
 
   return (
@@ -51,6 +91,7 @@ export const Deals: React.FC = () => {
       {openOrder && selectedDeal && (
         <AddDealToOrder
           deal={selectedDeal}
+          initialValues={initialValues}
           closeHandler={closeAddToOrderHandler}
         />
       )}

@@ -61,7 +61,7 @@ type SelectElementProps = GenericInputElementProps & {
   selection: TSelection[];
   initialValue: string;
   disabled?: boolean;
-  selectionHandler: (event: any) => void;
+  sizeHandler?: (event: any) => void;
 };
 
 type TSelection = TSize | TFlavor;
@@ -136,8 +136,8 @@ export const Input = (props: InputProps) => {
       if (props.type === 'number') {
         props.setQuantity(parseInt(event.target.value));
       }
-      if (props.type === 'select') {
-        props.selectionHandler(event);
+      if (props.type === 'select' && props.sizeHandler) {
+        props.sizeHandler(event);
       }
       dispatch({
         type: 'CHANGE',

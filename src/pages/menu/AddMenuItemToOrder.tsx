@@ -174,7 +174,6 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           selection={menuItem.flavors}
           onInput={inputHandler}
           initialValue={initialValue}
-          selectionHandler={sizeHandler}
           errorText="Please pick a valid flavor"
           disabled={false}
         />
