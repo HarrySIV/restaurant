@@ -1,22 +1,38 @@
 import React, { useState } from 'react';
-import { IDeal, useDeal } from '../../shared/hooks/database/deal-hook';
-import { useMenu } from '../../shared/hooks/database/menu-hook';
+import { useFetch } from '../../shared/hooks/useFetch';
+import { IMenuItem, useMenu } from '../../shared/hooks/database/menu-hook';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder } from './AddDealToOrder';
 
+export interface IDeal {
+  name: string;
+  img: string;
+  _id: string;
+  items: TItem[];
+  total: number;
+}
+
+export type TItem = {
+  id: number;
+  quantity: number;
+  size?: string;
+};
+
 export const Deals: React.FC = () => {
-  const { deals } = useDeal();
+  const { data } = useFetch('/deals');
   const { menu } = useMenu();
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
+  const [dealItems, setDealItems] = useState<IMenuItem[]>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<
     { type: string; value: string }[]
   >([]);
 
+  //deals
   const openAddToOrderHandler = (deal: IDeal) => {
     setSelectedDeal(deal);
     const newItems = menu.filter((menuItem) => {
-      return deal.items.map((item) => item.id.toString() === menuItem._id);
+      return deal.items.find((item) => item.id.toString() === menuItem._id);
     });
     newItems.forEach((item) => {
       if (item.flavors) {
@@ -40,25 +56,9 @@ export const Deals: React.FC = () => {
         ]);
       }
     });
+    setDealItems(newItems);
     setOpenOrder(true);
   };
-
-  /*
-    const openAddToOrderHandler = (menuItem: IMenuItem) => {
-    setMenuItem(menuItem);
-    const selection = menuItem.sizes?.length
-      ? menuItem.sizes
-      : menuItem.flavors?.length
-      ? menuItem.flavors
-      : null;
-    if (selection?.length)
-      setInitialValue(
-        selection.find((selectionValue) => selectionValue.checked === true)!
-          .value
-      );
-    setOpenOrder(true);
-  }; 
-  */
 
   const closeAddToOrderHandler = () => {
     setOpenOrder(false);
@@ -69,10 +69,10 @@ export const Deals: React.FC = () => {
     <>
       <h2 className="deal-text">DEALS</h2>
 
-      {!deals.length && !menu.length ? (
+      {!data.length && !menu.length ? (
         <LoadingSpinner />
       ) : (
-        deals.map((deal) => (
+        data.map((deal) => (
           <div className="deal" key={deal._id}>
             <img src={deal.img} alt={deal.name} className="deals-img" />
             <div
@@ -91,6 +91,7 @@ export const Deals: React.FC = () => {
       {openOrder && selectedDeal && (
         <AddDealToOrder
           deal={selectedDeal}
+          dealItems={dealItems!}
           initialValues={initialValues}
           closeHandler={closeAddToOrderHandler}
         />

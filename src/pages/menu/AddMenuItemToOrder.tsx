@@ -160,7 +160,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           selection={menuItem?.sizes}
           onInput={inputHandler}
           initialValue={initialValue}
-          selectionHandler={sizeHandler}
+          sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={disabled}
         />

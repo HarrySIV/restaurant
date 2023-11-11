@@ -1,13 +1,42 @@
 import { useState } from 'react';
 import { Button } from '../../shared/elements/form/Button';
-import { useMenu, IMenuItem } from '../../shared/hooks/database/menu-hook';
+import { useFetch } from '../../shared/hooks/useFetch';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AddMenuItemToOrder } from './AddMenuItemToOrder';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 
+export interface IMenuItem {
+  name: string;
+  description: string;
+  price: number;
+  _id: string;
+  cooking_time: string;
+  options: TItemOption[];
+  sizes?: TSize[];
+  flavors?: TFlavor[];
+}
+
+export type TItemOption = { name: string; price: number; checked: boolean };
+
+export type TSize = {
+  id: string;
+  value: string;
+  isValid: boolean;
+  price: number;
+  inches: number;
+  checked: boolean;
+};
+
+export type TFlavor = {
+  id: string;
+  value: string;
+  isValid: boolean;
+  checked: boolean;
+};
+
 export const MenuItem = () => {
-  const { menu } = useMenu();
+  const { data } = useFetch('/menu');
   const [ID, setID] = useState<string>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [menuItem, setMenuItem] = useState<IMenuItem | null>(null);
@@ -45,12 +74,12 @@ export const MenuItem = () => {
   //displays menu items when menu and menu.length exist... breaks otherwise.
   return (
     <>
-      {!menu.length ? (
+      {!data.length ? (
         <LoadingSpinner />
       ) : (
         <ul className="items">
-          {menu.length &&
-            menu.map((menuItem: IMenuItem) => {
+          {data.length &&
+            data.map((menuItem: IMenuItem) => {
               return (
                 <li key={menuItem._id} className="list-item">
                   <div className="li-inner">

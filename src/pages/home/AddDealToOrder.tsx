@@ -1,8 +1,12 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 
-import { IDeal, TItem } from '../../shared/hooks/database/deal-hook';
+import { IDeal, TItem } from './Deals';
 import { useForm } from '../../shared/hooks/form-hook';
-import { TItemOption, useMenu } from '../../shared/hooks/database/menu-hook';
+import {
+  IMenuItem,
+  TItemOption,
+  useMenu,
+} from '../../shared/hooks/database/menu-hook';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
 import { Modal } from '../../shared/elements/ui/Modal';
@@ -13,6 +17,7 @@ import { VALIDATOR_MIN, VALIDATOR_MAX } from '../../shared/util/validators';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
+  dealItems: IMenuItem[];
   initialValues: { type: string; value: string }[];
   closeHandler: () => void;
 }
@@ -31,10 +36,10 @@ type DealItemInputsProps = {
 };
 
 export const AddDealToOrder = (props: IAddDealToOrderProps) => {
-  const { deal, initialValues, closeHandler } = props;
+  const { deal, dealItems, initialValues, closeHandler } = props;
   const orderContext = useOrderContext();
   const [formState, inputHandler] = useForm({}, true);
-  const [total, setTotal] = useState(props.deal.total);
+  const [total, setTotal] = useState(deal.total);
   const [quantity, setQuantity] = useState(1);
 
   const dealSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -52,7 +57,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
         <fieldset>
           {deal && (
             <>
-              {deal.items.map((dealItem) => (
+              {dealItems.map((dealItem) => (
                 <div key={deal._id}>
                   <legend>{deal.name}</legend>
                   <DealItemInputs
@@ -88,6 +93,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
   const [menuItem, setMenuItem] = useState(
     menu.find((item) => item._id === dealItem.id.toString())
   );
+  const [size, setSize] = useState<string>();
 
   if (!menuItem) return <h1>No menu item found</h1>;
 
@@ -118,9 +124,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           label="Size:"
           selection={menuItem?.sizes}
           onInput={inputHandler}
-          initialValue={
-            initialValues.find((value) => value.type === 'size')?.value
-          }
+          initialValue={size!}
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={true}
@@ -135,10 +139,9 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           selection={menuItem.flavors}
           onInput={inputHandler}
           initialValue={
-            initialValues.find((value) => value.type === 'flavor')?.value
+            initialValues.find((value) => value.type === 'flavor')!.value
           }
           errorText="Please pick a valid flavor"
-          disabled={false}
         />
       )}
       {menuItem.options.length
