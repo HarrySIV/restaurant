@@ -30,10 +30,12 @@ export const Deals: React.FC = () => {
 
   //deals
   const openAddToOrderHandler = (deal: IDeal) => {
-    setSelectedDeal(deal);
+    //get menuItem and add quantity ---needs fixing
     const newItems = menu.filter((menuItem) => {
       return deal.items.find((item) => item.id.toString() === menuItem._id);
     });
+
+    //find inital flavor/size value, if any ---possibly needs fixing
     newItems.forEach((item) => {
       if (item.flavors) {
         setInitialValues([
@@ -56,6 +58,7 @@ export const Deals: React.FC = () => {
         ]);
       }
     });
+    setSelectedDeal(deal);
     setDealItems(newItems);
     setOpenOrder(true);
   };

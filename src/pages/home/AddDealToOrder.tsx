@@ -41,7 +41,6 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 
   const dealSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     orderContext.addToOrder({
       deal: deal,
       type: 'deal',

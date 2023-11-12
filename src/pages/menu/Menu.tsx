@@ -42,9 +42,7 @@ export type TFlavor = {
 
 type MenuItemProps = {
   menuItem: IMenuItem;
-  setInitialValue: React.Dispatch<React.SetStateAction<string | undefined>>;
-  setMenuItem: React.Dispatch<React.SetStateAction<IMenuItem | null>>;
-  setOpenOrder: React.Dispatch<React.SetStateAction<boolean>>;
+  openAddToOrderHandler: (menuItem: IMenuItem) => void;
 };
 
 export const Menu = () => {
@@ -53,7 +51,23 @@ export const Menu = () => {
   const [menuItem, setMenuItem] = useState<IMenuItem | null>(null);
   const [openOrder, setOpenOrder] = useState<boolean>(false);
 
-  const closeHandler = () => {
+  const openAddToOrderHandler = (menuItem: IMenuItem) => {
+    setMenuItem(menuItem);
+    const selection = menuItem.sizes?.length
+      ? menuItem.sizes
+      : menuItem.flavors?.length
+      ? menuItem.flavors
+      : null;
+
+    if (selection?.length)
+      setInitialValue(
+        selection.find((selectionValue) => selectionValue.checked === true)!
+          .value
+      );
+    setOpenOrder(true);
+  };
+
+  const closeAddToOrderHandler = () => {
     setOpenOrder(false);
     setMenuItem(null);
   };
@@ -70,9 +84,7 @@ export const Menu = () => {
             menu.map((menuItem: IMenuItem) => (
               <MenuItem
                 menuItem={menuItem}
-                setInitialValue={setInitialValue}
-                setMenuItem={setMenuItem}
-                setOpenOrder={setOpenOrder}
+                openAddToOrderHandler={openAddToOrderHandler}
               />
             ))}
         </ul>
@@ -83,7 +95,7 @@ export const Menu = () => {
           menuItem={menuItem}
           setMenuItem={setMenuItem}
           initialValue={initialValue}
-          closeHandler={closeHandler}
+          closeHandler={closeAddToOrderHandler}
         />
       )}
     </>
@@ -91,7 +103,7 @@ export const Menu = () => {
 };
 
 const MenuItem = (props: MenuItemProps) => {
-  const { menuItem, setInitialValue, setMenuItem, setOpenOrder } = props;
+  const { menuItem, openAddToOrderHandler } = props;
   const [ID, setID] = useState<string>();
 
   //onClick of menu item, displays menu item description
@@ -101,21 +113,6 @@ const MenuItem = (props: MenuItemProps) => {
     } else {
       setID('');
     }
-  };
-
-  const openAddToOrderHandler = (menuItem: IMenuItem) => {
-    setMenuItem(menuItem);
-    const selection = menuItem.sizes?.length
-      ? menuItem.sizes
-      : menuItem.flavors?.length
-      ? menuItem.flavors
-      : null;
-    if (selection?.length)
-      setInitialValue(
-        selection.find((selectionValue) => selectionValue.checked === true)!
-          .value
-      );
-    setOpenOrder(true);
   };
 
   return (
