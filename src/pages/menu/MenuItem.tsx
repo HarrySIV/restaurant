@@ -36,7 +36,7 @@ export type TFlavor = {
 };
 
 export const MenuItem = () => {
-  const { data } = useFetch('/menu');
+  const menu = useFetch('/menu', 'items').data;
   const [ID, setID] = useState<string>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [menuItem, setMenuItem] = useState<IMenuItem | null>(null);
@@ -74,12 +74,12 @@ export const MenuItem = () => {
   //displays menu items when menu and menu.length exist... breaks otherwise.
   return (
     <>
-      {!data.length ? (
+      {!menu.length ? (
         <LoadingSpinner />
       ) : (
         <ul className="items">
-          {data.length &&
-            data.map((menuItem: IMenuItem) => {
+          {menu.length &&
+            menu.map((menuItem: IMenuItem) => {
               return (
                 <li key={menuItem._id} className="list-item">
                   <div className="li-inner">

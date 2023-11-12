@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useHttpClient } from './http-hook';
 import { environment } from './../../config/settings';
 
-export const useFetch = (url: string) => {
+export const useFetch = (url: string, dataName: string) => {
   const { sendRequest } = useHttpClient();
   const [data, setData] = useState<any[]>([]);
   const [message, setMessage] = useState<{ message: string }>();
@@ -11,12 +11,13 @@ export const useFetch = (url: string) => {
     const getData = async () => {
       try {
         const responseData = await sendRequest(`${environment.api}${url}`);
-        setData(responseData.deals);
+        console.log(responseData);
+        setData(responseData[`${dataName}`]);
         setMessage(responseData.message);
       } catch (error) {}
     };
     getData();
-  }, [sendRequest, url]);
+  }, [sendRequest, url, dataName]);
 
   return { data, message };
 };

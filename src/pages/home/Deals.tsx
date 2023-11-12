@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFetch } from '../../shared/hooks/useFetch';
-import { IMenuItem, useMenu } from '../../shared/hooks/database/menu-hook';
+import { IMenuItem } from '../../shared/hooks/database/menu-hook';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder } from './AddDealToOrder';
 
@@ -19,8 +19,8 @@ export type TItem = {
 };
 
 export const Deals: React.FC = () => {
-  const { data } = useFetch('/deals');
-  const { menu } = useMenu();
+  const deals = useFetch('/deals', 'deals').data;
+  const menu = useFetch('/menu', 'items').data;
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
   const [dealItems, setDealItems] = useState<IMenuItem[]>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
@@ -69,10 +69,10 @@ export const Deals: React.FC = () => {
     <>
       <h2 className="deal-text">DEALS</h2>
 
-      {!data.length && !menu.length ? (
+      {!deals.length && !menu.length ? (
         <LoadingSpinner />
       ) : (
-        data.map((deal) => (
+        deals.map((deal) => (
           <div className="deal" key={deal._id}>
             <img src={deal.img} alt={deal.name} className="deals-img" />
             <div
