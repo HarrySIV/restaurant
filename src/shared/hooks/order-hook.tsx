@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { IMenuItem } from './menu-hook';
-import { useHttpClient } from '../http-hook';
-import { useOrderContext } from '../orderContext/OrderContext';
-import { environment } from '../../../config/settings';
+import { IMenuItem } from '../../pages/menu/Menu';
+import { useHttpClient } from './http-hook';
+import { useOrderContext } from './orderContext/OrderContext';
+import { environment } from '../../config/settings';
 
 interface IOrder {
   customer_name: string;

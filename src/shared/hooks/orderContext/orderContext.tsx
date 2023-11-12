@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import { IDeal } from '../database/deal-hook';
-import { IMenuItem } from '../database/menu-hook';
+import { IDeal } from '../../../pages/home/Deals';
+import { IMenuItem } from '../../../pages/menu/Menu';
 import { orderReducer } from './orderReducer';
 
 export type TOrderSubmission =

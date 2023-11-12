@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useFetch } from '../../shared/hooks/useFetch';
-import { IMenuItem } from '../../shared/hooks/database/menu-hook';
+import { useFetch } from '../../shared/hooks/fetch-hook';
+import { IMenuItem } from '../menu/Menu';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder } from './AddDealToOrder';
 
@@ -19,8 +19,8 @@ export type TItem = {
 };
 
 export const Deals: React.FC = () => {
-  const deals = useFetch('/deals', 'deals').data;
-  const menu = useFetch('/menu', 'items').data;
+  const deals: IDeal[] = useFetch('/deals', 'deals').data;
+  const menu: IMenuItem[] = useFetch('/menu', 'items').data;
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
   const [dealItems, setDealItems] = useState<IMenuItem[]>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);

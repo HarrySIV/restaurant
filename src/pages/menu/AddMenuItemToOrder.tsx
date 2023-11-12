@@ -3,7 +3,7 @@ import { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { useForm } from '../../shared/hooks/form-hook';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
-import { IMenuItem, TItemOption } from '../../shared/hooks/database/menu-hook';
+import { IMenuItem, TItemOption } from './Menu';
 
 import { Modal } from '../../shared/elements/ui/Modal';
 import { Button } from '../../shared/elements/form/Button';

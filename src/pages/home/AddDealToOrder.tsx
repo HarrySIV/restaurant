@@ -2,11 +2,8 @@ import { useState, Dispatch, SetStateAction } from 'react';
 
 import { IDeal, TItem } from './Deals';
 import { useForm } from '../../shared/hooks/form-hook';
-import {
-  IMenuItem,
-  TItemOption,
-  useMenu,
-} from '../../shared/hooks/database/menu-hook';
+import { IMenuItem, TItemOption } from '../menu/Menu';
+import { useFetch } from '../../shared/hooks/fetch-hook';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
 import { Modal } from '../../shared/elements/ui/Modal';
@@ -88,7 +85,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 };
 
 const DealItemInputs = (props: DealItemInputsProps) => {
-  const { menu } = useMenu();
+  const menu: IMenuItem[] = useFetch('/menu', 'items').data;
   const { dealItem, initialValues, inputHandler, setQuantity } = props;
   const [menuItem, setMenuItem] = useState(
     menu.find((item) => item._id === dealItem.id.toString())
