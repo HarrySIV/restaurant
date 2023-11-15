@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { IDeal } from '../../shared/hooks/database/deal-hook';
-import { IMenuItem } from '../../shared/hooks/database/menu-hook';
+import { IDeal } from '../home/Deals'; 
+import { IMenuItem } from '../menu/Menu';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
 import './_order.scss';
@@ -21,20 +21,18 @@ export const Order = () => {
   const orderContext = useOrderContext();
   const { items, total } = orderContext;
 
-  if (items.length) {
-    return (
-      <div className="order-page">
-        {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
-        {items.length ? (
-          items.map((item) => item !== null && <Item item={item} />)
-        ) : (
-          <h1>
-            No items have been added to the order. Try ordering from our menu!
-          </h1>
-        )}
-      </div>
-    );
-  }
+  return (
+    <div className="order-page">
+      {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
+      {items.length ? (
+        items.map((item) => item !== null && <Item item={item} />)
+      ) : (
+        <h1>
+          No items have been added to the order. Try ordering from our menu!
+        </h1>
+      )}
+    </div>
+  );
 };
 
 const Item = (props: ItemProps) => {

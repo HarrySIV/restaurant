@@ -35,31 +35,45 @@ export const Deals: React.FC = () => {
       return deal.items.find((item) => item.id.toString() === menuItem._id);
     });
 
-    //find inital flavor/size value, if any ---possibly needs fixing
-    newItems.forEach((item) => {
-      if (item.flavors) {
+    deal.items.forEach((dealItem) => {
+      let newItem = menu.find(
+        (menuItem) => menuItem._id === dealItem.id.toString()
+      );
+      newItem = {
+        ...newItem,
+        id: dealItem.id,
+        quantity: dealItem.quantity,
+      };
+      if (!newItem) throw new Error('Deal item not found in menu');
+      if (newItem.flavors) {
         setInitialValues([
           ...initialValues,
           {
             type: 'flavor',
             value:
-              item.flavors.find((flavor) => flavor.checked)?.value || 'pepsi',
+              newItem.flavors.find((flavor) => flavor.checked)?.value ||
+              'pepsi',
           },
         ]);
       }
 
-      if (item.sizes) {
+      if (newItem.sizes) {
         setInitialValues([
           ...initialValues,
           {
             type: 'size',
-            value: item.sizes.find((size) => size.checked)?.value || 'medium',
+            value:
+              newItem.sizes.find((size) => size.checked)?.value || 'medium',
           },
         ]);
       }
+
+      setDealItems((previous) =>
+        previous ? [...previous, newItem] : [newItem]
+      );
     });
+
     setSelectedDeal(deal);
-    setDealItems(newItems);
     setOpenOrder(true);
   };
 

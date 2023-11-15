@@ -14,13 +14,17 @@ import { VALIDATOR_MIN, VALIDATOR_MAX } from '../../shared/util/validators';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
-  dealItems: IMenuItem[];
+  dealItems: TDealItem[];
   initialValues: { type: string; value: string }[];
   closeHandler: () => void;
 }
 
+type TDealItem = {
+  quantity: number;
+} & IMenuItem;
+
 type DealItemInputsProps = {
-  dealItem: TItem;
+  dealItem: TDealItem;
   id: string;
   initialValues: { type: string; value: string }[];
   inputHandler: (
@@ -87,7 +91,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
   const menu: IMenuItem[] = useFetch('/menu', 'items').data;
   const { dealItem, initialValues, inputHandler, setQuantity } = props;
   const [menuItem, setMenuItem] = useState(
-    menu.find((item) => item._id === dealItem.id.toString())
+    menu.find((item) => item._id === dealItem._id)
   );
   const [size, setSize] = useState<string>();
 
