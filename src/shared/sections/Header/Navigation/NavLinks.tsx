@@ -11,11 +11,11 @@ export const NavLinks = () => {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    setTotal(0);
-    items.forEach((item) => {
-      if (!item || !item.quantity) return;
-      setTotal((total) => total + item?.quantity);
-    });
+    setTotal(items.length);
+    // items.forEach((item) => {
+    //   if (!item || !item.quantity) return;
+    //   setTotal((total) => total + item?.quantity);
+    // });
   }, [items]);
 
   return (

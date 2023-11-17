@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFetch } from '../../shared/hooks/fetch-hook';
 import { IMenuItem } from '../menu/Menu';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
-import { AddDealToOrder } from './AddDealToOrder';
+import { AddDealToOrder, TDealItem } from './AddDealToOrder';
 
 export interface IDeal {
   name: string;
@@ -22,7 +22,7 @@ export const Deals: React.FC = () => {
   const deals: IDeal[] = useFetch('/deals', 'deals').data;
   const menu: IMenuItem[] = useFetch('/menu', 'items').data;
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
-  const [dealItems, setDealItems] = useState<IMenuItem[]>();
+  const [dealItems, setDealItems] = useState<TDealItem[]>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
   const [initialValues, setInitialValues] = useState<
     { type: string; value: string }[]
@@ -30,21 +30,12 @@ export const Deals: React.FC = () => {
 
   //deals
   const openAddToOrderHandler = (deal: IDeal) => {
-    //get menuItem and add quantity ---needs fixing
-    const newItems = menu.filter((menuItem) => {
-      return deal.items.find((item) => item.id.toString() === menuItem._id);
-    });
-
     deal.items.forEach((dealItem) => {
-      let newItem = menu.find(
-        (menuItem) => menuItem._id === dealItem.id.toString()
-      );
-      newItem = {
-        ...newItem,
-        id: dealItem.id,
+      let newItem: TDealItem | undefined = {
+        ...menu.find((menuItem) => menuItem._id === dealItem.id.toString())!,
         quantity: dealItem.quantity,
       };
-      if (!newItem) throw new Error('Deal item not found in menu');
+
       if (newItem.flavors) {
         setInitialValues([
           ...initialValues,
@@ -67,9 +58,8 @@ export const Deals: React.FC = () => {
           },
         ]);
       }
-
       setDealItems((previous) =>
-        previous ? [...previous, newItem] : [newItem]
+        previous ? [...previous, newItem!] : [newItem!]
       );
     });
 
@@ -79,6 +69,7 @@ export const Deals: React.FC = () => {
 
   const closeAddToOrderHandler = () => {
     setOpenOrder(false);
+    setDealItems([]);
     setInitialValues([]);
   };
 

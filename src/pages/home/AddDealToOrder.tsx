@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction } from 'react';
 
-import { IDeal, TItem } from './Deals';
+import { IDeal } from './Deals';
 import { useForm } from '../../shared/hooks/form-hook';
 import { IMenuItem, TItemOption } from '../menu/Menu';
 import { useFetch } from '../../shared/hooks/fetch-hook';
@@ -19,7 +19,7 @@ interface IAddDealToOrderProps {
   closeHandler: () => void;
 }
 
-type TDealItem = {
+export type TDealItem = {
   quantity: number;
 } & IMenuItem;
 
