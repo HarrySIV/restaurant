@@ -50,6 +50,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
       item: orderItems,
       quantity: 1,
       total: total,
+      type: 'deal',
     });
   };
 

@@ -5,7 +5,7 @@ import { orderReducer } from './orderReducer';
 export type TOrderSubmission = GenericOrderSubmisison &
   (
     | {
-        items: IMenuItem[];
+        item: IMenuItem[];
         type: 'deal';
       }
     | {
