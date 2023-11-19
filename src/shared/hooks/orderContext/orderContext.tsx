@@ -20,7 +20,7 @@ type GenericOrderSubmisison = {
 };
 
 export interface IOrderContext {
-  items: TOrderSubmission[] | null;
+  orderItems: TOrderSubmission[] | null;
   total: number;
   clearOrder: () => void;
   addToOrder: (orderSubmission: TOrderSubmission) => void;
@@ -90,7 +90,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const value: IOrderContext = {
-    items: order.items,
+    orderItems: order.items,
     total: order.total,
     addToOrder,
     deleteFromOrder,
@@ -105,7 +105,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 const initialOrderState: IOrderContext = {
-  items: [],
+  orderItems: [],
   total: 0,
   clearOrder: () => {},
   addToOrder: (orderSubmission = null) => {},
