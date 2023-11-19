@@ -1,53 +1,45 @@
 import React, { useState } from 'react';
-import { IDeal } from '../home/Deals'; 
-import { IMenuItem } from '../menu/Menu';
-import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
+import {
+  TOrderSubmission,
+  useOrderContext,
+} from '../../shared/hooks/orderContext/OrderContext';
 
 import './_order.scss';
 
-type ItemProps =
-  | {
-      item: IMenuItem;
-      quantity: number;
-      total: number;
-      type: 'menuItem';
-    }
-  | {
-      deal: IDeal;
-      type: 'deal';
-    };
+type ItemProps = TOrderSubmission;
 
 export const Order = () => {
   const orderContext = useOrderContext();
   const { items, total } = orderContext;
 
-  return (
-    <div className="order-page">
-      {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
-      {items.length ? (
-        items.map((item) => item !== null && <Item item={item} />)
-      ) : (
-        <h1>
-          No items have been added to the order. Try ordering from our menu!
-        </h1>
-      )}
-    </div>
-  );
+  if (items === null) {
+    <h1>No items have been added to the order. Try ordering from our menu!</h1>;
+  } else {
+    return (
+      <div className="order-page">
+        {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
+        {items.map((orderItem) => {
+          return <Item item={orderItem} />;
+        })}
+      </div>
+    );
+  }
 };
 
 const Item = (props: ItemProps) => {
-  const { item } = props;
+  const { item, quantity, total, type } = props;
   const [displayOptions, setDisplayOptions] = useState(false);
-  return (
+
+  const element = ({ item, quantity, total, type }: ItemProps) => (
     <div className="order-line-item-box">
-      <h1 className="order-line-item">({item.quantity})</h1>
-      {item.item?.sizes ? (
+      <h1 className="order-line-item">({quantity})</h1>
+      {item.sizes ? (
         <h1 className="order-line-item">
-          {item.item.sizes.find((size) => size.checked === true)?.value}
+          {item.sizes.find((size) => size.checked === true)?.value}
         </h1>
       ) : null}
-      <h1 className="order-line-item">{item.item?.name}</h1>
-      {item.item?.options ? (
+      <h1 className="order-line-item">{item.name}</h1>
+      {item.options ? (
         <div className="order-line-item-inner-box">
           <h1
             onMouseEnter={() => setDisplayOptions(true)}
@@ -56,13 +48,57 @@ const Item = (props: ItemProps) => {
             toppings
           </h1>
           <div className={`options-display ${displayOptions ? 'active' : ''}`}>
-            {item.item.options.map((option) =>
+            {item.options.map((option) =>
               option.checked === true ? <h3>{option.name}</h3> : null
             )}
           </div>
         </div>
       ) : null}
-      <h1 className="order-line-item">${item.total.toFixed(2)}</h1>
+      <h1 className="order-line-item">${total.toFixed(2)}</h1>
     </div>
   );
+
+  if (type === 'menuItem') {
+    return element({ item, quantity, total, type });
+  }
+
+  return (
+    <>
+      {item.map((dealItem) => {
+        return element(dealItem);
+      })}
+    </>
+  );
 };
+
+// const DealItem = (props: DealItemProps) => {
+//   const { item, quantity, total, type } = props;
+//   const [displayOptions, setDisplayOptions] = useState(false);
+//   return (
+//     {item.map((dealItem) => <div className="order-line-item-box">
+//       <h1 className="order-line-item">({quantity})</h1>
+//       {item.sizes ? (
+//         <h1 className="order-line-item">
+//           {item.sizes.find((size) => size.checked === true)?.value}
+//         </h1>
+//       ) : null}
+//       <h1 className="order-line-item">{item.name}</h1>
+//       {item.options ? (
+//         <div className="order-line-item-inner-box">
+//           <h1
+//             onMouseEnter={() => setDisplayOptions(true)}
+//             onMouseLeave={() => setDisplayOptions(false)}
+//           >
+//             toppings
+//           </h1>
+//           <div className={`options-display ${displayOptions ? 'active' : ''}`}>
+//             {item.options.map((option) =>
+//               option.checked === true ? <h3>{option.name}</h3> : null
+//             )}
+//           </div>
+//         </div>
+//       ) : null}
+//       <h1 className="order-line-item">${total.toFixed(2)}</h1>
+//     </div>)}
+//   );
+// };

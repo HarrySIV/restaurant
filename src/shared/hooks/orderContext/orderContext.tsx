@@ -1,23 +1,26 @@
 import React, { createContext, useContext, useReducer } from 'react';
-import { IDeal } from '../../../pages/home/Deals';
 import { IMenuItem } from '../../../pages/menu/Menu';
 import { orderReducer } from './orderReducer';
 
-export type TOrderSubmission =
-  | {
-      item: IMenuItem;
-      quantity: number;
-      total: number;
-      type: 'menuItem';
-    }
-  | {
-      deal: IDeal;
-      type: 'deal';
-    }
-  | null;
+export type TOrderSubmission = GenericOrderSubmisison &
+  (
+    | {
+        items: IMenuItem[];
+        type: 'deal';
+      }
+    | {
+        item: IMenuItem;
+        type: 'menuItem';
+      }
+  );
+
+type GenericOrderSubmisison = {
+  quantity: number;
+  total: number;
+};
 
 export interface IOrderContext {
-  items: TOrderSubmission[];
+  items: TOrderSubmission[] | null;
   total: number;
   clearOrder: () => void;
   addToOrder: (orderSubmission: TOrderSubmission) => void;
@@ -32,22 +35,10 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const addToOrder = (orderSubmission: TOrderSubmission) => {
     if (orderSubmission === null) return;
 
-    if (orderSubmission.type === 'menuItem') {
-      const { item, quantity, total, type } = orderSubmission;
-      const newItem = { item, quantity, total, type };
-      updatePrice(total);
-      dispatch({ type: 'ADD_ITEM', newItem: newItem, total: order.total });
-    }
-
-    if (orderSubmission.type === 'deal') {
-      const { deal, type } = orderSubmission;
-      updatePrice(deal.total);
-      dispatch({
-        type: 'ADD_ITEM',
-        newItem: { deal, type },
-        total: order.total,
-      });
-    }
+    const { item, quantity, total } = orderSubmission;
+    const newItem = { item, quantity, total };
+    updatePrice(total);
+    dispatch({ type: 'ADD_ITEM', newItem: newItem, total: order.total });
   };
 
   /* returns new array without item submitted */

@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react';
+import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 
 import { IDeal } from './Deals';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -19,9 +19,7 @@ interface IAddDealToOrderProps {
   closeHandler: () => void;
 }
 
-export type TDealItem = {
-  quantity: number;
-} & IMenuItem;
+export type TDealItem = IMenuItem;
 
 type DealItemInputsProps = {
   dealItem: TDealItem;
@@ -32,7 +30,9 @@ type DealItemInputsProps = {
     userInputValue: string,
     userInputIsValid: boolean
   ) => void;
+  orderItems: TDealItem[];
   quantity: number;
+  setOrderItems: Dispatch<SetStateAction<TDealItem[]>>;
   setQuantity: Dispatch<SetStateAction<number>>;
 };
 
@@ -42,12 +42,14 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
   const [formState, inputHandler] = useForm({}, true);
   const [total, setTotal] = useState(deal.total);
   const [quantity, setQuantity] = useState(1);
+  const [orderItems, setOrderItems] = useState(dealItems);
 
   const dealSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     orderContext.addToOrder({
-      deal: deal,
-      type: 'deal',
+      item: orderItems,
+      quantity: 1,
+      total: total,
     });
   };
 
@@ -65,6 +67,8 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
                     id={`${deal._id}`}
                     initialValues={initialValues}
                     inputHandler={inputHandler}
+                    orderItems={orderItems}
+                    setOrderItems={setOrderItems}
                     // totalHandler={totalHandler}
                     quantity={quantity}
                     setQuantity={setQuantity}
@@ -89,11 +93,28 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 
 const DealItemInputs = (props: DealItemInputsProps) => {
   const menu: IMenuItem[] = useFetch('/menu', 'items').data;
-  const { dealItem, initialValues, inputHandler, setQuantity } = props;
+  const {
+    dealItem,
+    initialValues,
+    inputHandler,
+    orderItems,
+    setOrderItems,
+    setQuantity,
+  } = props;
   const [menuItem, setMenuItem] = useState(
-    menu.find((item) => item._id === dealItem._id)
+    menu.find((item) => item._id === dealItem._id)!
   );
   const [size, setSize] = useState<string>();
+
+  useEffect(() => {
+    //whenever menuItem changes, update the corresponding orderItem
+    const newItems = orderItems.map((orderItem) => {
+      if (orderItem._id !== dealItem._id) {
+        return orderItem;
+      } else return menuItem;
+    });
+    setOrderItems(newItems);
+  }, [orderItems, menuItem, setOrderItems, dealItem._id]);
 
   if (!menuItem) return <h1>No menu item found</h1>;
 
