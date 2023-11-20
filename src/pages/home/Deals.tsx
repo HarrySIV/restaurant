@@ -33,7 +33,6 @@ export const Deals: React.FC = () => {
     deal.items.forEach((dealItem) => {
       let newItem: TDealItem | undefined = {
         ...menu.find((menuItem) => menuItem._id === dealItem.id.toString())!,
-        quantity: dealItem.quantity,
       };
 
       if (newItem.flavors) {

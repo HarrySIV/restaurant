@@ -23,17 +23,21 @@ export const Order = () => {
   const { orderItems, total } = orderContext;
 
   if (orderItems === null) {
-    <h1>No items have been added to the order. Try ordering from our menu!</h1>;
-  } else {
     return (
-      <div className="order-page">
-        {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
-        {orderItems.map((orderItem) => {
-          return <Item orderItem={orderItem} />;
-        })}
-      </div>
+      <h1>
+        No items have been added to the order. Try ordering from our menu!
+      </h1>
     );
   }
+
+  return (
+    <div className="order-page">
+      {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
+      {orderItems.map((orderItem) => {
+        return <Item orderItem={orderItem} />;
+      })}
+    </div>
+  );
 };
 
 const Item = (props: ItemProps) => {

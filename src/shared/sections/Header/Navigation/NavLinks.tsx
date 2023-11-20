@@ -7,16 +7,17 @@ import { useOrderContext } from '../../../hooks/orderContext/OrderContext';
 
 export const NavLinks = () => {
   const orderContext = useOrderContext();
-  const { items } = orderContext;
+  const { orderItems } = orderContext;
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    setTotal(items.length);
+    if (orderItems === null) return;
+    setTotal(orderItems.length);
     // items.forEach((item) => {
     //   if (!item || !item.quantity) return;
     //   setTotal((total) => total + item?.quantity);
     // });
-  }, [items]);
+  }, [orderItems]);
 
   return (
     <ul className="nav-links">

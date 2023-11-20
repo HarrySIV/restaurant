@@ -25,11 +25,12 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
   orderReducerState,
   orderReducerAction
 ) => {
+  if (!orderReducerState.orderItems) return orderReducerState;
   switch (orderReducerAction.type) {
     case 'ADD_ITEM':
       return {
         ...orderReducerState,
-        items: [...orderReducerState.items, orderReducerAction.newItem],
+        items: [...orderReducerState.orderItems, orderReducerAction.newItem],
         total: orderReducerAction.total + orderReducerState.total,
       };
     case 'REMOVE_ITEM':

@@ -23,26 +23,26 @@ export interface IOrderContext {
   orderItems: TOrderSubmission[] | null;
   total: number;
   clearOrder: () => void;
-  addToOrder: (orderSubmission: TOrderSubmission) => void;
-  updateItemQuantity: (orderSubmission: TOrderSubmission) => void;
-  deleteFromOrder: (orderSubmission: TOrderSubmission) => void;
+  addToOrder: (orderSubmission: TOrderSubmission | null) => void;
+  updateItemQuantity: (orderSubmission: TOrderSubmission | null) => void;
+  deleteFromOrder: (orderSubmission: TOrderSubmission | null) => void;
   updatePrice: (total: number) => void;
 }
 
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
 
-  const addToOrder = (orderSubmission: TOrderSubmission) => {
+  const addToOrder = (orderSubmission: TOrderSubmission | null) => {
     if (orderSubmission === null) return;
 
-    const { item, quantity, total } = orderSubmission;
-    const newItem = { item, quantity, total };
+    const { item, quantity, total, type } = orderSubmission;
+    const newItem = { item, quantity, total, type } as TOrderSubmission;
     updatePrice(total);
     dispatch({ type: 'ADD_ITEM', newItem: newItem, total: order.total });
   };
 
   /* returns new array without item submitted */
-  const deleteFromOrder = (orderSubmission: TOrderSubmission) => {
+  const deleteFromOrder = (orderSubmission: TOrderSubmission | null) => {
     // if (orderSubmission === null) return;
     // if (orderSubmission.type === 'menuItem') {
     //   const { item, total } = orderSubmission;
@@ -61,7 +61,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   /* finds item within order and returns new item. current logic is super wrong*/
-  const updateItemQuantity = (orderSubmission: TOrderSubmission) => {
+  const updateItemQuantity = (orderSubmission: TOrderSubmission | null) => {
     // if (orderSubmission === null) return;
     // const { item, total } = orderSubmission;
     // const newOrder = {
@@ -90,7 +90,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const value: IOrderContext = {
-    orderItems: order.items,
+    orderItems: order.orderItems,
     total: order.total,
     addToOrder,
     deleteFromOrder,
