@@ -93,7 +93,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 };
 
 const DealItemInputs = (props: DealItemInputsProps) => {
-  const menu: IMenuItem[] = useFetch('/menu', 'items').data;
+  const menu: IMenuItem[] | undefined = useFetch('/menu', 'items').data;
   const {
     dealItem,
     initialValues,
@@ -102,20 +102,22 @@ const DealItemInputs = (props: DealItemInputsProps) => {
     setOrderItems,
     setQuantity,
   } = props;
-  const [menuItem, setMenuItem] = useState(
-    menu.find((item) => item._id === dealItem._id)!
-  );
+  const [menuItem, setMenuItem] = useState<IMenuItem>();
   const [size, setSize] = useState<string>();
 
   useEffect(() => {
     //whenever menuItem changes, update the corresponding orderItem
     const newItems = orderItems.map((orderItem) => {
-      if (orderItem._id !== dealItem._id) {
-        return orderItem;
-      } else return menuItem;
+      if (orderItem._id === dealItem._id) return dealItem;
+      return orderItem;
     });
     setOrderItems(newItems);
-  }, [orderItems, menuItem, setOrderItems, dealItem._id]);
+  }, [orderItems, setOrderItems, dealItem, menu]);
+
+  useEffect(() => {
+    if (!menu) return;
+    setMenuItem(menu.find((item) => item._id === dealItem._id)!);
+  }, [dealItem._id, menu]);
 
   if (!menuItem) return <h1>No menu item found</h1>;
 
