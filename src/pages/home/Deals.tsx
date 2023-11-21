@@ -79,8 +79,8 @@ export const Deals: React.FC = () => {
       {!deals.length && !menu.length ? (
         <LoadingSpinner />
       ) : (
-        deals.map((deal) => (
-          <div className="deal" key={deal._id}>
+        deals.map((deal, index) => (
+          <div className="deal" key={index}>
             <img src={deal.img} alt={deal.name} className="deals-img" />
             <div
               className="deals-backdrop"

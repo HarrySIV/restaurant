@@ -15,6 +15,7 @@ type ElementProps = {
 };
 
 type ItemProps = {
+  key: number;
   orderItem: TOrderSubmission;
 };
 
@@ -33,8 +34,8 @@ export const Order = () => {
   return (
     <div className="order-page">
       {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
-      {orderItems.map((orderItem) => {
-        return <Item orderItem={orderItem} />;
+      {orderItems.map((orderItem, index) => {
+        return <Item orderItem={orderItem} key={index} />;
       })}
     </div>
   );
@@ -45,7 +46,7 @@ const Item = (props: ItemProps) => {
   const [displayOptions, setDisplayOptions] = useState(false);
 
   const element = ({ item, quantity, total }: ElementProps) => (
-    <div className="order-line-item-box">
+    <div className="order-line-item-box" key={props.key}>
       <h1 className="order-line-item">({quantity})</h1>
       {item.sizes ? (
         <h1 className="order-line-item">

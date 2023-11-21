@@ -60,8 +60,8 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
         <fieldset>
           {deal && (
             <>
-              {dealItems.map((dealItem) => (
-                <div key={deal._id}>
+              {dealItems.map((dealItem, index) => (
+                <div key={index}>
                   <legend>{deal.name}</legend>
                   <DealItemInputs
                     dealItem={dealItem}
@@ -105,14 +105,18 @@ const DealItemInputs = (props: DealItemInputsProps) => {
   const [menuItem, setMenuItem] = useState<IMenuItem>();
   const [size, setSize] = useState<string>();
 
+  //whenever menuItem changes, update the corresponding orderItem
   useEffect(() => {
-    //whenever menuItem changes, update the corresponding orderItem
-    const newItems = orderItems.map((orderItem) => {
-      if (orderItem._id === dealItem._id) return dealItem;
-      return orderItem;
-    });
-    setOrderItems(newItems);
-  }, [orderItems, setOrderItems, dealItem, menu]);
+    const updateItemState = () => {
+      const newItems = orderItems.map((orderItem) => {
+        if (orderItem._id === dealItem._id) return dealItem;
+        return orderItem;
+      });
+      setOrderItems(newItems);
+      console.log(newItems);
+    };
+    updateItemState();
+  }, [dealItem]);
 
   useEffect(() => {
     if (!menu) return;
