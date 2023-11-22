@@ -90,11 +90,11 @@ export const Menu = () => {
         </ul>
       )}
 
-      {openOrder && menuItem && initialValue && (
+      {openOrder && menuItem !== null && (
         <AddMenuItemToOrder
           menuItem={menuItem}
           setMenuItem={setMenuItem}
-          initialValue={initialValue}
+          initialValue={initialValue ? initialValue : ''}
           closeHandler={closeAddToOrderHandler}
         />
       )}

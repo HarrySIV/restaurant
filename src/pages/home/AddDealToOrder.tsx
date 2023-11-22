@@ -52,7 +52,15 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 
   return (
     <Modal header="Add to Order" closeHandler={closeHandler}>
-      <form className="order-form" onSubmit={dealSubmitHandler}>
+      <form
+        className="order-form"
+        style={{
+          overflowY: 'scroll',
+          minHeight: 'fitContent',
+          maxHeight: '60vh',
+        }}
+        onSubmit={dealSubmitHandler}
+      >
         <fieldset>
           {deal && (
             <>
