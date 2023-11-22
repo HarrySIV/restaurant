@@ -12,6 +12,7 @@ import { ErrorPage } from './pages/ErrorPage';
 import { SiteMap } from './shared/sections/SiteMap';
 import { MainHeader } from './shared/sections/header/MainHeader';
 import { OrderProvider } from './shared/hooks/orderContext/OrderContext';
+import { MenuProvider } from './shared/hooks/menuContext/MenuContext';
 
 export function App() {
   const routes = (
@@ -30,10 +31,12 @@ export function App() {
     <BrowserRouter>
       <div className="body">
         <div className="main-wrapper">
-          <OrderProvider>
-            <MainHeader />
-            <main>{routes}</main>
-          </OrderProvider>
+          <MenuProvider>
+            <OrderProvider>
+              <MainHeader />
+              <main>{routes}</main>
+            </OrderProvider>
+          </MenuProvider>
         </div>
         <SiteMap />
       </div>

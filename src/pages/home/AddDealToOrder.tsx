@@ -3,14 +3,13 @@ import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { IDeal } from './Deals';
 import { useForm } from '../../shared/hooks/form-hook';
 import { IMenuItem, TItemOption } from '../menu/Menu';
-import { useFetch } from '../../shared/hooks/fetch-hook';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
 import { Modal } from '../../shared/elements/ui/Modal';
 import { Button } from '../../shared/elements/form/Button';
 import { Input } from '../../shared/elements/form/Input';
 
-import { VALIDATOR_MIN, VALIDATOR_MAX } from '../../shared/util/validators';
+import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
@@ -31,17 +30,13 @@ type DealItemInputsProps = {
     userInputIsValid: boolean
   ) => void;
   orderItems: TDealItem[];
-  quantity: number;
   setOrderItems: Dispatch<SetStateAction<TDealItem[]>>;
-  setQuantity: Dispatch<SetStateAction<number>>;
 };
 
 export const AddDealToOrder = (props: IAddDealToOrderProps) => {
   const { deal, dealItems, initialValues, closeHandler } = props;
   const orderContext = useOrderContext();
   const [formState, inputHandler] = useForm({}, true);
-  const [total, setTotal] = useState(deal.total);
-  const [quantity, setQuantity] = useState(1);
   const [orderItems, setOrderItems] = useState(dealItems);
 
   const dealSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -49,9 +44,10 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
     orderContext.addToOrder({
       item: orderItems,
       quantity: 1,
-      total: total,
+      total: deal.total,
       type: 'deal',
     });
+    closeHandler();
   };
 
   return (
@@ -62,7 +58,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
             <>
               {dealItems.map((dealItem, index) => (
                 <div key={index}>
-                  <legend>{deal.name}</legend>
+                  <legend>{dealItem.name}</legend>
                   <DealItemInputs
                     dealItem={dealItem}
                     id={`${deal._id}`}
@@ -71,13 +67,11 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
                     orderItems={orderItems}
                     setOrderItems={setOrderItems}
                     // totalHandler={totalHandler}
-                    quantity={quantity}
-                    setQuantity={setQuantity}
                   />
-                  <h2>${total.toFixed(2)}</h2>
                   <hr />
                 </div>
               ))}
+              <h2>${deal.total.toFixed(2)}</h2>
             </>
           )}
         </fieldset>
@@ -93,17 +87,10 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
 };
 
 const DealItemInputs = (props: DealItemInputsProps) => {
-  const menu: IMenuItem[] | undefined = useFetch('/menu', 'items').data;
-  const {
-    dealItem,
-    initialValues,
-    inputHandler,
-    orderItems,
-    setOrderItems,
-    setQuantity,
-  } = props;
+  const menu = useMenuContext();
+  const { dealItem, initialValues, inputHandler, orderItems, setOrderItems } =
+    props;
   const [menuItem, setMenuItem] = useState<IMenuItem>();
-  const [size, setSize] = useState<string>();
 
   //whenever menuItem changes, update the corresponding orderItem
   useEffect(() => {
@@ -113,7 +100,6 @@ const DealItemInputs = (props: DealItemInputsProps) => {
         return orderItem;
       });
       setOrderItems(newItems);
-      console.log(newItems);
     };
     updateItemState();
   }, [dealItem]);
@@ -138,9 +124,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
     setMenuItem(newItem);
   };
 
-  const sizeHandler = (event: any) => {
-    setSize(event.target.value);
-  };
+  const sizeHandler = (event: any) => {};
 
   return (
     <>
@@ -152,7 +136,10 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           label="Size:"
           selection={menuItem?.sizes}
           onInput={inputHandler}
-          initialValue={size!}
+          initialValue={
+            initialValues.find((initialValue) => initialValue.type === 'size')
+              ?.value!
+          }
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={true}
@@ -167,7 +154,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           selection={menuItem.flavors}
           onInput={inputHandler}
           initialValue={
-            initialValues.find((value) => value.type === 'flavor')!.value
+            initialValues.find((value) => value.type === 'flavor')?.value!
           }
           errorText="Please pick a valid flavor"
         />
@@ -188,18 +175,6 @@ const DealItemInputs = (props: DealItemInputsProps) => {
             />
           ))
         : null}
-      <Input
-        id="quanity"
-        element="number"
-        errorText="You must add at least 1 item"
-        initialValue={'1'}
-        label="Quantity:"
-        onInput={inputHandler}
-        setQuantity={setQuantity}
-        type="number"
-        validators={[VALIDATOR_MIN(1)]}
-        disabled={true}
-      />
       <Input
         id="_id"
         element="text"

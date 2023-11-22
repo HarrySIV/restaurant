@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useFetch } from '../../shared/hooks/fetch-hook';
-import { IMenuItem } from '../menu/Menu';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder, TDealItem } from './AddDealToOrder';
+import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
+import { useFetch } from './../../shared/hooks/fetch-hook';
 
 export interface IDeal {
   name: string;
@@ -14,13 +14,12 @@ export interface IDeal {
 
 export type TItem = {
   id: number;
-  quantity: number;
   size?: string;
 };
 
 export const Deals: React.FC = () => {
+  const menu = useMenuContext();
   const deals: IDeal[] = useFetch('/deals', 'deals').data;
-  const menu: IMenuItem[] = useFetch('/menu', 'items').data;
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
   const [dealItems, setDealItems] = useState<TDealItem[]>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
@@ -30,30 +29,31 @@ export const Deals: React.FC = () => {
 
   //deals
   const openAddToOrderHandler = (deal: IDeal) => {
-    deal.items.forEach((dealItem) => {
-      let newItem: TDealItem | undefined = {
-        ...menu.find((menuItem) => menuItem._id === dealItem.id.toString())!,
-      };
+    if (initialValues.length > 0) return;
 
-      if (newItem.flavors) {
-        setInitialValues([
-          ...initialValues,
+    deal.items.forEach((dealItem) => {
+      let newItem = menu.find(
+        (menuItem) => menuItem._id === dealItem.id.toString()
+      )!;
+
+      if (newItem.flavors && newItem.flavors.length > 0) {
+        setInitialValues((previousValues) => [
+          ...previousValues,
           {
             type: 'flavor',
             value:
-              newItem.flavors.find((flavor) => flavor.checked)?.value ||
+              newItem.flavors!.find((flavor) => flavor.checked)?.value ||
               'pepsi',
           },
         ]);
       }
 
-      if (newItem.sizes) {
-        setInitialValues([
-          ...initialValues,
+      if (newItem.sizes && newItem.sizes.length > 0) {
+        setInitialValues((previousValues) => [
+          ...previousValues,
           {
             type: 'size',
-            value:
-              newItem.sizes.find((size) => size.checked)?.value || 'medium',
+            value: dealItem.size || 'medium',
           },
         ]);
       }

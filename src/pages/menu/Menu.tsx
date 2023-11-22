@@ -6,10 +6,10 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { AddMenuItemToOrder } from './AddMenuItemToOrder';
 
 import { Button } from '../../shared/elements/form/Button';
-import { useFetch } from '../../shared/hooks/fetch-hook';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 
 import './_menu.scss';
+import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
 
 export interface IMenuItem {
   name: string;
@@ -46,7 +46,7 @@ type MenuItemProps = {
 };
 
 export const Menu = () => {
-  const menu: IMenuItem[] = useFetch('/menu', 'items').data;
+  const menu = useMenuContext();
   const [initialValue, setInitialValue] = useState<string>();
   const [menuItem, setMenuItem] = useState<IMenuItem | null>(null);
   const [openOrder, setOpenOrder] = useState<boolean>(false);
