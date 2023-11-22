@@ -196,7 +196,11 @@ export const Input = (props: InputProps) => {
     >
       {props.selection &&
         props.selection.map((selection) => (
-          <option value={selection.value} id={selection.id} key={selection.id}>
+          <option
+            value={selection.value.toLowerCase()}
+            id={selection.id}
+            key={selection.id}
+          >
             {selection.value}
           </option>
         ))}

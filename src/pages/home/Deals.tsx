@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 import { AddDealToOrder, TDealItem } from './AddDealToOrder';
 import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
@@ -17,7 +17,7 @@ export type TItem = {
   size?: string;
 };
 
-export const Deals: React.FC = () => {
+export const Deals = () => {
   const menu = useMenuContext();
   const deals: IDeal[] = useFetch('/deals', 'deals').data;
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
