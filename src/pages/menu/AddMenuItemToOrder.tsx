@@ -17,16 +17,16 @@ import '../_AddToOrder.scss';
 
 interface IAddMenuItemToOrderProps {
   closeHandler: () => void;
-  initialFlavorValue: TFlavorValue;
-  initialSizeValue: TSizeValue;
+  initialFlavorValue: TFlavorValue | null;
+  initialSizeValue: TSizeValue | null;
   menuItem: IMenuItem;
   setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
 }
 
 type MenuItemInputsProps = {
   id: string;
-  initialFlavorValue: TFlavorValue;
-  initialSizeValue: TSizeValue;
+  initialFlavorValue: TFlavorValue | null;
+  initialSizeValue: TSizeValue | null;
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -128,7 +128,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
     menuItem.options.forEach((option) => {
       if (option.checked) optionsTotal += option.price;
     });
-    if (menuItem.sizes?.length) {
+    if (size && menuItem.sizes) {
       const itemPrice = menuItem.sizes.find(
         (itemSize) => itemSize.value.toLowerCase() === size.toLowerCase()
       )!.price;
@@ -164,7 +164,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
 
   return (
     <>
-      {initialSizeValue && (
+      {initialSizeValue && menuItem.sizes && (
         <Input
           id="size"
           element="select"
@@ -172,13 +172,13 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           label="Size:"
           selection={menuItem?.sizes}
           onInput={inputHandler}
-          initialSizeValue={initialSizeValue}
+          initialValue={initialSizeValue}
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={disabled}
         />
       )}
-      {initialFlavorValue && (
+      {initialFlavorValue && menuItem.flavors && (
         <Input
           id="flavor"
           element="select"

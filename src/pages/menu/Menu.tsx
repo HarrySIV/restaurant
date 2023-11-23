@@ -95,8 +95,8 @@ export const Menu = () => {
         <AddMenuItemToOrder
           menuItem={menuItem}
           setMenuItem={setMenuItem}
-          initiaSizeValue={initialSizeValue}
-          initiaFlavorValue={initialFlavorValue}
+          initialSizeValue={initialSizeValue}
+          initialFlavorValue={initialFlavorValue}
           closeHandler={closeAddToOrderHandler}
         />
       )}
