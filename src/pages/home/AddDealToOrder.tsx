@@ -10,7 +10,7 @@ import { Button } from '../../shared/elements/form/Button';
 import { Input } from '../../shared/elements/form/Input';
 
 import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
-import { TItemOption } from '../../types/OptionTypes';
+import { TFlavorValue, TItemOption } from '../../types/OptionTypes';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
@@ -100,6 +100,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
   const { dealItem, initialValues, inputHandler, orderItems, setOrderItems } =
     props;
   const [menuItem, setMenuItem] = useState<IMenuItem>();
+  const [flavor, setFlavor] = useState<TFlavorValue | null>(initialFlavorValue);
 
   //whenever menuItem changes, update the corresponding orderItem
   useEffect(() => {
@@ -134,6 +135,9 @@ const DealItemInputs = (props: DealItemInputsProps) => {
   };
 
   const sizeHandler = (event: any) => {};
+  const flavorHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFlavor(event.target.value as TFlavorValue);
+  };
 
   return (
     <>
@@ -165,6 +169,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           initialValue={
             initialValues.find((value) => value.type === 'flavor')?.value!
           }
+          flavorHandler={flavorHandler}
           errorText="Please pick a valid flavor"
         />
       )}

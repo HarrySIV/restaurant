@@ -118,8 +118,8 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
     setQuantity,
     totalHandler,
   } = props;
-  const [size, setSize] = useState(initialSizeValue);
-  const [flavor, setFlavor] = useState(initialFlavorValue);
+  const [size, setSize] = useState<TSizeValue | null>(initialSizeValue);
+  const [flavor, setFlavor] = useState<TFlavorValue | null>(initialFlavorValue);
 
   //handles the price of each item to update with quantity changes
   useEffect(() => {
@@ -162,9 +162,12 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
     setSize(event.target.value as TSizeValue);
   };
 
+  const flavorHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFlavor(event.target.value as TFlavorValue);
+  };
   return (
     <>
-      {initialSizeValue && menuItem.sizes && (
+      {size && menuItem.sizes && (
         <Input
           id="size"
           element="select"
@@ -172,13 +175,13 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           label="Size:"
           selection={menuItem?.sizes}
           onInput={inputHandler}
-          initialValue={initialSizeValue}
+          initialValue={size}
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={disabled}
         />
       )}
-      {initialFlavorValue && menuItem.flavors && (
+      {flavor && menuItem.flavors && (
         <Input
           id="flavor"
           element="select"
@@ -186,7 +189,8 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           label="Flavor:"
           selection={menuItem.flavors}
           onInput={inputHandler}
-          initialValue={initialFlavorValue}
+          initialValue={flavor}
+          flavorHandler={flavorHandler}
           errorText="Please pick a valid flavor"
           disabled={false}
         />

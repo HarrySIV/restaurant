@@ -63,6 +63,7 @@ type SelectElementProps = GenericInputElementProps & {
   selection: TSelection[];
   initialValue: TFlavorValue | TSizeValue;
   disabled?: boolean;
+  flavorHandler?: (event: any) => void;
   sizeHandler?: (event: any) => void;
 };
 

@@ -74,6 +74,9 @@ export const Input = (props: InputProps) => {
       if (props.type === 'select' && props.sizeHandler) {
         props.sizeHandler(event);
       }
+      if (props.type === 'select' && props.flavorHandler) {
+        props.flavorHandler(event);
+      }
       dispatch({
         type: 'CHANGE',
         userActionValue: event.target.value,
