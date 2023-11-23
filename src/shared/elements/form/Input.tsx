@@ -1,5 +1,5 @@
 import React, { useState, useReducer, useEffect, Reducer } from 'react';
-import { TFlavor, TSize, TItemOption } from '../../../pages/menu/Menu';
+import { TFlavor, TItemOption, TSize } from '../../../types/OptionTypes';
 import { validate } from '../../util/validators';
 
 import './_input.scss';

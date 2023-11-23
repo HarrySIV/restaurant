@@ -10,6 +10,13 @@ import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 
 import './_menu.scss';
 import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
+import {
+  TItemOption,
+  TSize,
+  TFlavor,
+  TSizeValue,
+  TFlavorValue,
+} from '../../types/OptionTypes';
 
 export interface IMenuItem {
   name: string;
@@ -22,24 +29,6 @@ export interface IMenuItem {
   flavors?: TFlavor[];
 }
 
-export type TItemOption = { name: string; price: number; checked: boolean };
-
-export type TSize = {
-  id: string;
-  value: string;
-  isValid: boolean;
-  price: number;
-  inches: number;
-  checked: boolean;
-};
-
-export type TFlavor = {
-  id: string;
-  value: string;
-  isValid: boolean;
-  checked: boolean;
-};
-
 type MenuItemProps = {
   menuItem: IMenuItem;
   openAddToOrderHandler: (menuItem: IMenuItem) => void;
@@ -47,28 +36,40 @@ type MenuItemProps = {
 
 export const Menu = () => {
   const menu = useMenuContext();
-  const [initialValue, setInitialValue] = useState<string>();
+  const [initialSizeValue, setInitialSizeValue] = useState<TSizeValue | null>(
+    null
+  );
+  const [initialFlavorValue, setInitialFlavorValue] =
+    useState<TFlavorValue | null>(null);
   const [menuItem, setMenuItem] = useState<IMenuItem | null>(null);
   const [openOrder, setOpenOrder] = useState<boolean>(false);
 
   const openAddToOrderHandler = (menuItem: IMenuItem) => {
     setMenuItem(menuItem);
-    const selection = menuItem.sizes?.length
-      ? menuItem.sizes
-      : menuItem.flavors?.length
-      ? menuItem.flavors
-      : null;
+    const sizeSelection = menuItem.sizes?.length ? menuItem.sizes : null;
+    const flavorSelection = menuItem.flavors?.length ? menuItem.flavors : null;
 
-    if (selection?.length)
-      setInitialValue(
-        selection.find((selectionValue) => selectionValue.checked === true)!
-          .value
+    if (flavorSelection) {
+      setInitialFlavorValue(
+        flavorSelection.find(
+          (selectionValue: TFlavor) => selectionValue.checked === true
+        )!.id
       );
+    }
+    if (sizeSelection) {
+      setInitialSizeValue(
+        sizeSelection.find(
+          (selectionValue: TSize) => selectionValue.checked === true
+        )!.id
+      );
+    }
     setOpenOrder(true);
   };
 
   const closeAddToOrderHandler = () => {
     setOpenOrder(false);
+    setInitialFlavorValue(null);
+    setInitialSizeValue(null);
     setMenuItem(null);
   };
 
@@ -94,7 +95,8 @@ export const Menu = () => {
         <AddMenuItemToOrder
           menuItem={menuItem}
           setMenuItem={setMenuItem}
-          initialValue={initialValue ? initialValue : ''}
+          initiaSizeValue={initialSizeValue}
+          initiaFlavorValue={initialFlavorValue}
           closeHandler={closeAddToOrderHandler}
         />
       )}

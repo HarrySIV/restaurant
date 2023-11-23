@@ -1,9 +1,11 @@
-import { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
+
+import { TFlavorValue, TItemOption, TSizeValue } from '../../types/OptionTypes';
 
 import { useForm } from '../../shared/hooks/form-hook';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
-import { IMenuItem, TItemOption } from './Menu';
+import { IMenuItem } from './Menu';
 
 import { Modal } from '../../shared/elements/ui/Modal';
 import { Button } from '../../shared/elements/form/Button';
@@ -15,14 +17,16 @@ import '../_AddToOrder.scss';
 
 interface IAddMenuItemToOrderProps {
   closeHandler: () => void;
-  initialValue: string;
+  initialFlavorValue: TFlavorValue;
+  initialSizeValue: TSizeValue;
   menuItem: IMenuItem;
   setMenuItem: Dispatch<SetStateAction<IMenuItem | null>>;
 }
 
 type MenuItemInputsProps = {
   id: string;
-  initialValue: string;
+  initialFlavorValue: TFlavorValue;
+  initialSizeValue: TSizeValue;
   inputHandler: (
     id: string,
     userInputValue: string,
@@ -37,7 +41,13 @@ type MenuItemInputsProps = {
 };
 
 export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
-  const { closeHandler, initialValue, menuItem, setMenuItem } = props;
+  const {
+    closeHandler,
+    initialFlavorValue,
+    initialSizeValue,
+    menuItem,
+    setMenuItem,
+  } = props;
   const orderContext = useOrderContext();
   const [formState, inputHandler] = useForm({}, true);
   const [total, setTotal] = useState(menuItem.price);
@@ -64,7 +74,7 @@ export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
     <Modal header="Add to Order" closeHandler={closeHandler}>
       <form className="order-form" onSubmit={itemSubmitHandler}>
         <fieldset>
-          {menuItem && initialValue && (
+          {menuItem && (
             <div key={menuItem._id}>
               <legend>{menuItem.name}</legend>
               <MenuItemInputs
@@ -73,7 +83,8 @@ export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
                 setMenuItem={setMenuItem}
                 inputHandler={inputHandler}
                 totalHandler={totalHandler}
-                initialValue={initialValue}
+                initialFlavorValue={initialFlavorValue}
+                initialSizeValue={initialSizeValue}
                 quantity={quantity}
                 setQuantity={setQuantity}
                 disabled={false}
@@ -98,7 +109,8 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
   const {
     disabled,
     id,
-    initialValue,
+    initialFlavorValue,
+    initialSizeValue,
     inputHandler,
     menuItem,
     quantity,
@@ -106,7 +118,8 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
     setQuantity,
     totalHandler,
   } = props;
-  const [size, setSize] = useState(initialValue);
+  const [size, setSize] = useState(initialSizeValue);
+  const [flavor, setFlavor] = useState(initialFlavorValue);
 
   //handles the price of each item to update with quantity changes
   useEffect(() => {
@@ -117,7 +130,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
     });
     if (menuItem.sizes?.length) {
       const itemPrice = menuItem.sizes.find(
-        (itemSize) => itemSize.value === size
+        (itemSize) => itemSize.value.toLowerCase() === size.toLowerCase()
       )!.price;
       itemTotal = itemPrice + optionsTotal;
     } else itemTotal = menuItem.price + optionsTotal;
@@ -145,13 +158,13 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
   };
 
   //gets size value from select input
-  const sizeHandler = (event: any) => {
-    setSize(event.target.value);
+  const sizeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSize(event.target.value as TSizeValue);
   };
 
   return (
     <>
-      {!!menuItem.sizes?.length && (
+      {initialSizeValue && (
         <Input
           id="size"
           element="select"
@@ -159,13 +172,13 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           label="Size:"
           selection={menuItem?.sizes}
           onInput={inputHandler}
-          initialValue={initialValue}
+          initialSizeValue={initialSizeValue}
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={disabled}
         />
       )}
-      {!!menuItem.flavors?.length && (
+      {initialFlavorValue && (
         <Input
           id="flavor"
           element="select"
@@ -173,7 +186,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           label="Flavor:"
           selection={menuItem.flavors}
           onInput={inputHandler}
-          initialValue={initialValue}
+          initialValue={initialFlavorValue}
           errorText="Please pick a valid flavor"
           disabled={false}
         />

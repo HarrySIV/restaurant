@@ -2,7 +2,7 @@ import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 
 import { IDeal } from './Deals';
 import { useForm } from '../../shared/hooks/form-hook';
-import { IMenuItem, TItemOption } from '../menu/Menu';
+import { IMenuItem } from '../menu/Menu';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
 import { Modal } from '../../shared/elements/ui/Modal';
@@ -10,6 +10,7 @@ import { Button } from '../../shared/elements/form/Button';
 import { Input } from '../../shared/elements/form/Input';
 
 import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
+import { TItemOption } from '../../types/OptionTypes';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
