@@ -10,7 +10,7 @@ interface ButtonProps {
 }
 
 export const Button = (props: ButtonProps) => {
-  const [buttonHandler, setButtonHandler] = useState<any>();
+  const [buttonHandler, setButtonHandler] = useState(false);
   useEffect(() => {
     if (props.onClick) setButtonHandler(true);
     else setButtonHandler(false);

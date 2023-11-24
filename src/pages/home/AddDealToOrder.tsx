@@ -100,18 +100,18 @@ const DealItemInputs = (props: DealItemInputsProps) => {
   const { dealItem, initialValues, inputHandler, orderItems, setOrderItems } =
     props;
   const [menuItem, setMenuItem] = useState<IMenuItem>();
-  const [flavor, setFlavor] = useState<TFlavorValue | null>(initialFlavorValue);
+  const [flavor, setFlavor] = useState<TFlavorValue | null>(
+    (initialValues.find((value) => value.type === 'flavor')
+      ?.value! as TFlavorValue) || null
+  );
 
   //whenever menuItem changes, update the corresponding orderItem
   useEffect(() => {
-    const updateItemState = () => {
-      const newItems = orderItems.map((orderItem) => {
-        if (orderItem._id === dealItem._id) return dealItem;
-        return orderItem;
-      });
-      setOrderItems(newItems);
-    };
-    updateItemState();
+    const newItems = orderItems.map((orderItem) => {
+      if (orderItem._id === dealItem._id) return dealItem;
+      return orderItem;
+    });
+    setOrderItems(newItems);
   }, [dealItem]);
 
   useEffect(() => {
@@ -158,7 +158,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           disabled={true}
         />
       )}
-      {!!menuItem.flavors?.length && (
+      {flavor && (
         <Input
           id="flavor"
           element="select"
@@ -166,9 +166,7 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           label="Flavor:"
           selection={menuItem.flavors}
           onInput={inputHandler}
-          initialValue={
-            initialValues.find((value) => value.type === 'flavor')?.value!
-          }
+          initialValue={flavor}
           flavorHandler={flavorHandler}
           errorText="Please pick a valid flavor"
         />

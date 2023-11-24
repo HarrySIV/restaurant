@@ -62,8 +62,9 @@ const formReducer: Reducer<FormState, FormAction> = (formState, formAction) => {
   }
 };
 
-/* useForm takes TWO arguments, the initial inputs and the initial form validity. It then uses a reducer to update formState from the
-inputs dispatched from the input handler... setFormData should be used when the form "submit" button is clicked. */
+/* useForm takes TWO arguments, the initial inputs and the initial form validity. It then uses a
+reducer to update formState from the inputs dispatched from the input handler... setFormData
+should be used when the form "submit" button is clicked. */
 export const useForm = (
   initialInputs: FormStateInputs,
   initialFormValidity: boolean
