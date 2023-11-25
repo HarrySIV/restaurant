@@ -6,26 +6,41 @@
   flex-flow: column wrap;
 }
 
+.order-item-quantity {
+  font-size: xx-large;
+  width: 50px;
+}
+
+.order-line-item-name {
+  margin: 0;
+  padding: 0;
+  width: 40vw;
+  max-width: 500px;
+  min-width: 250px;
+}
+
 .order-line-item-box {
+  align-items: center;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
+  max-width: 900px;
+  min-width: 400px;
+}
+
+.order-line-item-content {
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .order-line-item-inner-box {
-  border: 1px solid black;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between;
-  position: relative;
 }
 
-.options-display {
-  display: none;
-  position: absolute;
-  background-color: rgba(128, 128, 128, 0.31);
-  left: 150px;
-  top: 60px;
+.order-item-price {
+  display: flex;
+  justify-content: center;
+  width: 200px;
 }
 
 .active {

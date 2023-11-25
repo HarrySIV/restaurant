@@ -43,33 +43,40 @@ export const Order = () => {
 
 const Item = (props: ItemProps) => {
   const { item, quantity, total, type } = props.orderItem;
-  const [displayOptions, setDisplayOptions] = useState(false);
 
   const element = ({ item, quantity, total }: ElementProps) => (
     <div className="order-line-item-box" key={props.key}>
-      <h1 className="order-line-item">({quantity})</h1>
-      {item.sizes ? (
-        <h1 className="order-line-item">
-          {item.sizes.find((size) => size.checked === true)?.value}
-        </h1>
-      ) : null}
-      <h1 className="order-line-item">{item.name}</h1>
-      {item.options ? (
-        <div className="order-line-item-inner-box">
-          <h1
-            onMouseEnter={() => setDisplayOptions(true)}
-            onMouseLeave={() => setDisplayOptions(false)}
-          >
-            toppings
+      <h2 className="order-item-quantity">{quantity}</h2>
+      <h3 className="order-line-item-content">
+        {item.sizes ? (
+          <h1 className="order-line-item-name">
+            {item.sizes.find((size) => size.checked === true)?.value}{' '}
+            {item.name}
           </h1>
-          <div className={`options-display ${displayOptions ? 'active' : ''}`}>
-            {item.options.map((option) =>
-              option.checked === true ? <h3>{option.name}</h3> : null
-            )}
+        ) : null}
+        {item.options ? (
+          <div className="order-line-item-inner-box">
+            <div>
+              <h3>
+                {item.options.map((option, index) =>
+                  option.checked === true ? (
+                    <span>
+                      {option.name}
+                      {index !== item.options.length - 1 ? ', ' : ' '}
+                    </span>
+                  ) : null
+                )}
+              </h3>
+              <h3>
+                {item.flavors?.map((flavor, index) =>
+                  flavor.checked === true ? <span>{flavor.value}</span> : null
+                )}
+              </h3>
+            </div>
           </div>
-        </div>
-      ) : null}
-      <h1 className="order-line-item">${total.toFixed(2)}</h1>
+        ) : null}
+      </h3>
+      <h1 className="order-item-price">${total.toFixed(2)}</h1>
     </div>
   );
 

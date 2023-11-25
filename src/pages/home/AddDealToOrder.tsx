@@ -10,7 +10,7 @@ import { Button } from '../../shared/elements/form/Button';
 import { Input } from '../../shared/elements/form/Input';
 
 import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
-import { TFlavorValue, TItemOption } from '../../types/OptionTypes';
+import { TFlavorValue, TItemOption, TSizeValue } from '../../types/OptionTypes';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
@@ -101,8 +101,8 @@ const DealItemInputs = (props: DealItemInputsProps) => {
     props;
   const [menuItem, setMenuItem] = useState<IMenuItem>();
   const [flavor, setFlavor] = useState<TFlavorValue | null>(
-    (initialValues.find((value) => value.type === 'flavor')
-      ?.value! as TFlavorValue) || null
+    initialValues.find((value) => value.type === 'flavor')
+      ?.value! as TFlavorValue
   );
 
   //whenever menuItem changes, update the corresponding orderItem
@@ -151,14 +151,14 @@ const DealItemInputs = (props: DealItemInputsProps) => {
           onInput={inputHandler}
           initialValue={
             initialValues.find((initialValue) => initialValue.type === 'size')
-              ?.value!
+              ?.value! as TSizeValue
           }
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={true}
         />
       )}
-      {flavor && (
+      {flavor && menuItem.flavors && (
         <Input
           id="flavor"
           element="select"
