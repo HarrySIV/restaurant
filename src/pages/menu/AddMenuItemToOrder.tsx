@@ -3,7 +3,10 @@ import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { TFlavorValue, TItemOption, TSizeValue } from '../../types/OptionTypes';
 
 import { useForm } from '../../shared/hooks/form-hook';
-import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
+import {
+  TOrderSubmission,
+  useOrderContext,
+} from '../../shared/hooks/orderContext/OrderContext';
 
 import { IMenuItem } from './Menu';
 
@@ -65,7 +68,7 @@ export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
         quantity: quantity,
         total: total,
         type: 'menuItem',
-      });
+      } as TOrderSubmission);
       closeHandler();
     }
   };

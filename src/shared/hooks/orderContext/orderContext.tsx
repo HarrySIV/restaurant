@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useState } from 'react';
 import { IMenuItem } from '../../../pages/menu/Menu';
 import { orderReducer } from './orderReducer';
 
@@ -15,6 +15,7 @@ export type TOrderSubmission = GenericOrderSubmisison &
   );
 
 type GenericOrderSubmisison = {
+  id: number;
   quantity: number;
   total: number;
 };
@@ -31,6 +32,7 @@ export interface IOrderContext {
 
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
+  const [orderItemID, setOrderItemID] = useState(0);
 
   const addToOrder = (orderSubmission: TOrderSubmission | null) => {
     if (orderSubmission === null) return;
@@ -38,7 +40,13 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     const { item, quantity, total, type } = orderSubmission;
     const newItem = { item, quantity, total, type } as TOrderSubmission;
     updatePrice(total);
-    dispatch({ type: 'ADD_ITEM', newItem: newItem, total: order.total });
+    dispatch({
+      type: 'ADD_ITEM',
+      newItem: newItem,
+      total: order.total,
+      orderID: orderItemID,
+    });
+    setOrderItemID((previousID) => previousID++);
   };
 
   /* returns new array without item submitted */

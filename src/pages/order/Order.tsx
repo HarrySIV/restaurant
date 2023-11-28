@@ -47,7 +47,7 @@ const Item = (props: ItemProps) => {
   const element = ({ item, quantity, total }: ElementProps) => (
     <div className="order-line-item-box" key={props.key}>
       <h2 className="order-item-quantity">{quantity}</h2>
-      <h3 className="order-line-item-content">
+      <div className="order-line-item-content">
         {item.sizes ? (
           <h1 className="order-line-item-name">
             {item.sizes.find((size) => size.checked === true)?.value}{' '}
@@ -58,24 +58,19 @@ const Item = (props: ItemProps) => {
           <div className="order-line-item-inner-box">
             <div>
               <h3>
-                {item.options.map((option, index) =>
-                  option.checked === true ? (
-                    <span>
-                      {option.name}
-                      {index !== item.options.length - 1 ? ', ' : ' '}
-                    </span>
-                  ) : null
+                {item.options.map((option) =>
+                  option.checked === true ? <span>{option.name}</span> : null
                 )}
               </h3>
               <h3>
-                {item.flavors?.map((flavor, index) =>
+                {item.flavors?.map((flavor) =>
                   flavor.checked === true ? <span>{flavor.value}</span> : null
                 )}
               </h3>
             </div>
           </div>
         ) : null}
-      </h3>
+      </div>
       <h1 className="order-item-price">${total.toFixed(2)}</h1>
     </div>
   );

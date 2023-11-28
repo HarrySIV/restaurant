@@ -3,7 +3,10 @@ import { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { IDeal } from './Deals';
 import { useForm } from '../../shared/hooks/form-hook';
 import { IMenuItem } from '../menu/Menu';
-import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
+import {
+  TOrderSubmission,
+  useOrderContext,
+} from '../../shared/hooks/orderContext/OrderContext';
 
 import { Modal } from '../../shared/elements/ui/Modal';
 import { Button } from '../../shared/elements/form/Button';
@@ -47,7 +50,7 @@ export const AddDealToOrder = (props: IAddDealToOrderProps) => {
       quantity: 1,
       total: deal.total,
       type: 'deal',
-    });
+    } as TOrderSubmission);
     closeHandler();
   };
 
