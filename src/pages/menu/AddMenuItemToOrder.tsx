@@ -182,6 +182,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={disabled}
+          data-testid="size"
         />
       )}
       {flavor && menuItem.flavors && (
@@ -196,6 +197,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           flavorHandler={flavorHandler}
           errorText="Please pick a valid flavor"
           disabled={false}
+          data-testid="flavor"
         />
       )}
       {menuItem.options.length
@@ -211,6 +213,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
               optionsHandler={optionsHandler}
               initialValue={option.name}
               errorText="Please pick a valid topping"
+              data-testid="options"
             />
           ))
         : null}
@@ -225,6 +228,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
         type="number"
         validators={[VALIDATOR_MIN(1)]}
         disabled={disabled}
+        data-testid="quantity"
       />
       <Input
         id="_id"
@@ -236,6 +240,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
         initialValue={id}
         hidden={true}
         errorText="A valid ID was not passed"
+        data-testid="id"
       />
     </>
   );

@@ -7,7 +7,6 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/node-sass": "^4.11.3",
     "@types/react": "^18.0.21",
@@ -48,9 +47,16 @@
     "@babel/core": "^7.23.3",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
+    "@testing-library/react": "^14.1.2",
     "@types/jest": "^29.5.10",
     "babel-jest": "^29.7.0",
     "jest": "^27.5.1",
     "sass": "^1.54.5"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/src/**/*.test.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
+    ]
   }
 }
