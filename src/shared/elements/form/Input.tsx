@@ -51,7 +51,7 @@ export const Input = (props: InputProps) => {
 
   /* on input, updates onInput function with input values on change, 
   which really just executes "changeHandler" and dispatches to the reducer */
-  const { id, onInput } = props;
+  const { id, onInput, dataTestID } = props;
   const { userInputValue, userInputIsValid } = inputReducerState;
   useEffect(() => {
     onInput(id, userInputValue, userInputIsValid);
@@ -101,6 +101,7 @@ export const Input = (props: InputProps) => {
       onBlur={touchHandler}
       value={inputReducerState.userInputValue}
       hidden={props.hidden}
+      data-testid={dataTestID}
     />
   );
   const number = props.type === 'number' && (
@@ -112,6 +113,7 @@ export const Input = (props: InputProps) => {
       value={inputReducerState.userInputValue}
       disabled={props.disabled}
       min="1"
+      data-testid={dataTestID}
     />
   );
   const checkbox = props.type === 'checkbox' && (
@@ -121,6 +123,7 @@ export const Input = (props: InputProps) => {
         type={props.type}
         onChange={changeHandler}
         checked={isChecked}
+        data-testid={dataTestID}
       />
       <label htmlFor={props.id}>{props.label}</label>
     </>
@@ -131,6 +134,7 @@ export const Input = (props: InputProps) => {
       onChange={changeHandler}
       value={inputReducerState.userInputValue}
       disabled={props.disabled}
+      data-testid={dataTestID}
     >
       {props.selection &&
         props.selection.map((selection) => (
@@ -151,6 +155,7 @@ export const Input = (props: InputProps) => {
       onChange={changeHandler}
       onBlur={touchHandler}
       value={inputReducerState.userInputValue}
+      data-testid={dataTestID}
     />
   );
 

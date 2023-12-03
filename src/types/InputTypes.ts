@@ -27,6 +27,7 @@ type GenericInputElementProps = {
   errorText: string;
   validators?: { type: string; configVal?: number }[];
   initialValid?: boolean;
+  dataTestID: string;
   onInput: (
     id: string,
     userInputValue: string,

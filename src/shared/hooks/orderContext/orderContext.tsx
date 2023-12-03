@@ -32,7 +32,8 @@ export interface IOrderContext {
 
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [order, dispatch] = useReducer(orderReducer, initialOrderState);
-  const [orderItemID, setOrderItemID] = useState(0);
+  // const [orderItemID, setOrderItemID] = useState(0);
+  const [newItemID, setNewItemID] = useState(0);
 
   const addToOrder = (orderSubmission: TOrderSubmission | null) => {
     if (orderSubmission === null) return;
@@ -44,9 +45,9 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       type: 'ADD_ITEM',
       newItem: newItem,
       total: order.total,
-      orderID: orderItemID,
+      itemID: newItemID,
     });
-    setOrderItemID((previousID) => previousID++);
+    setNewItemID((previous) => previous++);
   };
 
   /* returns new array without item submitted */

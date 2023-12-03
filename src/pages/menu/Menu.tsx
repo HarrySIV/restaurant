@@ -5,6 +5,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { AddMenuItemToOrder } from './AddMenuItemToOrder';
 
+import { Modal } from '../../shared/elements/ui/Modal';
 import { Button } from '../../shared/elements/form/Button';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 
@@ -92,13 +93,15 @@ export const Menu = () => {
       )}
 
       {openOrder && menuItem !== null && (
-        <AddMenuItemToOrder
-          menuItem={menuItem}
-          setMenuItem={setMenuItem}
-          initialSizeValue={initialSizeValue}
-          initialFlavorValue={initialFlavorValue}
-          closeHandler={closeAddToOrderHandler}
-        />
+        <Modal header="Add to Order" closeHandler={closeAddToOrderHandler}>
+          <AddMenuItemToOrder
+            menuItem={menuItem}
+            setMenuItem={setMenuItem}
+            initialSizeValue={initialSizeValue}
+            initialFlavorValue={initialFlavorValue}
+            closeHandler={closeAddToOrderHandler}
+          />
+        </Modal>
       )}
     </>
   );

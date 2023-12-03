@@ -10,7 +10,6 @@ import {
 
 import { IMenuItem } from './Menu';
 
-import { Modal } from '../../shared/elements/ui/Modal';
 import { Button } from '../../shared/elements/form/Button';
 import { Input } from '../../shared/elements/form/Input';
 
@@ -74,44 +73,45 @@ export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
   };
 
   return (
-    <Modal header="Add to Order" closeHandler={closeHandler}>
-      <form className="order-form" onSubmit={itemSubmitHandler}>
-        <fieldset>
-          {menuItem && (
-            <div key={menuItem._id}>
-              <legend>{menuItem.name}</legend>
-              <MenuItemInputs
-                id={`${menuItem._id}`}
-                menuItem={menuItem}
-                setMenuItem={setMenuItem}
-                inputHandler={inputHandler}
-                totalHandler={totalHandler}
-                initialFlavorValue={initialFlavorValue}
-                initialSizeValue={initialSizeValue}
-                quantity={quantity}
-                setQuantity={setQuantity}
-                disabled={false}
-              />
-              <h2>${total.toFixed(2)}</h2>
-              <hr />
-            </div>
-          )}
-        </fieldset>
-        <Button
-          type="submit"
-          text="ADD TO ORDER"
-          onClick={itemSubmitHandler}
-          disabled={!formState.isFormValid}
-        />
-      </form>
-    </Modal>
+    <form
+      className="order-form"
+      onSubmit={itemSubmitHandler}
+      data-testid="addToOrder"
+    >
+      <fieldset>
+        {menuItem && (
+          <div key={menuItem._id}>
+            <legend>{menuItem.name}</legend>
+            <MenuItemInputs
+              id={`${menuItem._id}`}
+              menuItem={menuItem}
+              setMenuItem={setMenuItem}
+              inputHandler={inputHandler}
+              totalHandler={totalHandler}
+              initialFlavorValue={initialFlavorValue}
+              initialSizeValue={initialSizeValue}
+              quantity={quantity}
+              setQuantity={setQuantity}
+              disabled={false}
+            />
+            <h2>${total.toFixed(2)}</h2>
+            <hr />
+          </div>
+        )}
+      </fieldset>
+      <Button
+        type="submit"
+        text="ADD TO ORDER"
+        onClick={itemSubmitHandler}
+        disabled={!formState.isFormValid}
+      />
+    </form>
   );
 };
 
 const MenuItemInputs = (props: MenuItemInputsProps) => {
   const {
     disabled,
-    id,
     initialFlavorValue,
     initialSizeValue,
     inputHandler,
@@ -182,7 +182,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           sizeHandler={sizeHandler}
           errorText="Please pick a valid size"
           disabled={disabled}
-          data-testid="size"
+          dataTestID="size"
         />
       )}
       {flavor && menuItem.flavors && (
@@ -197,7 +197,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
           flavorHandler={flavorHandler}
           errorText="Please pick a valid flavor"
           disabled={false}
-          data-testid="flavor"
+          dataTestID="flavor"
         />
       )}
       {menuItem.options.length
@@ -213,7 +213,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
               optionsHandler={optionsHandler}
               initialValue={option.name}
               errorText="Please pick a valid topping"
-              data-testid="options"
+              dataTestID={option.name}
             />
           ))
         : null}
@@ -228,19 +228,7 @@ const MenuItemInputs = (props: MenuItemInputsProps) => {
         type="number"
         validators={[VALIDATOR_MIN(1)]}
         disabled={disabled}
-        data-testid="quantity"
-      />
-      <Input
-        id="_id"
-        element="text"
-        type="text"
-        label="_id"
-        placeholder={id}
-        onInput={inputHandler}
-        initialValue={id}
-        hidden={true}
-        errorText="A valid ID was not passed"
-        data-testid="id"
+        dataTestID="quantity"
       />
     </>
   );
