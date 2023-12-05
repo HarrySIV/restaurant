@@ -1,7 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import React from 'react';
-
 import { IMenuItem } from '../../pages/menu/Menu';
 import { AddMenuItemToOrder } from '../../pages/menu/AddMenuItemToOrder';
 
@@ -61,7 +59,6 @@ describe('AddMenuItemToOrder Tests', () => {
   render(
     <AddMenuItemToOrder
       menuItem={menuItem}
-      setMenuItem={() => {}}
       initialSizeValue={'large'}
       initialFlavorValue={null}
       closeHandler={() => {}}
@@ -71,7 +68,7 @@ describe('AddMenuItemToOrder Tests', () => {
   const sizeInput = screen.getByTestId('size') as HTMLSelectElement;
   const pepperoniInput = screen.getByTestId('Pepperoni') as HTMLInputElement;
   const quantityInput = screen.getByTestId('quantity') as HTMLInputElement;
-  
+
   test('selection inputs', () => {
     fireEvent.change(sizeInput, { target: { value: 'small' } });
     expect(sizeInput.value).toBe('small');

@@ -16,6 +16,7 @@ export type UserInputActions =
   | {
       type: 'CHANGE';
       userActionValue: string;
+      userActionChecked?: boolean;
       validators?: { type: string; configVal: number }[] | { type: string }[];
     }
   | { type: 'TOUCH' };
@@ -31,7 +32,8 @@ type GenericInputElementProps = {
   onInput: (
     id: string,
     userInputValue: string,
-    userInputIsValid: boolean
+    userInputIsValid: boolean,
+    checked?: boolean
   ) => void;
 };
 

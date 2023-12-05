@@ -26,6 +26,7 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
                 userInputAction.validators
               )
             : userInputState.userInputIsValid,
+        // userInputChecked: userInputAction.checked,
         userInputIsTouched: userInputState.userInputIsTouched,
       };
     case 'TOUCH':
@@ -54,8 +55,8 @@ export const Input = (props: InputProps) => {
   const { id, onInput, dataTestID } = props;
   const { userInputValue, userInputIsValid } = inputReducerState;
   useEffect(() => {
-    onInput(id, userInputValue, userInputIsValid);
-  }, [id, userInputValue, userInputIsValid, onInput]);
+    onInput(id, userInputValue, userInputIsValid, isChecked);
+  }, [id, userInputValue, userInputIsValid, onInput, isChecked]);
 
   //handles input changes and dispatches to inputReducer
   const changeHandler = (
@@ -67,22 +68,28 @@ export const Input = (props: InputProps) => {
     if (props.type === 'checkbox') {
       props.optionsHandler(props.option, !isChecked);
       setIsChecked(!isChecked);
-    } else {
-      if (props.type === 'number') {
-        props.setQuantity(parseInt(event.target.value));
-      }
-      if (props.type === 'select' && props.sizeHandler) {
-        props.sizeHandler(event);
-      }
-      if (props.type === 'select' && props.flavorHandler) {
-        props.flavorHandler(event);
-      }
       dispatch({
         type: 'CHANGE',
         userActionValue: event.target.value,
         validators: props.validators,
+        userActionChecked: !isChecked,
       });
+      return;
     }
+    if (props.type === 'number') {
+      props.setQuantity(parseInt(event.target.value));
+    }
+    if (props.type === 'select' && props.sizeHandler) {
+      props.sizeHandler(event);
+    }
+    if (props.type === 'select' && props.flavorHandler) {
+      props.flavorHandler(event);
+    }
+    dispatch({
+      type: 'CHANGE',
+      userActionValue: event.target.value,
+      validators: props.validators,
+    });
   };
 
   const touchHandler = () => {

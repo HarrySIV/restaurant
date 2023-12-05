@@ -34,8 +34,8 @@ export const Order = () => {
   return (
     <div className="order-page">
       {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
-      {orderItems.map((orderItem, index) => {
-        return <Item orderItem={orderItem} key={index} />;
+      {orderItems.map((orderItem) => {
+        return <Item orderItem={orderItem} key={orderItem.id} />;
       })}
     </div>
   );
@@ -59,12 +59,16 @@ const Item = (props: ItemProps) => {
             <div>
               <h3>
                 {item.options.map((option) =>
-                  option.checked === true ? <span>{option.name}</span> : null
+                  option.checked === true ? (
+                    <span key={option.name}>{option.name}</span>
+                  ) : null
                 )}
               </h3>
               <h3>
                 {item.flavors?.map((flavor) =>
-                  flavor.checked === true ? <span>{flavor.value}</span> : null
+                  flavor.checked === true ? (
+                    <span key={flavor.value}>{flavor.value}</span>
+                  ) : null
                 )}
               </h3>
             </div>

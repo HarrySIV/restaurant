@@ -47,7 +47,7 @@ const formReducer: Reducer<FormState, FormAction> = (formState, formAction) => {
           [formAction.inputId]: {
             value: formAction.value,
             isValid: formAction.isValid,
-            checked: formAction.checked,
+            checked: formAction.checked ? formAction.checked : false,
           },
         },
         isFormValid: returnIsFormValid,

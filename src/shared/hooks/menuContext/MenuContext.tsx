@@ -4,7 +4,6 @@ import { useFetch } from '../fetch-hook';
 
 export const MenuProvider = ({ children }: { children: React.ReactNode }) => {
   const menu: IMenuItem[] = useFetch('/menu', 'items').data;
-
   const value = menu;
   return <MenuContext.Provider value={value}>{children}</MenuContext.Provider>;
 };
