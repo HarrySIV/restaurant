@@ -50,8 +50,8 @@ const Item = (props: ItemProps) => {
       <div className="order-line-item-content">
         {item.sizes ? (
           <h1 className="order-line-item-name">
-            {item.sizes.find((size) => size.checked === true)?.value}{' '}
-            {item.name}
+            {item.sizes.find((size) => size.checked === true)?.value}
+            {'  '}{item.name}
           </h1>
         ) : null}
         {item.options ? (
@@ -60,7 +60,7 @@ const Item = (props: ItemProps) => {
               <h3>
                 {item.options.map((option) =>
                   option.checked === true ? (
-                    <span key={option.name}>{option.name}</span>
+                    <span key={option.name}>{option.name + '  '}</span>
                   ) : null
                 )}
               </h3>

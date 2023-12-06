@@ -1,6 +1,11 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 
-import { TFlavorValue, TItemOption, TSizeValue } from '../../types/OptionTypes';
+import {
+  TFlavorValue,
+  TItemOption,
+  TSize,
+  TSizeValue,
+} from '../../types/OptionTypes';
 
 import { useForm } from '../../shared/hooks/form-hook';
 import {
@@ -53,30 +58,47 @@ export const AddMenuItemToOrder = (props: IAddMenuItemToOrderProps) => {
   useEffect(() => {
     // updates all properties to match user inputs
     //need to setUpdatedItem instead of mutating updatedItem directly
+
+    let updatedSizes;
+    let updatedOptions;
+
+    if (!updatedItem || !updatedItem.sizes) return;
+
     for (const key in formState.inputs) {
       if (key === 'size') {
-        updatedItem.sizes?.forEach((size, index) => {
-          if (size.id === formState.inputs.size.value) {
-            // const newSize = [...previousItem.sizes]
-            setUpdatedItem(previousItem => {
-              ...previousItem,
-              previousItem.sizes
-            })
-            updatedItem.sizes![index].checked = true;
+        updatedSizes = updatedItem.sizes.map((size) => {
+          if (size.id === formState.inputs[key].value) {
+            return {
+              ...size,
+              checked: true,
+            };
           } else {
-            updatedItem.sizes![index].checked = false;
+            return {
+              ...size,
+              checked: false,
+            };
           }
         });
-        console.log(menuItem);
       }
 
-      updatedItem.options.forEach((option, index) => {
-        if (key === option.name)
-          updatedItem.options[index].checked =
-            formState.inputs[key].checked || false;
-      });
+      updatedOptions = updatedItem.options.map((topping) => {
+        if (key === topping.name) {
+          return {
+            ...topping,
+            checked: formState.inputs[key].checked,
+          };
+        } else {
+          return { ...topping };
+        }
+      }) as TItemOption[];
     }
-  }, [updatedItem, formState.inputs]);
+
+    setUpdatedItem({
+      ...updatedItem,
+      options: updatedOptions || updatedItem.options,
+      sizes: updatedSizes || updatedItem.sizes,
+    });
+  }, [formState.inputs]);
 
   const totalHandler = (quantity: number, itemPrice: number) => {
     if (quantity > 0) setTotal(quantity * itemPrice);

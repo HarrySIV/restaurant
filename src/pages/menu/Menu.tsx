@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -72,12 +72,7 @@ export const Menu = () => {
     setInitialFlavorValue(null);
     setInitialSizeValue(null);
     setMenuItem(null);
-    console.log('close handler', menuItem);
   };
-
-  useEffect(() => {
-    console.log(menuItem);
-  }, [menuItem]);
 
   //displays menu items when menu and menu.length exist... breaks otherwise.
   return (
