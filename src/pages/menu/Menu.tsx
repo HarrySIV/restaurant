@@ -3,21 +3,17 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-import { AddMenuItemToOrder } from './AddMenuItemToOrder';
+import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
 
 import { Modal } from '../../shared/elements/ui/Modal';
 import { Button } from '../../shared/elements/form/Button';
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
 
+import { AddToOrder } from '../../shared/components/AddToOrder';
+
+import { TItemOption, TSize, TFlavor } from '../../types/OptionTypes';
+
 import './_menu.scss';
-import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
-import {
-  TItemOption,
-  TSize,
-  TFlavor,
-  TSizeValue,
-  TFlavorValue,
-} from '../../types/OptionTypes';
 
 export interface IMenuItem {
   name: string;
@@ -37,40 +33,16 @@ type MenuItemProps = {
 
 export const Menu = () => {
   const menu = useMenuContext();
-  const [initialSizeValue, setInitialSizeValue] = useState<TSizeValue | null>(
-    null
-  );
-  const [initialFlavorValue, setInitialFlavorValue] =
-    useState<TFlavorValue | null>(null);
   const [menuItem, setMenuItem] = useState<IMenuItem | null>(null);
   const [openOrder, setOpenOrder] = useState<boolean>(false);
 
   const openAddToOrderHandler = (menuItem: IMenuItem) => {
     setMenuItem(menuItem);
-    const sizeSelection = menuItem.sizes?.length ? menuItem.sizes : null;
-    const flavorSelection = menuItem.flavors?.length ? menuItem.flavors : null;
-
-    if (flavorSelection) {
-      setInitialFlavorValue(
-        flavorSelection.find(
-          (selectionValue: TFlavor) => selectionValue.checked === true
-        )!.id
-      );
-    }
-    if (sizeSelection) {
-      setInitialSizeValue(
-        sizeSelection.find(
-          (selectionValue: TSize) => selectionValue.checked === true
-        )!.id
-      );
-    }
     setOpenOrder(true);
   };
 
   const closeAddToOrderHandler = () => {
     setOpenOrder(false);
-    setInitialFlavorValue(null);
-    setInitialSizeValue(null);
     setMenuItem(null);
   };
 
@@ -95,11 +67,11 @@ export const Menu = () => {
 
       {openOrder && menuItem !== null && (
         <Modal header="Add to Order" closeHandler={closeAddToOrderHandler}>
-          <AddMenuItemToOrder
-            menuItem={menuItem}
-            initialSizeValue={initialSizeValue}
-            initialFlavorValue={initialFlavorValue}
+          <AddToOrder
+            menuItems={[menuItem]}
             closeHandler={closeAddToOrderHandler}
+            price={menuItem.price}
+            type='menu'
           />
         </Modal>
       )}

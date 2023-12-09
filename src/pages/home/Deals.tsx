@@ -1,16 +1,21 @@
 import { useState } from 'react';
-import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
-import { AddDealToOrder, TDealItem } from './AddDealToOrder';
+
+import { IMenuItem } from './../menu/Menu';
+
 import { useMenuContext } from '../../shared/hooks/menuContext/MenuContext';
 import { useFetch } from './../../shared/hooks/fetch-hook';
 
-export interface IDeal {
+import { AddToOrder } from '../../shared/components/AddToOrder';
+
+import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
+
+export type IDeal = {
   name: string;
   img: string;
   _id: string;
   items: TItem[];
   total: number;
-}
+};
 
 export type TItem = {
   id: number;
@@ -21,47 +26,10 @@ export const Deals = () => {
   const menu = useMenuContext();
   const deals: IDeal[] = useFetch('/deals', 'deals').data;
   const [selectedDeal, setSelectedDeal] = useState<IDeal>();
-  const [dealItems, setDealItems] = useState<TDealItem[]>();
+  const [dealItems, setDealItems] = useState<IMenuItem[]>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
-  const [initialValues, setInitialValues] = useState<
-    { type: string; value: string }[]
-  >([]);
 
-  //deals
   const openAddToOrderHandler = (deal: IDeal) => {
-    if (initialValues.length > 0) return;
-
-    deal.items.forEach((dealItem) => {
-      let newItem = menu.find(
-        (menuItem) => menuItem._id === dealItem.id.toString()
-      )!;
-
-      if (newItem.flavors && newItem.flavors.length > 0) {
-        setInitialValues((previousValues) => [
-          ...previousValues,
-          {
-            type: 'flavor',
-            value:
-              newItem.flavors!.find((flavor) => flavor.checked)?.value ||
-              'pepsi',
-          },
-        ]);
-      }
-
-      if (newItem.sizes && newItem.sizes.length > 0) {
-        setInitialValues((previousValues) => [
-          ...previousValues,
-          {
-            type: 'size',
-            value: dealItem.size || 'medium',
-          },
-        ]);
-      }
-      setDealItems((previous) =>
-        previous ? [...previous, newItem!] : [newItem!]
-      );
-    });
-
     setSelectedDeal(deal);
     setOpenOrder(true);
   };
@@ -69,7 +37,6 @@ export const Deals = () => {
   const closeAddToOrderHandler = () => {
     setOpenOrder(false);
     setDealItems([]);
-    setInitialValues([]);
   };
 
   return (
@@ -96,11 +63,11 @@ export const Deals = () => {
         ))
       )}
       {openOrder && selectedDeal && (
-        <AddDealToOrder
-          deal={selectedDeal}
-          dealItems={dealItems!}
-          initialValues={initialValues}
+        <AddToOrder
+          menuItems={dealItems!}
           closeHandler={closeAddToOrderHandler}
+          price={selectedDeal.total}
+          type="deal"
         />
       )}
     </>

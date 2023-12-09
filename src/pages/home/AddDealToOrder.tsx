@@ -17,15 +17,13 @@ import { TFlavorValue, TItemOption, TSizeValue } from '../../types/OptionTypes';
 
 interface IAddDealToOrderProps {
   deal: IDeal;
-  dealItems: TDealItem[];
+  dealItems: IMenuItem[];
   initialValues: { type: string; value: string }[];
   closeHandler: () => void;
 }
 
-export type TDealItem = IMenuItem;
-
 type DealItemInputsProps = {
-  dealItem: TDealItem;
+  dealItem: IMenuItem;
   id: string;
   initialValues: { type: string; value: string }[];
   inputHandler: (
@@ -33,8 +31,8 @@ type DealItemInputsProps = {
     userInputValue: string,
     userInputIsValid: boolean
   ) => void;
-  orderItems: TDealItem[];
-  setOrderItems: Dispatch<SetStateAction<TDealItem[]>>;
+  orderItems: IMenuItem[];
+  setOrderItems: Dispatch<SetStateAction<IMenuItem[]>>;
 };
 
 export const AddDealToOrder = (props: IAddDealToOrderProps) => {
