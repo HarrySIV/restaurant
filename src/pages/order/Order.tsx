@@ -8,10 +8,10 @@ import { IMenuItem } from '../menu/Menu';
 import './_order.scss';
 
 type ElementProps = {
-  item: IMenuItem;
+  item: IMenuItem[];
   quantity: number;
   total: number;
-  type: 'menuItem';
+  type: 'menu';
 };
 
 type ItemProps = {
@@ -42,7 +42,7 @@ export const Order = () => {
 };
 
 const Item = (props: ItemProps) => {
-  const { item, quantity, total, type } = props.orderItem;
+  const { items, quantity, itemPrice, type } = props.orderItem;
 
   const element = ({ item, quantity, total }: ElementProps) => (
     <div className="order-line-item-box" key={props.key}>
@@ -79,13 +79,13 @@ const Item = (props: ItemProps) => {
     </div>
   );
 
-  if (type === 'menuItem') {
-    return element({ item, quantity, total, type });
+  if (type === 'menu') {
+    return element({ items, quantity, itemPrice, type });
   }
 
   return (
     <>
-      {item.map((dealItem) => {
+      {items.map((dealItem) => {
         return element({
           item: dealItem,
           quantity: 1,

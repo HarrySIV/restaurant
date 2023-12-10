@@ -8,6 +8,7 @@ import { useFetch } from './../../shared/hooks/fetch-hook';
 import { AddToOrder } from '../../shared/components/AddToOrder';
 
 import { LoadingSpinner } from '../../shared/elements/ui/LoadingSpinner';
+import { Modal } from '../../shared/elements/ui/Modal';
 
 export type IDeal = {
   name: string;
@@ -63,12 +64,14 @@ export const Deals = () => {
         ))
       )}
       {openOrder && selectedDeal && (
-        <AddToOrder
-          menuItems={dealItems!}
-          closeHandler={closeAddToOrderHandler}
-          price={selectedDeal.total}
-          type="deal"
-        />
+        <Modal header="Add to Order" closeHandler={closeAddToOrderHandler}>
+          <AddToOrder
+            menuItems={dealItems!}
+            closeHandler={closeAddToOrderHandler}
+            price={selectedDeal.total}
+            type="deal"
+          />
+        </Modal>
       )}
     </>
   );

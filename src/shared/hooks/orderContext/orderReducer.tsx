@@ -4,7 +4,7 @@ import { IOrderContext, TOrderSubmission } from './OrderContext';
 export type OrderAction =
   | {
       type: 'ADD_ITEM';
-      newItem: TOrderSubmission;
+      newItems: TOrderSubmission;
       total: number;
       itemID: number;
     }
@@ -33,7 +33,7 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
         ...orderReducerState,
         orderItems: [
           ...orderReducerState.orderItems,
-          orderReducerAction.newItem,
+          orderReducerAction.newItems,
         ],
         total: orderReducerAction.total + orderReducerState.total,
       };

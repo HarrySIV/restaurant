@@ -6,7 +6,7 @@ import { TFlavorValue, TItemOption, TSizeValue } from "../../types/OptionTypes";
 import { Input } from "../elements/form/Input";
 import { VALIDATOR_MIN } from '../util/validators';
 
-type MenuItemInputsProps = {
+type ItemInputsProps = {
    id: string;
    initialFlavorValue: TFlavorValue | null;
    initialSizeValue: TSizeValue | null;
@@ -23,7 +23,7 @@ type MenuItemInputsProps = {
    disabled?: boolean;
  };
 
-export const MenuItemInputs = (props: MenuItemInputsProps) => {
+export const ItemInputs = (props: ItemInputsProps) => {
   const {
     disabled,
     initialFlavorValue,
