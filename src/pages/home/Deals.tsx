@@ -26,17 +26,34 @@ export type TItem = {
 export const Deals = () => {
   const menu = useMenuContext();
   const deals: IDeal[] = useFetch('/deals', 'deals').data;
-  const [selectedDeal, setSelectedDeal] = useState<IDeal>();
+  const [selectedDeal, setSelectedDeal] = useState<IDeal | null>(null);
   const [dealItems, setDealItems] = useState<IMenuItem[]>();
   const [openOrder, setOpenOrder] = useState<boolean>(false);
 
   const openAddToOrderHandler = (deal: IDeal) => {
     setSelectedDeal(deal);
+    const items = deal.items.map((item) => {
+      const newItem = menu.find(
+        (menuItem) => menuItem._id === item.id.toString()
+      )!;
+      return {
+        ...newItem,
+        sizes: newItem.sizes?.map((size) => {
+          if (size.id === item.size) {
+            return { ...size, checked: true };
+          } else {
+            return { ...size, checked: false };
+          }
+        }),
+      };
+    });
+    setDealItems(items);
     setOpenOrder(true);
   };
 
   const closeAddToOrderHandler = () => {
     setOpenOrder(false);
+    setSelectedDeal(null);
     setDealItems([]);
   };
 
