@@ -37,7 +37,9 @@ export const AddToOrder = (props: TAddToOrderProps) => {
   );
 
   const totalPriceHandler = (quantity: number, itemPrice: number) => {
-    if (quantity > 0) setTotalPrice(quantity * itemPrice);
+    if (quantity > 0) {
+      if (type === 'menu') setTotalPrice(quantity * itemPrice);
+    }
   };
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {

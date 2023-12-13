@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
 import { IMenuItem } from '../../../pages/menu/Menu';
 import { orderReducer } from './orderReducer';
 
@@ -32,9 +32,10 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     dispatch({
       type: 'ADD_ITEM',
       newItems: { items, quantity, itemPrice, type } as TOrderSubmission,
-      total: order.total,
+      total: itemPrice,
       itemID: itemID,
     });
+    console.log(itemPrice, order.total);
   };
 
   /* returns new array without item submitted */

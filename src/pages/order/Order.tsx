@@ -1,22 +1,11 @@
-import React from 'react';
-import {
-  TOrderSubmission,
-  useOrderContext,
-} from '../../shared/hooks/orderContext/OrderContext';
+import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 import { IMenuItem } from '../menu/Menu';
 
 import './_order.scss';
 
-type ElementProps = {
-  item: IMenuItem[];
-  quantity: number;
-  total: number;
-  type: 'menu';
-};
-
 type ItemProps = {
-  key: number;
-  orderItem: TOrderSubmission;
+  key: string;
+  item: IMenuItem;
 };
 
 export const Order = () => {
@@ -34,24 +23,38 @@ export const Order = () => {
   return (
     <div className="order-page">
       {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
-      {orderItems.map((orderItem) => {
-        return <Item orderItem={orderItem} key={orderItem.id} />;
-      })}
+      <div>
+        {orderItems.map((orderItem) => {
+          return (
+            <div className="order-line-item-box">
+              <h2 className="order-items-quantity">{orderItem.quantity}x</h2>
+              <div className="order-line-items">
+                {orderItem.items.map((item, index) => (
+                  <Item item={item} key={`${item._id}-${index}`} />
+                ))}
+              </div>
+              <h1 className="order-items-price">
+                ${orderItem.itemPrice.toFixed(2)}
+              </h1>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 const Item = (props: ItemProps) => {
-  const { items, quantity, itemPrice, type } = props.orderItem;
+  const { item } = props;
 
-  const element = ({ item, quantity, total }: ElementProps) => (
-    <div className="order-line-item-box" key={props.key}>
-      <h2 className="order-item-quantity">{quantity}</h2>
+  return (
+    <>
       <div className="order-line-item-content">
         {item.sizes ? (
           <h1 className="order-line-item-name">
             {item.sizes.find((size) => size.checked === true)?.value}
-            {'  '}{item.name}
+            {'  '}
+            {item.name}
           </h1>
         ) : null}
         {item.options ? (
@@ -75,24 +78,6 @@ const Item = (props: ItemProps) => {
           </div>
         ) : null}
       </div>
-      <h1 className="order-item-price">${total.toFixed(2)}</h1>
-    </div>
-  );
-
-  if (type === 'menu') {
-    return element({ items, quantity, itemPrice, type });
-  }
-
-  return (
-    <>
-      {items.map((dealItem) => {
-        return element({
-          item: dealItem,
-          quantity: 1,
-          total: 0,
-          type: 'menuItem',
-        });
-      })}
     </>
   );
 };
