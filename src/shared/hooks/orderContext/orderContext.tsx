@@ -26,16 +26,13 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addToOrder = (orderSubmission: TOrderSubmission | null) => {
     if (orderSubmission === null) return;
-
     const { items, quantity, itemID, itemPrice, type } = orderSubmission;
-    updatePrice(itemPrice);
     dispatch({
       type: 'ADD_ITEM',
       newItems: { items, quantity, itemPrice, type } as TOrderSubmission,
       total: itemPrice,
       itemID: itemID,
     });
-    console.log(itemPrice, order.total);
   };
 
   /* returns new array without item submitted */

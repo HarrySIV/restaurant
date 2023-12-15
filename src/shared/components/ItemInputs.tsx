@@ -1,90 +1,28 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from 'react';
 
-import { IMenuItem } from "../../pages/menu/Menu";
-import { TFlavorValue, TItemOption, TSizeValue } from "../../types/OptionTypes";
+import { IMenuItem } from '../../pages/menu/Menu';
 
-import { Input } from "../elements/form/Input";
+import { Input } from '../elements/form/Input';
 import { VALIDATOR_MIN } from '../util/validators';
 
 type ItemInputsProps = {
-   id: string;
-   initialFlavorValue: TFlavorValue | null;
-   initialSizeValue: TSizeValue | null;
-   inputHandler: (
-     id: string,
-     userInputValue: string,
-     userInputIsValid: boolean
-   ) => void;
-   updatedItem: IMenuItem;
-   quantity: number;
-   setUpdatedItem: Dispatch<SetStateAction<IMenuItem>>;
-   setQuantity: Dispatch<SetStateAction<number>>;
-   totalHandler: (quantity: number, itemPrice: number) => void;
-   disabled?: boolean;
- };
+  id: string;
+  inputHandler: (
+    id: string,
+    userInputValue: string,
+    userInputIsValid: boolean
+  ) => void;
+  updatedItem: IMenuItem;
+  setUpdatedItem: Dispatch<SetStateAction<IMenuItem>>;
+  disabled?: boolean;
+};
 
 export const ItemInputs = (props: ItemInputsProps) => {
-  const {
-    disabled,
-    initialFlavorValue,
-    initialSizeValue,
-    inputHandler,
-    updatedItem,
-    quantity,
-    setUpdatedItem,
-    setQuantity,
-    totalHandler,
-  } = props;
-  const [size, setSize] = useState<TSizeValue | null>(initialSizeValue);
-  const [flavor, setFlavor] = useState<TFlavorValue | null>(initialFlavorValue);
+  const { disabled, inputHandler, updatedItem } = props;
 
-  //handles the price of each item to update with quantity changes
-  useEffect(() => {
-    let optionsTotal = 0;
-    let itemTotal = 0;
-    updatedItem.options.forEach((option) => {
-      if (option.checked) optionsTotal += option.price;
-    });
-    if (size && updatedItem.sizes) {
-      const itemPrice = updatedItem.sizes.find(
-        (itemSize) => itemSize.value.toLowerCase() === size.toLowerCase()
-      )!.price;
-      itemTotal = itemPrice + optionsTotal;
-    } else itemTotal = updatedItem.price + optionsTotal;
-    totalHandler(quantity, itemTotal);
-  }, [
-    quantity,
-    totalHandler,
-    size,
-    updatedItem.options,
-    updatedItem.sizes,
-    updatedItem.price,
-  ]);
-
-  //sets options array based on checked inputs
-  const optionsHandler = (userOption: TItemOption, isChecked: boolean) => {
-    const newOptions = [...updatedItem.options];
-    const newItem = {
-      ...updatedItem,
-    };
-    newOptions.find(
-      (newOption) => newOption.name === userOption.name
-    )!.checked = isChecked;
-    newItem.options = newOptions;
-    setUpdatedItem(newItem);
-  };
-
-  //gets size value from select input
-  const sizeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSize(event.target.value as TSizeValue);
-  };
-
-  const flavorHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setFlavor(event.target.value as TFlavorValue);
-  };
   return (
     <>
-      {size && updatedItem.sizes && (
+      {updatedItem.sizes && updatedItem.sizes.length > 0 && (
         <Input
           id="size"
           element="select"
@@ -92,14 +30,15 @@ export const ItemInputs = (props: ItemInputsProps) => {
           label="Size:"
           selection={updatedItem?.sizes}
           onInput={inputHandler}
-          initialValue={size}
-          sizeHandler={sizeHandler}
+          initialValue={
+            updatedItem.sizes?.find((size) => size.checked === true)?.id!
+          }
           errorText="Please pick a valid size"
           disabled={disabled}
           dataTestID="size"
         />
       )}
-      {flavor && updatedItem.flavors && (
+      {updatedItem.flavors && updatedItem.flavors.length > 0 && (
         <Input
           id="flavor"
           element="select"
@@ -107,8 +46,9 @@ export const ItemInputs = (props: ItemInputsProps) => {
           label="Flavor:"
           selection={updatedItem.flavors}
           onInput={inputHandler}
-          initialValue={flavor}
-          flavorHandler={flavorHandler}
+          initialValue={
+            updatedItem.flavors?.find((flavor) => flavor.checked === true)?.id!
+          }
           errorText="Please pick a valid flavor"
           disabled={false}
           dataTestID="flavor"
@@ -124,7 +64,6 @@ export const ItemInputs = (props: ItemInputsProps) => {
               label={option.name}
               onInput={inputHandler}
               option={option}
-              optionsHandler={optionsHandler}
               initialValue={option.name}
               errorText="Please pick a valid topping"
               dataTestID={option.name}
@@ -132,13 +71,12 @@ export const ItemInputs = (props: ItemInputsProps) => {
           ))
         : null}
       <Input
-        id="quanity"
+        id="quantity"
         element="number"
         errorText="You must add at least 1 item"
         initialValue={'1'}
         label="Quantity:"
         onInput={inputHandler}
-        setQuantity={setQuantity}
         type="number"
         validators={[VALIDATOR_MIN(1)]}
         disabled={disabled}

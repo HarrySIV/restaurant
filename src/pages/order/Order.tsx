@@ -26,17 +26,20 @@ export const Order = () => {
       <div>
         {orderItems.map((orderItem) => {
           return (
-            <div className="order-line-item-box">
-              <h2 className="order-items-quantity">{orderItem.quantity}x</h2>
-              <div className="order-line-items">
-                {orderItem.items.map((item, index) => (
-                  <Item item={item} key={`${item._id}-${index}`} />
-                ))}
+            <>
+              <hr />
+              <div className="order-line-item-box">
+                <h2 className="order-items-quantity">{orderItem.quantity}x</h2>
+                <div className="order-line-items">
+                  {orderItem.items.map((item, index) => (
+                    <Item item={item} key={`${item._id}-${index}`} />
+                  ))}
+                </div>
+                <h1 className="order-items-price">
+                  ${orderItem.itemPrice.toFixed(2)}
+                </h1>
               </div>
-              <h1 className="order-items-price">
-                ${orderItem.itemPrice.toFixed(2)}
-              </h1>
-            </div>
+            </>
           );
         })}
       </div>

@@ -51,14 +51,12 @@ type TextAreaElementProps = GenericInputElementProps & {
 };
 type NumberElementProps = GenericInputElementProps & {
   type: 'number';
-  setQuantity: React.Dispatch<React.SetStateAction<number>>;
   initialValue: string | 0 | undefined;
   disabled?: boolean;
 };
 type CheckboxElementProps = GenericInputElementProps & {
   type: 'checkbox';
   option: TItemOption;
-  optionsHandler: (userOption: TItemOption, isChecked: boolean) => void;
   initialValue: string | undefined;
 };
 type SelectElementProps = GenericInputElementProps & {
@@ -66,8 +64,6 @@ type SelectElementProps = GenericInputElementProps & {
   selection: TSelection[];
   initialValue: TFlavorValue | TSizeValue;
   disabled?: boolean;
-  flavorHandler?: (event: any) => void;
-  sizeHandler?: (event: any) => void;
 };
 
 type TSelection = TSize | TFlavor;

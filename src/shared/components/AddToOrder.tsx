@@ -1,12 +1,12 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
-import { TFlavor, TItemOption, TSize } from '../../types/OptionTypes';
+import { TFlavorValue, TSizeValue } from '../../types/OptionTypes';
 import { IMenuItem } from '../../pages/menu/Menu';
 
-import { useForm } from '../../shared/hooks/form-hook';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
-import { ItemInputs } from './ItemInputs';
+import { ItemToAdd } from './ItemToAdd';
+
 import { LoadingSpinner } from '../elements/ui/LoadingSpinner';
 import { Button } from '../../shared/elements/form/Button';
 
@@ -19,14 +19,6 @@ type TAddToOrderProps = {
   type: 'deal' | 'menu';
 };
 
-type TItemToAddProps = {
-  quantity: number;
-  setQuantity: Dispatch<SetStateAction<number>>;
-  totalPriceHandler: (quantity: number, itemPrice: number) => void;
-  item: IMenuItem;
-  type: 'deal' | 'menu';
-};
-
 export const AddToOrder = (props: TAddToOrderProps) => {
   const { closeHandler, menuItems, price, type } = props;
   const orderContext = useOrderContext();
@@ -36,14 +28,92 @@ export const AddToOrder = (props: TAddToOrderProps) => {
     menuItems
   );
 
-  const totalPriceHandler = (quantity: number, itemPrice: number) => {
-    if (quantity > 0) {
-      if (type === 'menu') setTotalPrice(quantity * itemPrice);
-    }
-  };
+  const totalPriceHandler = useCallback(
+    (quantity: number, itemPrice: number) => {
+      if (quantity > 0 && type === 'menu') {
+        setTotalPrice(quantity * itemPrice);
+      }
+    },
+    [type]
+  );
+
+  const updateItemSelection = useCallback(
+    (
+      itemIndex: number,
+      selectionType: 'flavors' | 'sizes',
+      selectionValue: TFlavorValue | TSizeValue
+    ) => {
+      if (!updatedItems) return;
+      const updatedSelection = updatedItems[itemIndex][selectionType]?.map(
+        (selection) => {
+          if (selection.id === selectionValue.replace(/\s/g, '')) {
+            return {
+              ...selection,
+              checked: true,
+            };
+          } else
+            return {
+              ...selection,
+              checked: false,
+            };
+        }
+      );
+
+      setUpdatedItems((prevItems) => {
+        if (!prevItems) return null;
+        return prevItems.map((updatedItem, index) => {
+          if (index === itemIndex) {
+            return {
+              ...updatedItem,
+              [selectionType]: updatedSelection,
+            };
+          } else
+            return {
+              ...updatedItem,
+            };
+        });
+      });
+    },
+    [updatedItems]
+  );
+
+  const updateItemTopping = useCallback(
+    (
+      itemIndex: number,
+      toppingValue: 'Pepperoni' | 'Sausage' | 'Mushroom',
+      checked: boolean
+    ) => {
+      if (!updatedItems) return;
+      const updatedToppings = updatedItems[itemIndex].options?.map((option) => {
+        if (toppingValue === option.name) {
+          return { ...option, checked: checked };
+        } else
+          return {
+            ...option,
+          };
+      });
+      setUpdatedItems(
+        updatedItems.map((updatedItem, index) => {
+          if (index === itemIndex) {
+            return {
+              ...updatedItem,
+              options: updatedToppings,
+            };
+          } else
+            return {
+              ...updatedItem,
+            };
+        })
+      );
+    },
+    [updatedItems]
+  );
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log(updatedItems![0].flavors);
+    console.log(updatedItems![0].sizes);
+    console.log(updatedItems![0].options);
 
     if (updatedItems === null) return;
     orderContext.addToOrder({
@@ -66,13 +136,17 @@ export const AddToOrder = (props: TAddToOrderProps) => {
         data-testid="addToOrder"
       >
         <fieldset>
-          {updatedItems?.map((item) => (
+          {updatedItems?.map((item, index) => (
             <ItemToAdd
-              quantity={quantity}
-              setQuantity={setQuantity}
-              totalPriceHandler={totalPriceHandler}
+              index={index}
               item={item}
+              setQuantity={setQuantity}
+              setUpdatedItems={setUpdatedItems}
+              totalPriceHandler={totalPriceHandler}
               type={type}
+              updatedItems={updatedItems}
+              updateItemSelection={updateItemSelection}
+              updateItemTopping={updateItemTopping}
             />
           ))}
         </fieldset>
@@ -80,116 +154,4 @@ export const AddToOrder = (props: TAddToOrderProps) => {
         <Button type="submit" text="ADD TO ORDER" onClick={itemSubmitHandler} />
       </form>
     );
-};
-
-const ItemToAdd = (props: TItemToAddProps) => {
-  const { item, quantity, setQuantity, totalPriceHandler, type } = props;
-  const [formState, inputHandler] = useForm({}, true);
-  const [updatedItem, setUpdatedItem] = useState(item);
-  const [flavorValue, setFlavorValue] = useState(
-    item.flavors?.find((flavor) => flavor.checked === true)?.id || null
-  );
-  const [sizeValue, setSizeValue] = useState(
-    item.sizes?.find((size) => size.checked === true)?.id || null
-  );
-  useEffect(() => {
-    // updates all properties to match user inputs
-    //need to setUpdatedItem instead of mutating updatedItem directly
-
-    let updatedSizes;
-    let updatedOptions;
-    let updatedFlavors;
-
-    if (!updatedItem || !updatedItem.sizes) return;
-
-    for (const key in formState.inputs) {
-      if (key === 'size') {
-        updatedSizes = updatedItem.sizes.map((size) => {
-          if (size.id === formState.inputs[key].value) {
-            return {
-              ...size,
-              checked: true,
-            };
-          } else {
-            return {
-              ...size,
-              checked: false,
-            };
-          }
-        });
-      }
-
-      if (key === 'flavor') {
-        updatedFlavors = updatedItem.flavors?.map((flavor) => {
-          if (flavor.id === formState.inputs[key].value) {
-            return {
-              ...flavor,
-              checked: true,
-            };
-          } else {
-            return {
-              ...flavor,
-              checked: false,
-            };
-          }
-        });
-      }
-
-      updatedOptions = updatedItem.options.map((topping) => {
-        if (key === topping.name) {
-          return {
-            ...topping,
-            checked: formState.inputs[key].checked,
-          };
-        } else {
-          return { ...topping };
-        }
-      }) as TItemOption[];
-    }
-
-    setUpdatedItem({
-      ...updatedItem,
-      flavors: updatedFlavors || updatedItem.flavors || [],
-      options: updatedOptions || updatedItem.options || [],
-      sizes: updatedSizes || updatedItem.sizes || [],
-    });
-  }, [formState.inputs]);
-
-  useEffect(() => {
-    if (flavorValue && item.flavors) {
-      setFlavorValue(
-        item.flavors.find(
-          (flavorValue: TFlavor) => flavorValue.checked === true
-        )!.id
-      );
-    }
-    if (sizeValue && item.sizes) {
-      setSizeValue(
-        item.sizes.find((sizeValue: TSize) => sizeValue.checked === true)!.id
-      );
-    }
-  }, [flavorValue, item.flavors, sizeValue, item.sizes]);
-
-  return (
-    <>
-      {updatedItem && (
-        <div key={updatedItem._id}>
-          <legend>{updatedItem.name}</legend>
-          <ItemInputs
-            id={`${updatedItem._id}`}
-            updatedItem={updatedItem}
-            setUpdatedItem={setUpdatedItem}
-            inputHandler={inputHandler}
-            totalHandler={totalPriceHandler}
-            initialFlavorValue={flavorValue}
-            initialSizeValue={sizeValue}
-            quantity={quantity}
-            setQuantity={setQuantity}
-            disabled={type === 'deal' ? true : false}
-          />
-        </div>
-      )}
-      <hr />
-    </>
-  );
 };

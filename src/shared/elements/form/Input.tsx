@@ -66,7 +66,6 @@ export const Input = (props: InputProps) => {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     if (props.type === 'checkbox') {
-      props.optionsHandler(props.option, !isChecked);
       setIsChecked(!isChecked);
       dispatch({
         type: 'CHANGE',
@@ -75,15 +74,6 @@ export const Input = (props: InputProps) => {
         userActionChecked: !isChecked,
       });
       return;
-    }
-    if (props.type === 'number') {
-      props.setQuantity(parseInt(event.target.value));
-    }
-    if (props.type === 'select' && props.sizeHandler) {
-      props.sizeHandler(event);
-    }
-    if (props.type === 'select' && props.flavorHandler) {
-      props.flavorHandler(event);
     }
     dispatch({
       type: 'CHANGE',
@@ -165,7 +155,6 @@ export const Input = (props: InputProps) => {
       data-testid={dataTestID}
     />
   );
-
   return (
     <div
       className={`form-control ${
