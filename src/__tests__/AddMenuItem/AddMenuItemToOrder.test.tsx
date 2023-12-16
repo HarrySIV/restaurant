@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { IMenuItem } from '../../pages/menu/Menu';
-import { AddMenuItemToOrder } from '../../pages/menu/AddMenuItemToOrder';
+import { AddToOrder } from './../../shared/components/AddToOrder';
 
-describe('AddMenuItemToOrder Tests', () => {
+describe('AddToOrder Tests', () => {
   const menuItem: IMenuItem = {
     _id: '0',
     name: 'Pizza',
@@ -57,11 +57,11 @@ describe('AddMenuItemToOrder Tests', () => {
   };
 
   render(
-    <AddMenuItemToOrder
-      menuItem={menuItem}
-      initialSizeValue={'large'}
-      initialFlavorValue={null}
+    <AddToOrder
+      menuItems={[menuItem]}
       closeHandler={() => {}}
+      price={menuItem.price}
+      type="menu"
     />
   );
 

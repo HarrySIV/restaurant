@@ -1,11 +1,10 @@
-import { Dispatch, SetStateAction } from 'react';
-
 import { IMenuItem } from '../../pages/menu/Menu';
 
 import { Input } from '../elements/form/Input';
 import { VALIDATOR_MIN } from '../util/validators';
 
 type ItemInputsProps = {
+  disabled?: boolean;
   id: string;
   inputHandler: (
     id: string,
@@ -13,8 +12,6 @@ type ItemInputsProps = {
     userInputIsValid: boolean
   ) => void;
   updatedItem: IMenuItem;
-  setUpdatedItem: Dispatch<SetStateAction<IMenuItem>>;
-  disabled?: boolean;
 };
 
 export const ItemInputs = (props: ItemInputsProps) => {

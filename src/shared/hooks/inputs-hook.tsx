@@ -3,16 +3,20 @@ import { TFlavorValue, TSizeValue } from '../../types/OptionTypes';
 
 import { IMenuItem } from './../../pages/menu/Menu';
 
-export const useInputs = (menuItem: IMenuItem | null, formStateInputs: any) => {
+export const useInputs = (
+  menuItem: IMenuItem,
+  formStateInputs: any,
+  totalPriceHandler: (quantity: number, itemPrice: number) => void
+) => {
   const [updatedItem, setUpdatedItem] = useState(menuItem);
 
-  //update item by formStateInputs and return the new item
+  //update item by formStateInputs
   const updateItemSelection = useCallback(
     (
       selectionType: 'flavors' | 'sizes',
       selectionValue: TFlavorValue | TSizeValue
     ) => {
-      const updatedSelection = menuItem![selectionType]?.map((selection) => {
+      const updatedSelection = menuItem[selectionType]?.map((selection) => {
         if (selection.id === selectionValue.replace(/\s/g, '')) {
           return {
             ...selection,
@@ -24,14 +28,21 @@ export const useInputs = (menuItem: IMenuItem | null, formStateInputs: any) => {
             checked: false,
           };
       });
-      return updatedSelection;
+
+      setUpdatedItem((previousItem) => {
+        return {
+          ...previousItem,
+          [selectionType]: updatedSelection,
+        };
+      });
     },
     [menuItem]
   );
 
+  /* update item by formStateInputs */
   const updateItemTopping = useCallback(
     (toppingValue: 'Pepperoni' | 'Sausage' | 'Mushroom', checked: boolean) => {
-      const updatedToppings = menuItem!.options?.map((option) => {
+      const updatedToppings = menuItem.options?.map((option) => {
         if (toppingValue === option.name) {
           return { ...option, checked: checked };
         } else
@@ -39,31 +50,49 @@ export const useInputs = (menuItem: IMenuItem | null, formStateInputs: any) => {
             ...option,
           };
       });
-      return updatedToppings;
+      setUpdatedItem((previousItem) => {
+        return {
+          ...previousItem,
+          options: updatedToppings,
+        };
+      });
     },
     [menuItem]
   );
 
+  //updates the price based on input quantity and toppings
   useEffect(() => {
-    if (!menuItem) return;
+    if (!formStateInputs.quantity || !updatedItem) return;
+    let optionsTotal = 0;
+    let itemTotal = 0;
+    updatedItem.options.forEach((option) => {
+      if (option.checked) optionsTotal += option.price;
+    });
+    const size = updatedItem.sizes?.find((size) => size.checked === true)?.id;
+    if (size && updatedItem.sizes) {
+      const itemPrice = updatedItem.sizes.find(
+        (itemSize) => itemSize.value.toLowerCase() === size.toLowerCase()
+      )!.price;
+      itemTotal = itemPrice + optionsTotal;
+    } else itemTotal = updatedItem.price + optionsTotal;
+    totalPriceHandler(parseInt(formStateInputs.quantity.value), itemTotal);
+  }, [formStateInputs, totalPriceHandler, updatedItem]);
+
+  //handles toppings/sizes/flavor inputs
+  useEffect(() => {
+    if (!menuItem || !formStateInputs) return;
     for (const key in formStateInputs) {
       if (key === 'size') {
-        updateItemSelection(
-          index,
-          'sizes',
-          formStateInputs.size.value as TSizeValue
-        );
+        updateItemSelection('sizes', formStateInputs.size.value as TSizeValue);
       }
       if (key === 'flavor') {
         updateItemSelection(
-          index,
           'flavors',
           formStateInputs.flavor.value as TFlavorValue
         );
       }
       if (key === 'Pepperoni' || 'Sausage' || 'Mushroom') {
         updateItemTopping(
-          index,
           key as 'Pepperoni' | 'Sausage' | 'Mushroom',
           formStateInputs[key].checked!
         );
@@ -71,5 +100,5 @@ export const useInputs = (menuItem: IMenuItem | null, formStateInputs: any) => {
     }
   }, [menuItem, formStateInputs, updateItemSelection, updateItemTopping]);
 
-  return [updatedItem];
+  return { updatedItem };
 };

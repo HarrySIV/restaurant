@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from 'react';
 
-import { TFlavorValue, TSizeValue } from '../../types/OptionTypes';
 import { IMenuItem } from '../../pages/menu/Menu';
 
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
@@ -31,89 +30,33 @@ export const AddToOrder = (props: TAddToOrderProps) => {
   const totalPriceHandler = useCallback(
     (quantity: number, itemPrice: number) => {
       if (quantity > 0 && type === 'menu') {
+        setQuantity(quantity);
         setTotalPrice(quantity * itemPrice);
       }
     },
     [type]
   );
 
-  const updateItemSelection = useCallback(
-    (
-      itemIndex: number,
-      selectionType: 'flavors' | 'sizes',
-      selectionValue: TFlavorValue | TSizeValue
-    ) => {
-      if (!updatedItems) return;
-      const updatedSelection = updatedItems[itemIndex][selectionType]?.map(
-        (selection) => {
-          if (selection.id === selectionValue.replace(/\s/g, '')) {
-            return {
-              ...selection,
-              checked: true,
-            };
-          } else
-            return {
-              ...selection,
-              checked: false,
-            };
-        }
-      );
-
-      setUpdatedItems((prevItems) => {
-        if (!prevItems) return null;
-        return prevItems.map((updatedItem, index) => {
-          if (index === itemIndex) {
-            return {
-              ...updatedItem,
-              [selectionType]: updatedSelection,
-            };
-          } else
+  const updateItemHandler = useCallback(
+    (itemIndex: number, updatedItem: IMenuItem) => {
+      setUpdatedItems((previousItems) => {
+        return previousItems?.map((previousItem, prevItemIndex) => {
+          if (itemIndex === prevItemIndex) {
             return {
               ...updatedItem,
             };
-        });
+          } else
+            return {
+              ...previousItem,
+            };
+        }) as IMenuItem[];
       });
     },
-    [updatedItems]
-  );
-
-  const updateItemTopping = useCallback(
-    (
-      itemIndex: number,
-      toppingValue: 'Pepperoni' | 'Sausage' | 'Mushroom',
-      checked: boolean
-    ) => {
-      if (!updatedItems) return;
-      const updatedToppings = updatedItems[itemIndex].options?.map((option) => {
-        if (toppingValue === option.name) {
-          return { ...option, checked: checked };
-        } else
-          return {
-            ...option,
-          };
-      });
-      setUpdatedItems(
-        updatedItems.map((updatedItem, index) => {
-          if (index === itemIndex) {
-            return {
-              ...updatedItem,
-              options: updatedToppings,
-            };
-          } else
-            return {
-              ...updatedItem,
-            };
-        })
-      );
-    },
-    [updatedItems]
+    []
   );
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(updatedItems![0].flavors);
-    console.log(updatedItems![0].sizes);
-    console.log(updatedItems![0].options);
 
     if (updatedItems === null) return;
     orderContext.addToOrder({
@@ -127,26 +70,25 @@ export const AddToOrder = (props: TAddToOrderProps) => {
     closeHandler();
   };
 
-  if (updatedItems === null) return <LoadingSpinner />;
+  if (!updatedItems) return <LoadingSpinner />;
   else
     return (
       <form
         className="order-form"
+        key="form"
         onSubmit={itemSubmitHandler}
         data-testid="addToOrder"
       >
-        <fieldset>
-          {updatedItems?.map((item, index) => (
+        <fieldset key="fieldset">
+          {menuItems.map((item, index) => (
             <ItemToAdd
               index={index}
               item={item}
-              setQuantity={setQuantity}
+              key={`${item._id}-${index}`}
               setUpdatedItems={setUpdatedItems}
               totalPriceHandler={totalPriceHandler}
               type={type}
-              updatedItems={updatedItems}
-              updateItemSelection={updateItemSelection}
-              updateItemTopping={updateItemTopping}
+              updateItemHandler={updateItemHandler}
             />
           ))}
         </fieldset>
