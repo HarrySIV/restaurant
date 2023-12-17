@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 import { IMenuItem } from '../../pages/menu/Menu';
 
@@ -10,6 +10,7 @@ import { LoadingSpinner } from '../elements/ui/LoadingSpinner';
 import { Button } from '../../shared/elements/form/Button';
 
 import './_AddToOrder.scss';
+import { useItems } from '../hooks/items-hook';
 
 type TAddToOrderProps = {
   closeHandler: () => void;
@@ -21,39 +22,13 @@ type TAddToOrderProps = {
 export const AddToOrder = (props: TAddToOrderProps) => {
   const { closeHandler, menuItems, price, type } = props;
   const orderContext = useOrderContext();
-  const [totalPrice, setTotalPrice] = useState(price);
-  const [quantity, setQuantity] = useState(1);
-  const [updatedItems, setUpdatedItems] = useState<IMenuItem[] | null>(
-    menuItems
-  );
-
-  const totalPriceHandler = useCallback(
-    (quantity: number, itemPrice: number) => {
-      if (quantity > 0 && type === 'menu') {
-        setQuantity(quantity);
-        setTotalPrice(quantity * itemPrice);
-      }
-    },
-    [type]
-  );
-
-  const updateItemHandler = useCallback(
-    (itemIndex: number, updatedItem: IMenuItem) => {
-      setUpdatedItems((previousItems) => {
-        return previousItems?.map((previousItem, prevItemIndex) => {
-          if (itemIndex === prevItemIndex) {
-            return {
-              ...updatedItem,
-            };
-          } else
-            return {
-              ...previousItem,
-            };
-        }) as IMenuItem[];
-      });
-    },
-    []
-  );
+  const {
+    updatedItems,
+    totalPrice,
+    quantity,
+    updateItemHandler,
+    totalPriceHandler,
+  } = useItems(menuItems, type, price);
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -66,11 +41,10 @@ export const AddToOrder = (props: TAddToOrderProps) => {
       itemPrice: totalPrice,
       type: type,
     });
-    setUpdatedItems(null);
     closeHandler();
   };
 
-  if (!updatedItems) return <LoadingSpinner />;
+  if (!menuItems) return <LoadingSpinner />;
   else
     return (
       <form
@@ -85,7 +59,6 @@ export const AddToOrder = (props: TAddToOrderProps) => {
               index={index}
               item={item}
               key={`${item._id}-${index}`}
-              setUpdatedItems={setUpdatedItems}
               totalPriceHandler={totalPriceHandler}
               type={type}
               updateItemHandler={updateItemHandler}

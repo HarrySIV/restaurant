@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { IMenuItem } from '../../pages/menu/Menu';
 
@@ -9,7 +9,6 @@ import { useInputs } from './../hooks/inputs-hook';
 type TItemToAddProps = {
   index: number;
   item: IMenuItem;
-  setUpdatedItems: Dispatch<SetStateAction<IMenuItem[] | null>>;
   totalPriceHandler: (quantity: number, itemPrice: number) => void;
   type: 'deal' | 'menu';
   updateItemHandler: (itemIndex: number, updatedItem: IMenuItem) => void;
