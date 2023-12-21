@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
-
 import { IMenuItem } from '../../pages/menu/Menu';
 
-import { useForm } from '../../shared/hooks/form-hook';
 import { ItemInputs } from './ItemInputs';
-import { useInputs } from './../hooks/inputs-hook';
 
 type TItemToAddProps = {
   index: number;
+  inputHandler: (
+    id: string,
+    userInputValue: string,
+    userInputIsValid: boolean
+  ) => void;
   item: IMenuItem;
   totalPriceHandler: (quantity: number, itemPrice: number) => void;
   type: 'deal' | 'menu';
@@ -15,24 +16,18 @@ type TItemToAddProps = {
 };
 
 export const ItemToAdd = (props: TItemToAddProps) => {
-  const { index, item, totalPriceHandler, type, updateItemHandler } = props;
-  const [formState, inputHandler] = useForm({}, true);
-  const { updatedItem } = useInputs(item, formState.inputs, totalPriceHandler);
-
-  useEffect(() => {
-    updateItemHandler(index, updatedItem);
-  }, [index, updateItemHandler, updatedItem]);
+  const { item, type, inputHandler } = props;
 
   return (
     <>
-      {updatedItem && (
+      {item && (
         <>
-          <legend>{updatedItem.name}</legend>
+          <legend>{item.name}</legend>
           <ItemInputs
             disabled={type === 'deal' ? true : false}
-            id={`${updatedItem._id}`}
+            id={`${item._id}`}
             inputHandler={inputHandler}
-            updatedItem={updatedItem}
+            updatedItem={item}
           />
         </>
       )}

@@ -6,11 +6,12 @@ import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 
 import { ItemToAdd } from './ItemToAdd';
 
+import { useItems } from '../hooks/items-hook';
+
 import { LoadingSpinner } from '../elements/ui/LoadingSpinner';
 import { Button } from '../../shared/elements/form/Button';
 
 import './_AddToOrder.scss';
-import { useItems } from '../hooks/items-hook';
 
 type TAddToOrderProps = {
   closeHandler: () => void;
@@ -21,14 +22,15 @@ type TAddToOrderProps = {
 
 export const AddToOrder = (props: TAddToOrderProps) => {
   const { closeHandler, menuItems, price, type } = props;
-  const orderContext = useOrderContext();
   const {
-    updatedItems,
-    totalPrice,
+    inputHandler,
     quantity,
-    updateItemHandler,
+    totalPrice,
     totalPriceHandler,
+    updateItemHandler,
+    updatedItems,
   } = useItems(menuItems, type, price);
+  const orderContext = useOrderContext();
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -57,6 +59,7 @@ export const AddToOrder = (props: TAddToOrderProps) => {
           {menuItems.map((item, index) => (
             <ItemToAdd
               index={index}
+              inputHandler={inputHandler}
               item={item}
               key={`${item._id}-${index}`}
               totalPriceHandler={totalPriceHandler}

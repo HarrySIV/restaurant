@@ -1,4 +1,7 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
+
+import { useForm } from './form-hook';
+
 import {
   TFlavor,
   TFlavorValue,
@@ -6,15 +9,47 @@ import {
   TSize,
   TSizeValue,
 } from '../../types/OptionTypes';
+import { IMenuItem } from '../../pages/menu/Menu';
 
-import { IMenuItem } from './../../pages/menu/Menu';
-
-export const useInputs = (
-  menuItem: IMenuItem,
-  formStateInputs: any,
-  totalPriceHandler: (quantity: number, itemPrice: number) => void
+export const xuseItemsx = (
+  menuItems: IMenuItem[],
+  type: 'menu' | 'deal',
+  price: number
 ) => {
-  const [updatedItem, setUpdatedItem] = useState(menuItem);
+  const [formState, inputHandler] = useForm({}, true);
+  const [updatedItems, setUpdatedItems] = useState<IMenuItem[] | null>(
+    menuItems
+  );
+  const [totalPrice, setTotalPrice] = useState(price);
+  const [quantity, setQuantity] = useState(1);
+
+  const totalPriceHandler = useCallback(
+    (quantity: number, itemPrice: number) => {
+      if (quantity > 0 && type === 'menu') {
+        setQuantity(quantity);
+        setTotalPrice(quantity * itemPrice);
+      }
+    },
+    [type]
+  );
+
+  const updateItemHandler = useCallback(
+    (itemIndex: number, updatedItem: IMenuItem) => {
+      setUpdatedItems((previousItems) => {
+        return previousItems?.map((previousItem, prevItemIndex) => {
+          if (itemIndex === prevItemIndex) {
+            return {
+              ...updatedItem,
+            };
+          } else
+            return {
+              ...previousItem,
+            };
+        }) as IMenuItem[];
+      });
+    },
+    []
+  );
 
   //update item by formStateInputs
   const updateItemSelection = useCallback(
@@ -37,7 +72,7 @@ export const useInputs = (
 
       return updatedSelection;
     },
-    [menuItem]
+    [menuItems]
   );
 
   /* update item by formStateInputs */
@@ -54,38 +89,41 @@ export const useInputs = (
 
   //handles toppings/sizes/flavor inputs
   useEffect(() => {
-    if (!menuItem || !formStateInputs) return;
+    if (!menuItem || !formState.inputs) return;
     let options = [] as TItemOption[];
     let sizes = [] as TSize[];
     let flavors = [] as TFlavorValue[];
 
-    for (const key in formStateInputs) {
+    for (const key in formState.inputs) {
       switch (key) {
         case 'size':
           sizes = updateItemSelection(
             'sizes',
-            formStateInputs.size.value as TSizeValue
+            formState.inputs.size.value as TSizeValue
           );
           break;
         case 'flavor':
           flavors = updateItemSelection(
             'flavors',
-            formStateInputs.flavor.value as TFlavorValue
+            formState.inputs.flavor.value as TFlavorValue
           );
           break;
         case 'Pepperoni':
           options.push(
-            updateItemTopping(key as 'Pepperoni', formStateInputs[key].checked)!
+            updateItemTopping(
+              key as 'Pepperoni',
+              formState.inputs[key].checked
+            )!
           );
           break;
         case 'Sausage':
           options.push(
-            updateItemTopping(key as 'Sausage', formStateInputs[key].checked)!
+            updateItemTopping(key as 'Sausage', formState.inputs[key].checked)!
           );
           break;
         case 'Mushroom':
           options.push(
-            updateItemTopping(key as 'Mushroom', formStateInputs[key].checked)!
+            updateItemTopping(key as 'Mushroom', formState.inputs[key].checked)!
           );
           break;
         default:
@@ -93,7 +131,7 @@ export const useInputs = (
       }
     }
 
-    setUpdatedItem({
+    setUpdatedItems({
       ...updatedItem,
       options: options,
       sizes: sizes,
@@ -101,7 +139,7 @@ export const useInputs = (
     });
   }, [
     menuItem,
-    formStateInputs,
+    formState.inputs,
     updateItemSelection,
     updateItemTopping,
     updatedItem,
@@ -109,7 +147,7 @@ export const useInputs = (
 
   //updates the price based on input quantity and toppings
   useEffect(() => {
-    if (!formStateInputs.quantity || !updatedItem) return;
+    if (!formState.inputs.quantity || !updatedItem) return;
     let optionsTotal = 0;
     let itemTotal = 0;
     updatedItem.options.forEach((option) => {
@@ -122,8 +160,15 @@ export const useInputs = (
       )!.price;
       itemTotal = itemPrice + optionsTotal;
     } else itemTotal = updatedItem.price + optionsTotal;
-    totalPriceHandler(parseInt(formStateInputs.quantity.value), itemTotal);
-  }, [formStateInputs, totalPriceHandler, updatedItem]);
+    totalPriceHandler(parseInt(formState.inputs.quantity.value), itemTotal);
+  }, [formState.inputs, totalPriceHandler]);
 
-  return { updatedItem };
+  return {
+    inputHandler,
+    quantity,
+    totalPrice,
+    totalPriceHandler,
+    updatedItems,
+    updateItemHandler,
+  };
 };
