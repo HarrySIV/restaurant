@@ -1,3 +1,5 @@
+import { Button } from '../../shared/elements/form/Button';
+import { useOrder } from '../../shared/hooks/order-hook';
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 import { IMenuItem } from '../menu/Menu';
 
@@ -11,6 +13,7 @@ type ItemProps = {
 export const Order = () => {
   const orderContext = useOrderContext();
   const { orderItems, total } = orderContext;
+  const { addOrder } = useOrder();
 
   if (orderItems === null) {
     return (
@@ -20,29 +23,32 @@ export const Order = () => {
     );
   }
 
+  const submitOrder = () => {
+    addOrder();
+  };
+
   return (
     <div className="order-page">
       {total === 0 ? null : <h1>Total: ${total.toFixed(2)}</h1>}
-      <div>
-        {orderItems.map((orderItem) => {
-          return (
-            <>
-              <hr />
-              <div className="order-line-item-box">
-                <h2 className="order-items-quantity">{orderItem.quantity}x</h2>
-                <div className="order-line-items">
-                  {orderItem.items.map((item, index) => (
-                    <Item item={item} key={`${item._id}-${index}`} />
-                  ))}
-                </div>
-                <h1 className="order-items-price">
-                  ${orderItem.itemPrice.toFixed(2)}
-                </h1>
+      {orderItems.map((orderItem) => {
+        return (
+          <>
+            <hr />
+            <div className="order-line-item-box">
+              <h2 className="order-items-quantity">{orderItem.quantity}x</h2>
+              <div className="order-line-items">
+                {orderItem.items.map((item, index) => (
+                  <Item item={item} key={`${item._id}-${index}`} />
+                ))}
               </div>
-            </>
-          );
-        })}
-      </div>
+              <h1 className="order-items-price">
+                ${orderItem.itemPrice.toFixed(2)}
+              </h1>
+            </div>
+          </>
+        );
+      })}
+      <Button text="SUBMIT" onClick={submitOrder} />
     </div>
   );
 };

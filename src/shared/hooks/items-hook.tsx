@@ -15,7 +15,6 @@ export const useItems = (
 
   const updateItemHandler = useCallback(
     (itemToUpdateIndex: number, itemToUpdate: IMenuItem) => {
-      console.log(itemToUpdate);
       setUpdatedItems((prevItems) => {
         return prevItems?.map((prevItem, index) => {
           if (index === itemToUpdateIndex) {
