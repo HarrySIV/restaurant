@@ -1,22 +1,18 @@
+import { SetStateAction } from 'react';
 import { IMenuItem } from '../../pages/menu/Menu';
 
 import { ItemInputs } from './ItemInputs';
 
 type TItemToAddProps = {
   index: number;
-  inputHandler: (
-    id: string,
-    userInputValue: string,
-    userInputIsValid: boolean
-  ) => void;
   item: IMenuItem;
-  totalPriceHandler: (quantity: number, itemPrice: number) => void;
+  setQuantity: React.Dispatch<SetStateAction<number>>;
   type: 'deal' | 'menu';
   updateItemHandler: (itemIndex: number, updatedItem: IMenuItem) => void;
 };
 
 export const ItemToAdd = (props: TItemToAddProps) => {
-  const { item, type, inputHandler } = props;
+  const { index, item, setQuantity, type, updateItemHandler } = props;
 
   return (
     <>
@@ -26,8 +22,10 @@ export const ItemToAdd = (props: TItemToAddProps) => {
           <ItemInputs
             disabled={type === 'deal' ? true : false}
             id={`${item._id}`}
-            inputHandler={inputHandler}
-            updatedItem={item}
+            index={index}
+            setQuantity={setQuantity}
+            item={item}
+            updateItemHandler={updateItemHandler}
           />
         </>
       )}

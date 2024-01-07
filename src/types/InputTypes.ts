@@ -10,16 +10,29 @@ export type UserInputState = {
   userInputValue: string;
   userInputIsValid: boolean;
   userInputIsTouched: boolean;
+  userInputChecked: boolean;
 };
 
 export type UserInputActions =
   | {
       type: 'CHANGE';
       userActionValue: string;
-      userActionChecked?: boolean;
+      userActionChecked: boolean;
       validators?: { type: string; configVal: number }[] | { type: string }[];
     }
   | { type: 'TOUCH' };
+
+type onSelectionInput = (
+  id: 'sizes' | 'flavors',
+  userInputValue: TSizeValue | TFlavorValue
+) => void;
+
+type onQuantityInput = (userInputValue: string) => void;
+
+type onToppingInput = (
+  id: 'Pepperoni' | 'Mushrooms' | 'Sausage',
+  checked?: boolean
+) => void;
 
 type GenericInputElementProps = {
   id: string;
@@ -29,12 +42,7 @@ type GenericInputElementProps = {
   validators?: { type: string; configVal?: number }[];
   initialValid?: boolean;
   dataTestID: string;
-  onInput: (
-    id: string,
-    userInputValue: string,
-    userInputIsValid: boolean,
-    checked?: boolean
-  ) => void;
+  onInput: onSelectionInput | onQuantityInput | onToppingInput;
 };
 
 type TextElementProps = GenericInputElementProps & {

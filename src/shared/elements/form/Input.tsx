@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect, Reducer } from 'react';
+import React, { useReducer, useEffect, Reducer } from 'react';
 import {
   InputProps,
   UserInputActions,
@@ -28,6 +28,7 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
             : userInputState.userInputIsValid,
         // userInputChecked: userInputAction.checked,
         userInputIsTouched: userInputState.userInputIsTouched,
+        userInputChecked: userInputAction.userActionChecked,
       };
     case 'TOUCH':
       return {
@@ -43,20 +44,28 @@ const inputReducer: Reducer<UserInputState, UserInputActions> = (
 to 1 or an empty string. If initial validity is important, set it, otherwise assume the program always
 starts a form as valid */
 export const Input = (props: InputProps) => {
-  const [isChecked, setIsChecked] = useState(false);
   const [inputReducerState, dispatch] = useReducer(inputReducer, {
     userInputValue: props.initialValue ? props.initialValue : '1',
     userInputIsValid: props.initialValid ? props.initialValid : true,
     userInputIsTouched: false,
+    userInputChecked: false,
   });
 
   /* on input, updates onInput function with input values on change, 
   which really just executes "changeHandler" and dispatches to the reducer */
   const { id, onInput, dataTestID } = props;
-  const { userInputValue, userInputIsValid } = inputReducerState;
+  const { userInputValue, userInputIsValid, userInputChecked } =
+    inputReducerState;
   useEffect(() => {
-    onInput(id, userInputValue, userInputIsValid, isChecked);
-  }, [id, userInputValue, userInputIsValid, onInput, isChecked]);
+    // @ts-ignore
+    if (id === 'sizes' || id === 'flavors') onInput(id, userInputValue);
+    // @ts-ignore
+    if (id === 'quantity') onInput(userInputValue);
+    if (id === 'Pepperoni' || id === 'Mushroom' || id === 'Sausage') {
+      // @ts-ignore
+      onInput(id, userInputChecked);
+    }
+  }, [id, userInputValue, userInputIsValid, onInput, userInputChecked]);
 
   //handles input changes and dispatches to inputReducer
   const changeHandler = (
@@ -65,20 +74,11 @@ export const Input = (props: InputProps) => {
       | React.ChangeEvent<HTMLTextAreaElement>
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
-    if (props.type === 'checkbox') {
-      setIsChecked(!isChecked);
-      dispatch({
-        type: 'CHANGE',
-        userActionValue: event.target.value,
-        validators: props.validators,
-        userActionChecked: !isChecked,
-      });
-      return;
-    }
     dispatch({
       type: 'CHANGE',
       userActionValue: event.target.value,
       validators: props.validators,
+      userActionChecked: !userInputChecked,
     });
   };
 
@@ -119,7 +119,7 @@ export const Input = (props: InputProps) => {
         id={props.id}
         type={props.type}
         onChange={changeHandler}
-        checked={isChecked}
+        checked={!!userInputChecked}
         data-testid={dataTestID}
       />
       <label htmlFor={props.id}>{props.label}</label>

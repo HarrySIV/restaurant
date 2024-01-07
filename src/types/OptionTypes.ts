@@ -1,4 +1,10 @@
-export type TItemOption = { name: string; price: number; checked: boolean };
+export type TItemOption = {
+  name: TToppingValues;
+  price: number;
+  checked: boolean;
+};
+
+export type TToppingValues = 'Pepperoni' | 'Mushroom' | 'Sausage';
 
 export type TFlavorValue =
   | ('pepsi' | 'drpepper' | 'mountaindew')

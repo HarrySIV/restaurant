@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { IMenuItem } from '../../pages/menu/Menu';
 
 import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
@@ -22,19 +20,12 @@ type TAddToOrderProps = {
 
 export const AddToOrder = (props: TAddToOrderProps) => {
   const { closeHandler, menuItems, price, type } = props;
-  const {
-    inputHandler,
-    quantity,
-    totalPrice,
-    totalPriceHandler,
-    updateItemHandler,
-    updatedItems,
-  } = useItems(menuItems, type, price);
+  const { quantity, setQuantity, totalPrice, updateItemHandler, updatedItems } =
+    useItems(menuItems, type, price);
   const orderContext = useOrderContext();
 
   const itemSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (updatedItems === null) return;
     orderContext.addToOrder({
       items: updatedItems,
@@ -59,10 +50,9 @@ export const AddToOrder = (props: TAddToOrderProps) => {
           {menuItems.map((item, index) => (
             <ItemToAdd
               index={index}
-              inputHandler={inputHandler}
               item={item}
               key={`${item._id}-${index}`}
-              totalPriceHandler={totalPriceHandler}
+              setQuantity={setQuantity}
               type={type}
               updateItemHandler={updateItemHandler}
             />
