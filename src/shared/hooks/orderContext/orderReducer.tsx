@@ -6,7 +6,6 @@ export type OrderAction =
       type: 'ADD_ITEM';
       newItems: TOrderSubmission;
       total: number;
-      itemID: number;
     }
   | { type: 'UPDATE_QUANTITY' }
   | {

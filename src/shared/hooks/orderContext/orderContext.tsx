@@ -4,9 +4,9 @@ import { orderReducer } from './orderReducer';
 
 export type TOrderSubmission = {
   itemID: number;
+  itemPrice: number;
   items: IMenuItem[];
   quantity: number;
-  itemPrice: number;
   type: 'deal' | 'menu';
 };
 
@@ -29,9 +29,14 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     const { items, quantity, itemID, itemPrice, type } = orderSubmission;
     dispatch({
       type: 'ADD_ITEM',
-      newItems: { items, quantity, itemPrice, type } as TOrderSubmission,
+      newItems: {
+        itemID,
+        itemPrice,
+        items,
+        quantity,
+        type,
+      } as TOrderSubmission,
       total: itemPrice,
-      itemID: itemID,
     });
   };
 
