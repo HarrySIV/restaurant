@@ -44,6 +44,7 @@ export const Order = () => {
               <h1 className="order-items-price">
                 ${orderItem.itemPrice.toFixed(2)}
               </h1>
+              <Button text="DELETE" onClick={orderContext.deleteFromOrder} />
             </div>
           </>
         );

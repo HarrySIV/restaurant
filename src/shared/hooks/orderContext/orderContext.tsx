@@ -37,21 +37,15 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   /* returns new array without item submitted */
   const deleteFromOrder = (orderSubmission: TOrderSubmission | null) => {
-    // if (orderSubmission === null) return;
-    // if (orderSubmission.type === 'menuItem') {
-    //   const { item, total } = orderSubmission;
-    //   const updatedOrderItems = order.items.filter(
-    //     (orderItem) => orderItem !== null && orderItem.item._id !== item?._id
-    //   );
-    //   updatePrice(total);
-    //   dispatch({
-    //     type: 'REMOVE_ITEM',
-    //     updatedOrderItems: updatedOrderItems,
-    //     total: order.total,
-    //   });
-    // }
-    // if (orderSubmission.type === 'deal') {
-    // }
+    if (orderSubmission === null || order.orderItems === null) return;
+    const filteredOrderItems = order.orderItems.filter((item) => {
+      return orderSubmission.itemID !== item.itemID;
+    });
+    dispatch({
+      type: 'REMOVE_ITEM',
+      updatedOrderItems: filteredOrderItems,
+      total: orderSubmission.itemPrice,
+    });
   };
 
   /* finds item within order and returns new item. current logic is super wrong*/
