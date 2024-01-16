@@ -15,7 +15,6 @@ export interface IOrderContext {
   total: number;
   clearOrder: () => void;
   addToOrder: (orderSubmission: TOrderSubmission | null) => void;
-  updateItemQuantity: (orderSubmission: TOrderSubmission | null) => void;
   deleteFromOrder: (orderSubmission: TOrderSubmission | null) => void;
   updatePrice: (total: number) => void;
 }
@@ -53,26 +52,6 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  /* finds item within order and returns new item. current logic is super wrong*/
-  const updateItemQuantity = (orderSubmission: TOrderSubmission | null) => {
-    // if (orderSubmission === null) return;
-    // const { item, total } = orderSubmission;
-    // const newOrder = {
-    //   items: order.items.map((newOrderItem) => {
-    //     if (newOrderItem !== null && newOrderItem.item._id === item._id) {
-    //       return orderSubmission;
-    //     }
-    //     return newOrderItem;
-    //   }),
-    // };
-    // updatePrice(total);
-    // dispatch({
-    //   type: 'UPDATE_QUANTITY',
-    //   newOrder: newOrder,
-    //   total: order.total,
-    // });
-  };
-
   const clearOrder = () => {
     dispatch({ type: 'CLEAR_ORDER' });
   };
@@ -87,7 +66,6 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     total: order.total,
     addToOrder,
     deleteFromOrder,
-    updateItemQuantity,
     clearOrder,
     updatePrice,
   };
@@ -102,7 +80,6 @@ const initialOrderState: IOrderContext = {
   total: 0,
   clearOrder: () => {},
   addToOrder: (orderSubmission = null) => {},
-  updateItemQuantity: (orderSubmission = null) => {},
   deleteFromOrder: (orderSubmission = null) => {},
   updatePrice: (total = 0) => {},
 };

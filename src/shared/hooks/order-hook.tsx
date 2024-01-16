@@ -13,7 +13,7 @@ interface IOrder {
 }
 
 export const useOrder = () => {
-  const context = useOrderContext();
+  const { orderItems, total } = useOrderContext();
   const { sendRequest } = useHttpClient();
   const [orders, setOrders] = useState<IOrder[]>();
   const [message, setMessage] = useState<{ message: string }>();
@@ -34,7 +34,13 @@ export const useOrder = () => {
       const responseData = await sendRequest(
         `${environment.api}/orders`,
         'POST',
-        context
+        {
+          customer_name: 'guest',
+          phone_number: '5551234567',
+          _id: Math.random().toString(),
+          items: orderItems,
+          total: total,
+        }
       );
       setMessage(responseData.message);
     } catch (error) {}

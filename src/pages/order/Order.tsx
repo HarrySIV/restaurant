@@ -12,10 +12,10 @@ type ItemProps = {
 
 export const Order = () => {
   const orderContext = useOrderContext();
-  const { orderItems, total } = orderContext;
+  const { clearOrder, deleteFromOrder, orderItems, total } = orderContext;
   const { addOrder } = useOrder();
 
-  if (orderItems === null) {
+  if (orderItems === null || orderItems.length < 1) {
     return (
       <h1>
         No items have been added to the order. Try ordering from our menu!
@@ -23,8 +23,9 @@ export const Order = () => {
     );
   }
 
-  const submitOrder = () => {
-    addOrder();
+  const submitOrder = async () => {
+    await addOrder();
+    clearOrder();
   };
 
   return (
@@ -46,12 +47,13 @@ export const Order = () => {
               </h1>
               <Button
                 text="DELETE"
-                onClick={() => orderContext.deleteFromOrder(orderItem)}
+                onClick={() => deleteFromOrder(orderItem)}
               />
             </div>
           </>
         );
       })}
+
       <Button text="SUBMIT" onClick={submitOrder} />
     </div>
   );
@@ -74,18 +76,18 @@ const Item = (props: ItemProps) => {
           <div className="order-line-item-inner-box">
             <div>
               <h3>
-                {item.options.map((option) =>
-                  option.checked === true ? (
+                {item.options.map((option) => {
+                  return option.checked === true ? (
                     <span key={option.name}>{option.name + '  '}</span>
-                  ) : null
-                )}
+                  ) : null;
+                })}
               </h3>
               <h3>
-                {item.flavors?.map((flavor) =>
-                  flavor.checked === true ? (
+                {item.flavors?.map((flavor) => {
+                  return flavor.checked === true ? (
                     <span key={flavor.value}>{flavor.value}</span>
-                  ) : null
-                )}
+                  ) : null;
+                })}
               </h3>
             </div>
           </div>
