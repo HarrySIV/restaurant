@@ -29,10 +29,10 @@ export const useOrder = () => {
     getOrders();
   }, [sendRequest]);
 
-  const addOrder = async () => {
+  const submitOrder = async () => {
     try {
       const responseData = await sendRequest(
-        `${environment.api}/orders`,
+        `${environment.testingAPI}/orders`,
         'POST',
         {
           customer_name: 'guest',
@@ -46,5 +46,5 @@ export const useOrder = () => {
     } catch (error) {}
   };
 
-  return { orders, addOrder, message };
+  return { orders, submitOrder, message };
 };

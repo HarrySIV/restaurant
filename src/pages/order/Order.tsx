@@ -13,7 +13,7 @@ type ItemProps = {
 export const Order = () => {
   const orderContext = useOrderContext();
   const { clearOrder, deleteFromOrder, orderItems, total } = orderContext;
-  const { addOrder } = useOrder();
+  const { submitOrder } = useOrder();
 
   if (orderItems === null || orderItems.length < 1) {
     return (
@@ -23,8 +23,8 @@ export const Order = () => {
     );
   }
 
-  const submitOrder = async () => {
-    await addOrder();
+  const submitOrderHandler = async () => {
+    await submitOrder();
     clearOrder();
   };
 
@@ -54,7 +54,7 @@ export const Order = () => {
         );
       })}
 
-      <Button text="SUBMIT" onClick={submitOrder} />
+      <Button text="SUBMIT" onClick={submitOrderHandler} />
     </div>
   );
 };
