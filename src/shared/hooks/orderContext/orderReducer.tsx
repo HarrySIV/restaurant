@@ -49,7 +49,7 @@ export const orderReducer: Reducer<IOrderContext, OrderAction> = (
     //     items: orderReducerAction.newOrder.item,
     //   };
     case 'CLEAR_ORDER':
-      return { ...orderReducerState, items: [], total: 0 };
+      return { ...orderReducerState, orderItems: [], total: 0 };
     case 'UPDATE_PRICE':
       return {
         ...orderReducerState,

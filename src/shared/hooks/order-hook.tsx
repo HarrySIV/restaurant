@@ -30,17 +30,19 @@ export const useOrder = () => {
   }, [sendRequest]);
 
   const submitOrder = async () => {
+    const orderBody = JSON.stringify({
+      customer_name: 'guest',
+      phone_number: '5551234567',
+      _id: Math.random().toString(),
+      orderItems: orderItems,
+      total: total,
+    });
     try {
       const responseData = await sendRequest(
         `${environment.testingAPI}/orders`,
         'POST',
-        {
-          customer_name: 'guest',
-          phone_number: '5551234567',
-          _id: Math.random().toString(),
-          items: orderItems,
-          total: total,
-        }
+        orderBody,
+        { 'Content-type': 'application/json' }
       );
       setMessage(responseData.message);
     } catch (error) {}

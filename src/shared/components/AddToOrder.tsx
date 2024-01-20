@@ -29,7 +29,7 @@ export const AddToOrder = (props: TAddToOrderProps) => {
     if (updatedItems === null) return;
     orderContext.addToOrder({
       items: updatedItems,
-      itemID: Math.random(),
+      _id: Math.random().toString(),
       quantity: quantity,
       itemPrice: totalPrice,
       type: type,

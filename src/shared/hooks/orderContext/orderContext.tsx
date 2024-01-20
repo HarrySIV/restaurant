@@ -3,7 +3,7 @@ import { IMenuItem } from '../../../pages/menu/Menu';
 import { orderReducer } from './orderReducer';
 
 export type TOrderSubmission = {
-  itemID: number;
+  _id: string;
   itemPrice: number;
   items: IMenuItem[];
   quantity: number;
@@ -25,11 +25,11 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   const addToOrder = (orderSubmission: TOrderSubmission | null) => {
     if (orderSubmission === null) return;
-    const { items, quantity, itemID, itemPrice, type } = orderSubmission;
+    const { items, quantity, _id, itemPrice, type } = orderSubmission;
     dispatch({
       type: 'ADD_ITEM',
       newItems: {
-        itemID,
+        _id,
         itemPrice,
         items,
         quantity,
@@ -43,7 +43,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const deleteFromOrder = (orderSubmission: TOrderSubmission | null) => {
     if (orderSubmission === null || order.orderItems === null) return;
     const filteredOrderItems = order.orderItems.filter((item) => {
-      return orderSubmission.itemID !== item.itemID;
+      return orderSubmission._id !== item._id;
     });
     dispatch({
       type: 'REMOVE_ITEM',
