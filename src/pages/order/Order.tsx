@@ -4,7 +4,7 @@ import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 import { IMenuItem } from '../menu/Menu';
 
 import './_order.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type ItemProps = {
   key: string;
@@ -16,9 +16,26 @@ export const Order = () => {
   const { clearOrder, deleteFromOrder, orderItems, total } = orderContext;
   const { submitOrder } = useOrder();
   const [orderSubmitted, setOrderSubmitted] = useState(false);
+  const [orderReadyTime, setOrderReadyTime] = useState(5);
+
+  useEffect(() => {
+    orderItems?.forEach((orderItem) => {
+      orderItem.items.forEach((item) => {
+        if (parseInt(item.cooking_time) > orderReadyTime)
+          setOrderReadyTime((previous) => parseInt(item.cooking_time));
+      });
+    });
+  }, [orderItems, orderReadyTime]);
 
   if (orderSubmitted) {
-    return <h1>Order Submitted! Thanks for choosing Not a Restaurant!</h1>;
+    return (
+      <>
+        <h1>
+          Order Submitted! It will be ready in {orderReadyTime + 2} minutes.
+        </h1>
+        <h1>Thanks for choosing Not a Restaurant!</h1>
+      </>
+    );
   }
 
   if (orderItems === null || orderItems.length < 1) {
