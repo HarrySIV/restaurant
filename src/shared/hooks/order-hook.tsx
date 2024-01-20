@@ -39,7 +39,7 @@ export const useOrder = () => {
     });
     try {
       const responseData = await sendRequest(
-        `${environment.testingAPI}/orders`,
+        `${environment.api}/orders`,
         'POST',
         orderBody,
         { 'Content-type': 'application/json' }

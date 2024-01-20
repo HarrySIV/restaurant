@@ -4,6 +4,7 @@ import { useOrderContext } from '../../shared/hooks/orderContext/OrderContext';
 import { IMenuItem } from '../menu/Menu';
 
 import './_order.scss';
+import { useState } from 'react';
 
 type ItemProps = {
   key: string;
@@ -14,6 +15,11 @@ export const Order = () => {
   const orderContext = useOrderContext();
   const { clearOrder, deleteFromOrder, orderItems, total } = orderContext;
   const { submitOrder } = useOrder();
+  const [orderSubmitted, setOrderSubmitted] = useState(false);
+
+  if (orderSubmitted) {
+    return <h1>Order Submitted! Thanks for choosing Not a Restaurant!</h1>;
+  }
 
   if (orderItems === null || orderItems.length < 1) {
     return (
@@ -25,6 +31,7 @@ export const Order = () => {
 
   const submitOrderHandler = async () => {
     await submitOrder();
+    setOrderSubmitted(true);
     clearOrder();
   };
 
